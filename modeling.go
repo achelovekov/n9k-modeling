@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 
 	cu "github.com/achelovekov/collectorutils"
 )
@@ -42,17 +43,6 @@ type MetaData struct {
 	Filter  cu.Filter
 	KeysMap cu.KeysMap
 	DB      DB
-}
-
-type DB []DBEntry
-type DBEntry struct {
-	DeviceName string
-	DMEChunks  DMEChunks
-}
-type DMEChunks []DMEChunk
-type DMEChunk struct {
-	Key   string
-	Value []map[string]interface{}
 }
 
 func NXAPICall(hmd cu.HostMetaData, DMEPath string) map[string]interface{} {
@@ -124,34 +114,78 @@ func worker(src map[string]interface{}, path cu.Path, mode int, filter cu.Filter
 	buf := make([]map[string]interface{}, 0)
 	pathPassed := make([]string, 0)
 
-	/* cu.PrettyPrint(src) */
 	cu.FlattenMap(src, path, pathIndex, pathPassed, mode, header, &buf, filter, enrich)
 
 	return buf
 }
 
+type DB []DBEntry
+type DBEntry struct {
+	DeviceName  string
+	DMEChunkMap DMEChunkMap
+}
+type DMEChunkMap map[string]DMEChunk
+type DMEChunk []map[string]interface{}
+
 func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
 	var DBEntry DBEntry
 	DBEntry.DeviceName = hmd.Host.Hostname
-	DBEntry.DMEChunks = make([]DMEChunk, 0)
+	DBEntry.DMEChunkMap = make(map[string]DMEChunk)
 
 	for k, v := range md.KeysMap {
-		var DMEChunk DMEChunk
-		DMEChunk.Key = k
-		DMEChunk.Value = make([]map[string]interface{}, 0)
+		DMEChunk := make([]map[string]interface{}, 0)
 
 		buf := make([]map[string]interface{}, 0)
 		for _, v := range v {
 			result := worker(src, v, cu.Cadence, md.Filter, md.Enrich)
 			buf = append(buf, result...)
-			DMEChunk.Value = append(DMEChunk.Value, buf...)
+			DMEChunk = append(DMEChunk, buf...)
 		}
-		DBEntry.DMEChunks = append(DBEntry.DMEChunks, DMEChunk)
+		DBEntry.DMEChunkMap[k] = DMEChunk
 	}
 
 	md.DB = append(md.DB, DBEntry)
+}
 
-	fmt.Println(md.DB)
+func modeling(DB DB, vlanid int64) {
+	for _, DBEntry := range DB {
+		resultMap := make(map[string]interface{})
+		fmt.Println("get values for:", DBEntry.DeviceName)
+		for _, item := range DBEntry.DMEChunkMap["bd"] {
+			if item["l2BD.id"] == vlanid {
+				resultMap["l2BD.id"] = vlanid
+				resultMap["l2BD.accEncap"] = item["l2BD.accEncap"]
+			}
+		}
+		for index, item := range DBEntry.DMEChunkMap["evpn"] {
+			if item["rtctrlBDEvi.encap"] == resultMap["l2BD.accEncap"] {
+				resultMap[strconv.Itoa(index)+"_"+"rtctrlRttP.type"] = item["rtctrlRttP.type"]
+				resultMap[strconv.Itoa(index)+"_"+"rtctrlRttEntry.rtt"] = item["rtctrlRttEntry.rtt"]
+			}
+		}
+
+		for _, item := range DBEntry.DMEChunkMap["svi"] {
+			if item["sviIf.vlanId"] == resultMap["l2BD.id"] {
+				resultMap["sviIf.id"] = item["sviIf.id"]
+			}
+		}
+
+		for _, item := range DBEntry.DMEChunkMap["ipv4"] {
+			if item["ipv4If.id"] == resultMap["sviIf.id"] {
+				resultMap["ipv4Addr.addr"] = item["ipv4Addr.addr"]
+				resultMap["ipv4Addr.tag"] = item["ipv4Addr.tag"]
+				resultMap["ipv4Dom.name"] = item["ipv4Dom.name"]
+			}
+		}
+
+		for _, item := range DBEntry.DMEChunkMap["hmm"] {
+			if item["hmmFwdIf.id"] == resultMap["sviIf.id"] {
+				resultMap["hmmFwdIf.mode"] = item["hmmFwdIf.mode"]
+			}
+		}
+
+		cu.PrettyPrint(resultMap)
+	}
 }
 
 func main() {
@@ -161,10 +195,11 @@ func main() {
 	Inventory := cu.LoadInventory("inventory.json")
 
 	var DB DB
+	MetaData := &MetaData{Config: Config, Filter: Filter, Enrich: Enrich, KeysMap: KeysMap, DB: DB}
 
 	for _, v := range Inventory {
-		MetaData := &MetaData{Config: Config, Filter: Filter, Enrich: Enrich, KeysMap: KeysMap, DB: DB}
 		src := NXAPICall(v, "sys")
 		Processing(MetaData, v, src)
+		modeling(MetaData.DB, 2008)
 	}
 }

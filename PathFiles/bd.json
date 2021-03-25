@@ -1,0 +1,75 @@
+[
+    {
+      "Node": [
+        {
+          "NodeName": "imdata",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "topSystem",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "bdEntity",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "l2BD",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    }
+]

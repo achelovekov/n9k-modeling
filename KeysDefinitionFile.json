@@ -1,0 +1,42 @@
+[
+    {
+      "key": "sys",
+      "paths": [
+        {
+          "path":"PathFiles/bd.json"
+        }
+      ]  
+    },
+    {
+      "key": "evpn",
+      "paths": [
+        {
+          "path":"PathFiles/evpn.json"
+        }
+      ]  
+    },
+    {
+      "key": "ipv4",
+      "paths": [
+        {
+          "path":"PathFiles/ipv4.json"
+        }
+      ]  
+    },
+    {
+      "key": "hmm",
+      "paths": [
+        {
+          "path":"PathFiles/hmm.json"
+        }
+      ]  
+    },
+    {
+      "key": "svi",
+      "paths": [
+        {
+          "path":"PathFiles/svi.json"
+        }
+      ]  
+    }
+]

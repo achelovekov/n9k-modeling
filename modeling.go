@@ -127,6 +127,9 @@ type DBEntry struct {
 type DMEChunkMap map[string]DMEChunk
 type DMEChunk []map[string]interface{}
 
+type DataDB map[string]DeviceData
+type DeviceData map[string]interface{}
+
 func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
 	var DBEntry DBEntry
 	DBEntry.DeviceName = hmd.Host.Hostname
@@ -147,45 +150,58 @@ func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
 	md.DB = append(md.DB, DBEntry)
 }
 
-func modeling(DB DB, vlanid int64) {
+func Modeling(DataDB DataDB, DB DB, vlanid int64) {
 	for _, DBEntry := range DB {
-		resultMap := make(map[string]interface{})
-		fmt.Println("get values for:", DBEntry.DeviceName)
+		DeviceData := make(DeviceData)
 		for _, item := range DBEntry.DMEChunkMap["bd"] {
 			if item["l2BD.id"] == vlanid {
-				resultMap["l2BD.id"] = vlanid
-				resultMap["l2BD.accEncap"] = item["l2BD.accEncap"]
+				DeviceData["l2BD.id"] = vlanid
+				DeviceData["l2BD.accEncap"] = item["l2BD.accEncap"]
+				DeviceData["l2BD.name"] = item["l2BD.name"]
 			}
 		}
 		for index, item := range DBEntry.DMEChunkMap["evpn"] {
-			if item["rtctrlBDEvi.encap"] == resultMap["l2BD.accEncap"] {
-				resultMap[strconv.Itoa(index)+"_"+"rtctrlRttP.type"] = item["rtctrlRttP.type"]
-				resultMap[strconv.Itoa(index)+"_"+"rtctrlRttEntry.rtt"] = item["rtctrlRttEntry.rtt"]
+			if item["rtctrlBDEvi.encap"] == DeviceData["l2BD.accEncap"] {
+				DeviceData[strconv.Itoa(index)+"_"+"rtctrlRttP.type"] = item["rtctrlRttP.type"]
+				DeviceData[strconv.Itoa(index)+"_"+"rtctrlRttEntry.rtt"] = item["rtctrlRttEntry.rtt"]
 			}
 		}
 
 		for _, item := range DBEntry.DMEChunkMap["svi"] {
-			if item["sviIf.vlanId"] == resultMap["l2BD.id"] {
-				resultMap["sviIf.id"] = item["sviIf.id"]
+			if item["sviIf.vlanId"] == DeviceData["l2BD.id"] {
+				DeviceData["sviIf.id"] = item["sviIf.id"]
 			}
 		}
 
 		for _, item := range DBEntry.DMEChunkMap["ipv4"] {
-			if item["ipv4If.id"] == resultMap["sviIf.id"] {
-				resultMap["ipv4Addr.addr"] = item["ipv4Addr.addr"]
-				resultMap["ipv4Addr.tag"] = item["ipv4Addr.tag"]
-				resultMap["ipv4Dom.name"] = item["ipv4Dom.name"]
+			if item["ipv4If.id"] == DeviceData["sviIf.id"] {
+				DeviceData["ipv4Addr.addr"] = item["ipv4Addr.addr"]
+				DeviceData["ipv4Addr.tag"] = item["ipv4Addr.tag"]
+				DeviceData["ipv4Dom.name"] = item["ipv4Dom.name"]
 			}
 		}
 
 		for _, item := range DBEntry.DMEChunkMap["hmm"] {
-			if item["hmmFwdIf.id"] == resultMap["sviIf.id"] {
-				resultMap["hmmFwdIf.mode"] = item["hmmFwdIf.mode"]
+			if item["hmmFwdIf.id"] == DeviceData["sviIf.id"] {
+				DeviceData["hmmFwdIf.mode"] = item["hmmFwdIf.mode"]
 			}
 		}
 
-		cu.PrettyPrint(resultMap)
+		DataDB[DBEntry.DeviceName] = DeviceData
 	}
+}
+
+func ServiceConstuct(DataDB DataDB, vlanid int64) {
+	deviceList := []string{}
+	for deviceName, deviceData := range DataDB {
+		if value, ok := deviceData["l2BD.id"]; ok {
+			if value == vlanid {
+				deviceList = append(deviceList, deviceName)
+			}
+		}
+	}
+	fmt.Println("vlanid:", vlanid, "is streched for: ", deviceList)
+
 }
 
 func main() {
@@ -195,11 +211,14 @@ func main() {
 	Inventory := cu.LoadInventory("inventory.json")
 
 	var DB DB
+	DataDB := make(DataDB)
 	MetaData := &MetaData{Config: Config, Filter: Filter, Enrich: Enrich, KeysMap: KeysMap, DB: DB}
 
 	for _, v := range Inventory {
 		src := NXAPICall(v, "sys")
 		Processing(MetaData, v, src)
-		modeling(MetaData.DB, 2008)
 	}
+
+	Modeling(DataDB, MetaData.DB, 2008)
+	ServiceConstuct(DataDB, 2008)
 }

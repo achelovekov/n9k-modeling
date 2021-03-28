@@ -9,7 +9,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
+	"strings"
 
 	cu "github.com/achelovekov/collectorutils"
 )
@@ -113,8 +115,9 @@ func worker(src map[string]interface{}, path cu.Path, mode int, filter cu.Filter
 	header := make(map[string]interface{})
 	buf := make([]map[string]interface{}, 0)
 	pathPassed := make([]string, 0)
+	var keysLeft []string
 
-	cu.FlattenMap(src, path, pathIndex, pathPassed, mode, header, &buf, filter, enrich)
+	cu.FlattenMap(src, path, pathIndex, pathPassed, mode, header, &buf, filter, enrich, keysLeft)
 
 	return buf
 }
@@ -129,6 +132,18 @@ type DMEChunk []map[string]interface{}
 
 type DataDB map[string]DeviceData
 type DeviceData map[string]interface{}
+
+func PrettyPrint(DataDB DataDB) {
+	for k, v := range DataDB {
+		fmt.Println("Device:", k)
+
+		JSONData, err := json.MarshalIndent(v, "", "  ")
+		if err != nil {
+			log.Fatalf(err.Error())
+		}
+		fmt.Printf("Pretty processed output %s\n", string(JSONData))
+	}
+}
 
 func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
 	var DBEntry DBEntry
@@ -162,8 +177,8 @@ func Modeling(DataDB DataDB, DB DB, vlanid int64) {
 		}
 		for index, item := range DBEntry.DMEChunkMap["evpn"] {
 			if item["rtctrlBDEvi.encap"] == DeviceData["l2BD.accEncap"] {
-				DeviceData[strconv.Itoa(index)+"_"+"rtctrlRttP.type"] = item["rtctrlRttP.type"]
-				DeviceData[strconv.Itoa(index)+"_"+"rtctrlRttEntry.rtt"] = item["rtctrlRttEntry.rtt"]
+				DeviceData[strconv.Itoa(index%2)+"_"+"rtctrlRttP.type"] = item["rtctrlRttP.type"]
+				DeviceData[strconv.Itoa(index%2)+"_"+"rtctrlRttEntry.rtt"] = item["rtctrlRttEntry.rtt"]
 			}
 		}
 
@@ -187,21 +202,58 @@ func Modeling(DataDB DataDB, DB DB, vlanid int64) {
 			}
 		}
 
+		for _, item := range DBEntry.DMEChunkMap["nvo"] {
+			if strings.Contains(DeviceData["l2BD.accEncap"].(string), strconv.FormatInt(item["nvoNw.vni"].(int64), 10)) {
+				DeviceData["nvoNw.vni"] = item["nvoNw.vni"]
+				DeviceData["nvoNw.multisiteIngRepl"] = item["nvoNw.multisiteIngRepl"]
+				DeviceData["nvoNw.mcastGroup"] = item["nvoNw.mcastGroup"]
+				if _, ok := item["nvoIngRepl.rn"]; ok {
+					DeviceData["nvoIngRepl.rn"] = item["nvoIngRepl.rn"]
+					DeviceData["nvoIngRepl.proto"] = item["nvoIngRepl.proto"]
+				}
+			}
+		}
+
 		DataDB[DBEntry.DeviceName] = DeviceData
 	}
 }
 
-func ServiceConstuct(DataDB DataDB, vlanid int64) {
-	deviceList := []string{}
-	for deviceName, deviceData := range DataDB {
-		if value, ok := deviceData["l2BD.id"]; ok {
-			if value == vlanid {
-				deviceList = append(deviceList, deviceName)
-			}
+func GetService(DataDB DataDB, vlanid int64, ServicesDefinitions ServicesDefinitions) {
+	for k, v := range DataDB {
+		fmt.Println("service model for", k)
+		if CheckKeysExistance(ServicesDefinitions.L2VNI, v) {
+			fmt.Printf("L2VNI + ")
+		}
+		if CheckKeysExistance(ServicesDefinitions.AGW, v) {
+			fmt.Printf("AGW + ")
+		} else {
+			fmt.Printf("NO-AGW + ")
+		}
+		if CheckKeysExistance(ServicesDefinitions.IR, v) {
+			fmt.Printf("IR\n")
+		} else {
+			fmt.Printf("PIM\n")
 		}
 	}
-	fmt.Println("vlanid:", vlanid, "is streched for: ", deviceList)
+}
 
+func CheckKeysExistance(keysList []string, DeviceData map[string]interface{}) bool {
+	boolVal := bool(true)
+
+	for _, key := range keysList {
+		if _, ok := DeviceData[key]; ok {
+			boolVal = boolVal && true
+		} else {
+			boolVal = boolVal && false
+		}
+	}
+	return boolVal
+}
+
+type ServicesDefinitions struct {
+	L2VNI []string
+	AGW   []string
+	IR    []string
 }
 
 func main() {
@@ -209,6 +261,12 @@ func main() {
 	Config, Filter, Enrich := cu.Initialize("config.json")
 	KeysMap := cu.LoadKeysMap(Config.KeysDefinitionFile)
 	Inventory := cu.LoadInventory("inventory.json")
+	Vlanid, _ := strconv.ParseInt(os.Args[1], 10, 64)
+
+	ServicesDefinitions := ServicesDefinitions{}
+	ServicesDefinitions.L2VNI = []string{"l2BD.accEncap", "0_rtctrlRttEntry.rtt", "0_rtctrlRttP.type", "1_rtctrlRttEntry.rtt", "1_rtctrlRttP.type"}
+	ServicesDefinitions.AGW = []string{"ipv4Addr.addr", "hmmFwdIf.mode"}
+	ServicesDefinitions.IR = []string{"nvoIngRepl.rn"}
 
 	var DB DB
 	DataDB := make(DataDB)
@@ -219,6 +277,7 @@ func main() {
 		Processing(MetaData, v, src)
 	}
 
-	Modeling(DataDB, MetaData.DB, 2008)
-	ServiceConstuct(DataDB, 2008)
+	Modeling(DataDB, MetaData.DB, Vlanid)
+	PrettyPrint(DataDB)
+	GetService(DataDB, Vlanid, ServicesDefinitions)
 }

@@ -1,5 +1,5 @@
 {
-    "KeysDefinitionFile": "KeysDefinitionFile.json",
+    "KeysDefinitionFile": "KeysDefinitionFileDemo.json",
     "FilterFile" : "filter.json",
     "EnrichFile" : "enrich.json"
 }

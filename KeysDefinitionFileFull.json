@@ -1,0 +1,53 @@
+[
+    {
+      "key": "bd",
+      "paths": [
+        {
+          "path":"PathFiles/bd.json"
+        }
+      ]  
+    },
+    {
+      "key": "evpn",
+      "paths": [
+        {
+          "path":"PathFiles/evpn.json"
+        }
+      ]  
+    },
+    {
+      "key": "ipv4",
+      "paths": [
+        {
+          "path":"PathFiles/ipv4.json"
+        }
+      ]  
+    },
+    {
+      "key": "hmm",
+      "paths": [
+        {
+          "path":"PathFiles/hmm.json"
+        }
+      ]  
+    },
+    {
+      "key": "svi",
+      "paths": [
+        {
+          "path":"PathFiles/svi.json"
+        }
+      ]  
+    },
+    {
+      "key": "nvo",
+      "paths": [
+        {
+          "path":"PathFiles/nvo_1.json"
+        },
+        {
+          "path":"PathFiles/nvo_2.json"
+        }
+      ]  
+    }
+  ]

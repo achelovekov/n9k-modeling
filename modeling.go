@@ -40,11 +40,12 @@ type NXAPILoginResponse struct {
 }
 
 type MetaData struct {
-	Config  cu.Config
-	Enrich  cu.Enrich
-	Filter  cu.Filter
-	KeysMap cu.KeysMap
-	DB      DB
+	Config        cu.Config
+	Enrich        cu.Enrich
+	Filter        cu.Filter
+	KeysMap       cu.KeysMap
+	DB            DB
+	ConversionMap cu.ConversionMap
 }
 
 func NXAPICall(hmd cu.HostMetaData, DMEPath string) map[string]interface{} {
@@ -115,9 +116,9 @@ func worker(src map[string]interface{}, path cu.Path, mode int, filter cu.Filter
 	header := make(map[string]interface{})
 	buf := make([]map[string]interface{}, 0)
 	pathPassed := make([]string, 0)
-	var keysLeft []string
+	keysLeftFromPrevLayer := bool(false)
 
-	cu.FlattenMap(src, path, pathIndex, pathPassed, mode, header, &buf, filter, enrich, keysLeft)
+	cu.FlattenMap(src, path, pathIndex, pathPassed, mode, header, &buf, filter, enrich, keysLeftFromPrevLayer)
 
 	return buf
 }
@@ -133,7 +134,40 @@ type DMEChunk []map[string]interface{}
 type DataDB map[string]DeviceData
 type DeviceData map[string]interface{}
 
-func PrettyPrint(DataDB DataDB) {
+type ProcessPath []struct {
+	ChunkName string   `json:"ChunkName"`
+	KeySName  string   `json:"KeySName"`
+	KeySType  string   `json:"KeySType"`
+	KeyDName  string   `json:"KeyDName"`
+	KeyDType  string   `json:"KeyDType"`
+	KeyLink   string   `json:"KeyLink"`
+	MatchType string   `json:"MatchType"`
+	KeyList   []string `json:"KeyList"`
+	Options   []struct {
+		OptionKey   string `json:"optionKey"`
+		OptionValue string `json:"optionValue"`
+	} `json:"Options"`
+}
+
+func LoadProcessPath(fineName string) ProcessPath {
+	var ProcessPath ProcessPath
+	ProcessPathFile, err := os.Open(fineName)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer ProcessPathFile.Close()
+
+	ProcessPathFileBytes, _ := ioutil.ReadAll(ProcessPathFile)
+
+	err = json.Unmarshal(ProcessPathFileBytes, &ProcessPath)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return ProcessPath
+}
+
+func PrettyPrintDataDB(DataDB DataDB) {
 	for k, v := range DataDB {
 		fmt.Println("Device:", k)
 
@@ -142,6 +176,19 @@ func PrettyPrint(DataDB DataDB) {
 			log.Fatalf(err.Error())
 		}
 		fmt.Printf("Pretty processed output %s\n", string(JSONData))
+	}
+}
+
+func PrettyPrintDB(DB DB) {
+	for _, DBEntry := range DB {
+		fmt.Println("Device:", DBEntry.DeviceName)
+
+		for k, DMEChunk := range DBEntry.DMEChunkMap {
+			fmt.Println("	Key:", k)
+			for _, v := range DMEChunk {
+				cu.PrettyPrint(v)
+			}
+		}
 	}
 }
 
@@ -155,8 +202,7 @@ func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
 
 		buf := make([]map[string]interface{}, 0)
 		for _, v := range v {
-			result := worker(src, v, cu.Cadence, md.Filter, md.Enrich)
-			buf = append(buf, result...)
+			buf = worker(src, v, cu.Cadence, md.Filter, md.Enrich)
 			DMEChunk = append(DMEChunk, buf...)
 		}
 		DBEntry.DMEChunkMap[k] = DMEChunk
@@ -165,12 +211,125 @@ func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
 	md.DB = append(md.DB, DBEntry)
 }
 
-func Modeling(DataDB DataDB, DB DB, vlanid int64) {
+func PathModeling(DataDB DataDB, DB DB, entryArg interface{}, ProcessPath ProcessPath, ConversionMap cu.ConversionMap) {
+	for _, DBEntry := range DB {
+		DeviceData := make(DeviceData)
+		for _, v := range ProcessPath {
+			if v.KeyLink == "direct" && v.MatchType == "full" {
+				if len(v.Options) == 0 {
+					if v.KeySType != v.KeyDType {
+						P := cu.Pair{SrcType: v.KeySType, DstType: v.KeyDType}
+						entryArg = ConversionMap[P](entryArg)
+					}
+					for _, item := range DBEntry.DMEChunkMap[v.ChunkName] {
+						if entryArg == item[v.KeyDName] {
+							for _, v := range v.KeyList {
+								if _, ok := item[v]; ok {
+									DeviceData[v] = item[v]
+								}
+							}
+						}
+					}
+				} else {
+					for _, Option := range v.Options {
+						for _, item := range DBEntry.DMEChunkMap[v.ChunkName] {
+							if entryArg == item[v.KeyDName] && item[Option.OptionKey] == Option.OptionValue {
+								for _, v := range v.KeyList {
+									if _, ok := item[v]; ok {
+										DeviceData[v+"."+Option.OptionValue] = item[v]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if v.KeyLink == "indirect" && v.MatchType == "full" {
+				if len(v.Options) == 0 {
+					for _, item := range DBEntry.DMEChunkMap[v.ChunkName] {
+						if DeviceData[v.KeySName] == item[v.KeyDName] {
+							for _, v := range v.KeyList {
+								if _, ok := item[v]; ok {
+									DeviceData[v] = item[v]
+								}
+							}
+						}
+					}
+				} else {
+					for _, Option := range v.Options {
+						for _, item := range DBEntry.DMEChunkMap[v.ChunkName] {
+							if DeviceData[v.KeySName] == item[v.KeyDName] && item[Option.OptionKey] == Option.OptionValue {
+								for _, v := range v.KeyList {
+									if _, ok := item[v]; ok {
+										DeviceData[v+"."+Option.OptionValue] = item[v]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if v.KeyLink == "direct" && v.MatchType == "partial" {
+				if len(v.Options) == 0 {
+					for _, item := range DBEntry.DMEChunkMap[v.ChunkName] {
+						if strings.Contains(item[v.KeyDName].(string), entryArg.(string)) {
+							for _, v := range v.KeyList {
+								if _, ok := item[v]; ok {
+									DeviceData[v] = item[v]
+								}
+							}
+						}
+					}
+				} else {
+					for _, Option := range v.Options {
+						for _, item := range DBEntry.DMEChunkMap[v.ChunkName] {
+							if strings.Contains(item[v.KeyDName].(string), entryArg.(string)) && item[Option.OptionKey] == Option.OptionValue {
+								for _, v := range v.KeyList {
+									if _, ok := item[v]; ok {
+										DeviceData[v+"."+Option.OptionValue] = item[v]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if v.KeyLink == "indirect" && v.MatchType == "partial" {
+				if len(v.Options) == 0 {
+					for _, item := range DBEntry.DMEChunkMap[v.ChunkName] {
+						if strings.Contains(item[v.KeyDName].(string), DeviceData[v.KeySName].(string)) {
+							for _, v := range v.KeyList {
+								if _, ok := item[v]; ok {
+									DeviceData[v] = item[v]
+								}
+							}
+						}
+					}
+				} else {
+					for _, Option := range v.Options {
+						for _, item := range DBEntry.DMEChunkMap[v.ChunkName] {
+							if strings.Contains(item[v.KeyDName].(string), entryArg.(string)) && item[Option.OptionKey] == Option.OptionValue {
+								for _, v := range v.KeyList {
+									if _, ok := item[v]; ok {
+										DeviceData[v+"."+Option.OptionValue] = item[v]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		DataDB[DBEntry.DeviceName] = DeviceData
+	}
+}
+
+func Modeling(DataDB DataDB, DB DB, vnid int64) {
 	for _, DBEntry := range DB {
 		DeviceData := make(DeviceData)
 		for _, item := range DBEntry.DMEChunkMap["bd"] {
-			if item["l2BD.id"] == vlanid {
-				DeviceData["l2BD.id"] = vlanid
+			if strings.Contains(item["l2BD.accEncap"].(string), strconv.FormatInt(vnid, 10)) {
+				DeviceData["l2BD.id"] = item["l2BD.id"]
 				DeviceData["l2BD.accEncap"] = item["l2BD.accEncap"]
 				DeviceData["l2BD.name"] = item["l2BD.name"]
 			}
@@ -203,7 +362,9 @@ func Modeling(DataDB DataDB, DB DB, vlanid int64) {
 		}
 
 		for _, item := range DBEntry.DMEChunkMap["nvo"] {
-			if strings.Contains(DeviceData["l2BD.accEncap"].(string), strconv.FormatInt(item["nvoNw.vni"].(int64), 10)) {
+			fmt.Printf("type item: %T, value item: %v", item["nvoNw.vni"], item["nvoNw.vni"])
+			fmt.Printf("type vnid: %T, value vnid: %v", vnid, vnid)
+			if item["nvoNw.vni"] == vnid {
 				DeviceData["nvoNw.vni"] = item["nvoNw.vni"]
 				DeviceData["nvoNw.multisiteIngRepl"] = item["nvoNw.multisiteIngRepl"]
 				DeviceData["nvoNw.mcastGroup"] = item["nvoNw.mcastGroup"]
@@ -218,7 +379,7 @@ func Modeling(DataDB DataDB, DB DB, vlanid int64) {
 	}
 }
 
-func GetService(DataDB DataDB, vlanid int64, ServicesDefinitions ServicesDefinitions) {
+func GetService(DataDB DataDB, vnid int64, ServicesDefinitions ServicesDefinitions) {
 	for k, v := range DataDB {
 		fmt.Println("service model for", k)
 		if CheckKeysExistance(ServicesDefinitions.L2VNI, v) {
@@ -261,23 +422,32 @@ func main() {
 	Config, Filter, Enrich := cu.Initialize("config.json")
 	KeysMap := cu.LoadKeysMap(Config.KeysDefinitionFile)
 	Inventory := cu.LoadInventory("inventory.json")
-	Vlanid, _ := strconv.ParseInt(os.Args[1], 10, 64)
+	var vnid interface{} = "2012007"
+	/* 	Vlanid, _ := strconv.ParseInt(os.Args[1], 10, 64) */
 
-	ServicesDefinitions := ServicesDefinitions{}
-	ServicesDefinitions.L2VNI = []string{"l2BD.accEncap", "0_rtctrlRttEntry.rtt", "0_rtctrlRttP.type", "1_rtctrlRttEntry.rtt", "1_rtctrlRttP.type"}
-	ServicesDefinitions.AGW = []string{"ipv4Addr.addr", "hmmFwdIf.mode"}
-	ServicesDefinitions.IR = []string{"nvoIngRepl.rn"}
+	/* 	ServicesDefinitions := ServicesDefinitions{}
+	   	ServicesDefinitions.L2VNI = []string{"l2BD.accEncap", "0_rtctrlRttEntry.rtt", "0_rtctrlRttP.type", "1_rtctrlRttEntry.rtt", "1_rtctrlRttP.type"}
+	   	ServicesDefinitions.AGW = []string{"ipv4Addr.addr", "hmmFwdIf.mode"}
+	   	ServicesDefinitions.IR = []string{"nvoIngRepl.rn"} */
 
 	var DB DB
 	DataDB := make(DataDB)
-	MetaData := &MetaData{Config: Config, Filter: Filter, Enrich: Enrich, KeysMap: KeysMap, DB: DB}
+	ConversionMap := cu.CreateConversionMap()
+	MetaData := &MetaData{Config: Config, Filter: Filter, Enrich: Enrich, KeysMap: KeysMap, DB: DB, ConversionMap: ConversionMap}
 
 	for _, v := range Inventory {
 		src := NXAPICall(v, "sys")
 		Processing(MetaData, v, src)
 	}
 
-	Modeling(DataDB, MetaData.DB, Vlanid)
-	PrettyPrint(DataDB)
-	GetService(DataDB, Vlanid, ServicesDefinitions)
+	PrettyPrintDB(MetaData.DB)
+
+	var ProcessPath ProcessPath
+	ProcessPath = LoadProcessPath("PathProcessingModel.json")
+	fmt.Println(ProcessPath)
+	PathModeling(DataDB, MetaData.DB, vnid, ProcessPath, MetaData.ConversionMap)
+	PrettyPrintDataDB(DataDB)
+	/* 	Modeling(DataDB, MetaData.DB, Vlanid) */
+	/* 	 */
+	/* 	GetService(DataDB, Vlanid, ServicesDefinitions) */
 }

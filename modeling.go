@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -297,42 +298,63 @@ func PathModeling(DataDB DataDB, DB DB, srcVal interface{}, ProcessPath ProcessP
 	}
 }
 
-func GetService(DataDB DataDB, vnid int64, ServicesDefinitions ServicesDefinitions) {
+type ServicesDefinition []ServiceDefinition
+type ServiceDefinition struct {
+	ServiceName string       `json:"ServiceName"`
+	ServiceKeys []ServiceKey `json:"ServiceKyes"`
+}
+type ServiceKey struct {
+	Name  string `json:"Name"`
+	Value string `json:"Value"`
+}
+type DeviceServiceDB map[string]DeviceServiceData
+type DeviceServiceData map[string]bool
+
+func LoadServicesDefinition(fineName string) ServicesDefinition {
+	var ServicesDefinition ServicesDefinition
+	ServicesDefinitionFile, err := os.Open(fineName)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer ServicesDefinitionFile.Close()
+
+	ServicesDefinitionFileBytes, _ := ioutil.ReadAll(ServicesDefinitionFile)
+
+	err = json.Unmarshal(ServicesDefinitionFileBytes, &ServicesDefinition)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return ServicesDefinition
+}
+
+func CheckServiceKeys(ServiceKeys []ServiceKey, DeviceData map[string]interface{}) bool {
+	var flag bool = true
+	for _, ServiceKey := range ServiceKeys {
+		if v, ok := DeviceData[ServiceKey.Name]; ok {
+			if v == ServiceKey.Value || ServiceKey.Value == "anyValue" {
+				flag = flag && true
+			}
+		} else {
+			flag = flag && false
+		}
+	}
+	return flag
+}
+
+func GetService(ServicesDefinition ServicesDefinition, DataDB DataDB, DeviceServiceDB DeviceServiceDB) {
 	for k, v := range DataDB {
-		fmt.Println("service model for", k)
-		if CheckKeysExistance(ServicesDefinitions.L2VNI, v) {
-			fmt.Printf("L2VNI + ")
+		DeviceServiceData := make(DeviceServiceData)
+		fmt.Println("Get service for device:", k)
+		for _, Service := range ServicesDefinition {
+			if CheckServiceKeys(Service.ServiceKeys, v) {
+				DeviceServiceData[Service.ServiceName] = true
+			} else {
+				DeviceServiceData[Service.ServiceName] = false
+			}
 		}
-		if CheckKeysExistance(ServicesDefinitions.AGW, v) {
-			fmt.Printf("AGW + ")
-		} else {
-			fmt.Printf("NO-AGW + ")
-		}
-		if CheckKeysExistance(ServicesDefinitions.IR, v) {
-			fmt.Printf("IR\n")
-		} else {
-			fmt.Printf("PIM\n")
-		}
+		DeviceServiceDB[k] = DeviceServiceData
 	}
-}
-
-func CheckKeysExistance(keysList []string, DeviceData map[string]interface{}) bool {
-	boolVal := bool(true)
-
-	for _, key := range keysList {
-		if _, ok := DeviceData[key]; ok {
-			boolVal = boolVal && true
-		} else {
-			boolVal = boolVal && false
-		}
-	}
-	return boolVal
-}
-
-type ServicesDefinitions struct {
-	L2VNI []string
-	AGW   []string
-	IR    []string
 }
 
 func main() {
@@ -340,14 +362,9 @@ func main() {
 	Config, Filter, Enrich := cu.Initialize("config.json")
 	KeysMap := cu.LoadKeysMap(Config.KeysDefinitionFile)
 	Inventory := cu.LoadInventory("inventory.json")
-	/* 	vnid := flag.String("vnid", "00000", "vnid to construct the model")
-	   	flag.Parse() */
-	/* 	Vlanid, _ := strconv.ParseInt(os.Args[1], 10, 64) */
 
-	/* 	ServicesDefinitions := ServicesDefinitions{}
-	   	ServicesDefinitions.L2VNI = []string{"l2BD.accEncap", "0_rtctrlRttEntry.rtt", "0_rtctrlRttP.type", "1_rtctrlRttEntry.rtt", "1_rtctrlRttP.type"}
-	   	ServicesDefinitions.AGW = []string{"ipv4Addr.addr", "hmmFwdIf.mode"}
-	   	ServicesDefinitions.IR = []string{"nvoIngRepl.rn"} */
+	srcVal := flag.String("key", "00000", "vnid to construct the model")
+	flag.Parse()
 
 	var DB DB
 	DataDB := make(DataDB)
@@ -363,10 +380,13 @@ func main() {
 
 	var ProcessPath ProcessPath
 	ProcessPath = LoadProcessPath("PathProcessingModel.json")
-	fmt.Println(ProcessPath)
-	PathModeling(DataDB, MetaData.DB, "2012008", ProcessPath, MetaData.ConversionMap)
+
+	PathModeling(DataDB, MetaData.DB, *srcVal, ProcessPath, MetaData.ConversionMap)
 	PrettyPrintDataDB(DataDB)
-	/* 	Modeling(DataDB, MetaData.DB, Vlanid) */
-	/* 	 */
-	/* 	GetService(DataDB, Vlanid, ServicesDefinitions) */
+
+	ServicesDefinition := LoadServicesDefinition("ServicesDefinition.json")
+	DeviceServiceDB := make(DeviceServiceDB)
+	GetService(ServicesDefinition, DataDB, DeviceServiceDB)
+
+	fmt.Println(DeviceServiceDB)
 }

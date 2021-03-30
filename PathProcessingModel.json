@@ -83,7 +83,7 @@
     "KeySType": "string",
     "KeyDName": "nvoNw.vni",
     "KeyDType": "int64",
-    "KeyLink": "direct",
+    "KeyLink": "indirect",
     "MatchType": "full",
     "KeyList": [
       "nvoNw.vni",

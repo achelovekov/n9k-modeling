@@ -1,0 +1,16 @@
+{
+    "host": {
+      "url": "https://10.62.130.43",
+      "hostname": "site-1-ac-1",
+      "username": "admin",
+      "password": "cisco!123"
+    }
+  },
+  {
+      "host": {
+        "url": "https://10.62.130.44",
+        "hostname": "site-1-ac-2",
+        "username": "admin",
+        "password": "cisco!123"
+      }
+  },

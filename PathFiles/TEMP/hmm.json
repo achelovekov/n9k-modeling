@@ -1,0 +1,98 @@
+[
+    {
+      "Node": [
+        {
+          "NodeName": "imdata",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "topSystem",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "hmmEntity",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "hmmFwdInst",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "hmmFwdIf",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    }
+]

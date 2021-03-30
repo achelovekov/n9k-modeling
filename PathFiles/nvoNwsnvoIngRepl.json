@@ -1,0 +1,149 @@
+{
+  "PathOptions": {
+    "IgnoreTail": false
+  },
+  "PathData": [
+    {
+      "Node": [
+        {
+          "NodeName": "imdata",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "topSystem",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "nvoEps",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "nvoEp",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "nvoNws",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "nvoNw",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "nvoIngRepl",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        }
+      ]
+    }
+  ]
+}

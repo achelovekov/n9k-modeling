@@ -1,0 +1,98 @@
+[
+    {
+      "Node": [
+        {
+          "NodeName": "imdata",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "topSystem",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "interfaceEntity",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "sviIf",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": true,
+          "ToCombine": false
+        },
+        {
+          "NodeName": "children",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "sviOperSvi",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    },
+    {
+      "Node": [
+        {
+          "NodeName": "attributes",
+          "ToDive": false,
+          "ToCombine": false
+        }
+      ]
+    }
+]

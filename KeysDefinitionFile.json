@@ -1,52 +1,60 @@
 [
   {
-    "key": "bd",
+    "key": "hmmFwdIf",
     "paths": [
       {
-        "path":"PathFiles/bd.json"
+        "path":"PathFiles/hmmFwdIf.json"
       }
     ]  
   },
   {
-    "key": "svi",
+    "key": "rtctrlBDEvi",
     "paths": [
       {
-        "path":"PathFiles/svi.json"
+        "path":"PathFiles/rtctrlBDEvi.json"
       }
     ]  
   },
   {
-    "key": "evpn",
+    "key": "ipv4Addr",
     "paths": [
       {
-        "path":"PathFiles/evpn.json"
+        "path":"PathFiles/ipv4Addr.json"
       }
     ]  
   },
   {
-    "key": "ipv4",
+    "key": "sviIf",
     "paths": [
       {
-        "path":"PathFiles/ipv4.json"
+        "path":"PathFiles/sviIf.json"
       }
     ]  
   },
   {
-    "key": "hmm",
+    "key": "l2BD",
     "paths": [
       {
-        "path":"PathFiles/hmm.json"
+        "path":"PathFiles/l2BD.json"
       }
     ]  
   },
   {
-    "key": "nvo",
+    "key": "nvoEvpnMultisiteBordergw",
     "paths": [
       {
-        "path":"PathFiles/nvo_1.json"
+        "path":"PathFiles/nvoEvpnMultisiteBordergw.json"
+      }
+    ]  
+  },
+  {
+    "key": "nvoNw",
+    "paths": [
+      {
+        "path":"PathFiles/nvoNw.json"
       },
       {
-        "path":"PathFiles/nvo_2.json"
+        "path":"PathFiles/nvoNwsnvoIngRepl.json"
       }
     ]  
   }

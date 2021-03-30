@@ -1,4 +1,4 @@
-[
+[ 
   {
     "host": {
       "url": "https://10.62.130.43",
@@ -8,11 +8,19 @@
     }
   },
   {
-      "host": {
-        "url": "https://10.62.130.44",
-        "hostname": "site-1-ac-2",
-        "username": "admin",
-        "password": "cisco!123"
-      }
+    "host": {
+      "url": "https://10.62.130.44",
+      "hostname": "site-1-ac-2",
+      "username": "admin",
+      "password": "cisco!123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.62.130.37",
+      "hostname": "site-1-ag-1",
+      "username": "admin",
+      "password": "cisco!123"
+    }
   }
 ]

@@ -1,0 +1,54 @@
+[
+  {
+    "ServiceName": "L2VNI",
+    "ServiceKyes": [
+      {
+        "Name": "l2BD.accEncap",
+        "Value": "anyValue"
+      },
+      {
+        "Name": "rtctrlRttEntry.rtt.export",
+        "Value": "anyValue"
+      },
+      {
+        "Name": "rtctrlRttEntry.rtt.import",
+        "Value": "anyValue"
+      }
+    ]
+  },
+  {
+    "ServiceName": "AGW",
+    "ServiceKyes": [
+      {
+        "Name": "ipv4Addr.addr",
+        "Value": "anyValue"
+      },
+      {
+        "Name": "hmmFwdIf.mode",
+        "Value": "anycastGW"
+      }
+    ]
+  },
+  {
+    "ServiceName": "IR",
+    "ServiceKyes": [
+      {
+        "Name": "nvoIngRepl.rn",
+        "Value": "anyValue"
+      }
+    ]
+  },
+  {
+    "ServiceName": "PIM",
+    "ServiceKyes": [
+      {
+        "Name": "nvoNw.mcastGroup",
+        "Value": "anyValue"
+      },
+      {
+        "Name": "nvoNw.multisiteIngRepl",
+        "Value": "disable"
+      }
+    ]
+  }
+]

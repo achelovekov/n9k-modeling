@@ -1,5 +1,74 @@
 {
   "ServiceName": "VNI",
+  "DMEProcessing": [
+    {
+      "Key": "hmmFwdIf",
+      "Paths": [
+        {
+          "Path": "PathFiles/hmmFwdIf.json"
+        }
+      ]
+    },
+    {
+      "Key": "rtctrlBDEvi",
+      "Paths": [
+        {
+          "Path": "PathFiles/rtctrlBDEvi.json"
+        }
+      ]
+    },
+    {
+      "Key": "ipv4Addr",
+      "Paths": [
+        {
+          "Path": "PathFiles/ipv4Addr.json"
+        }
+      ]
+    },
+    {
+      "Key": "sviIf",
+      "Paths": [
+        {
+          "Path": "PathFiles/sviIf.json"
+        }
+      ]
+    },
+    {
+      "Key": "l2BD",
+      "Paths": [
+        {
+          "Path": "PathFiles/l2BD.json"
+        }
+      ]
+    },
+    {
+      "Key": "nvoEvpnMultisiteBordergw",
+      "Paths": [
+        {
+          "Path": "PathFiles/nvoEvpnMultisiteBordergw.json"
+        }
+      ]
+    },
+    {
+      "Key": "nvoNw",
+      "Paths": [
+        {
+          "Path": "PathFiles/nvoNw.json"
+        },
+        {
+          "Path": "PathFiles/nvoNwsnvoIngRepl.json"
+        }
+      ]
+    },
+    {
+      "Key": "bgpInst",
+      "Paths": [
+        {
+          "Path": "PathFiles/bgpInst.json"
+        }
+      ]
+    }
+  ],
   "ServiceConstructPath": [
     {
       "ChunkName": "l2BD",
@@ -93,6 +162,19 @@
         "nvoNw.mcastGroup"
       ],
       "Options": []
+    },
+    {
+      "ChunkName": "bgpInst",
+      "KeySName": "any",
+      "KeySType": "string",
+      "KeyDName": "any",
+      "KeyDType": "int64",
+      "KeyLink": "no-link",
+      "MatchType": "full",
+      "KeyList": [
+        "bgpInst.asn"
+      ],
+      "Options": []
     }
   ],
   "ServiceComponents": [
@@ -141,10 +223,15 @@
         {
           "Name": "nvoNw.mcastGroup",
           "Value": "anyValue"
-        },
+        }
+      ]
+    },
+    {
+      "ComponentName": "MS-IR",
+      "ComponentKeys": [
         {
           "Name": "nvoNw.multisiteIngRepl",
-          "Value": "disable"
+          "Value": "enable"
         }
       ]
     }

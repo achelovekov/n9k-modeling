@@ -1,0 +1,152 @@
+{
+  "ServiceName": "VNI",
+  "ServiceConstructPath": [
+    {
+      "ChunkName": "l2BD",
+      "KeySName": "vnid",
+      "KeySType": "string",
+      "KeyDName": "l2BD.accEncap",
+      "KeyDType": "string",
+      "KeyLink": "direct",
+      "MatchType": "partial",
+      "KeyList": [
+        "l2BD.id",
+        "l2BD.accEncap",
+        "l2BD.name"
+      ],
+      "Options": []
+    },
+    {
+      "ChunkName": "sviIf",
+      "KeySName": "l2BD.id",
+      "KeySType": "int64",
+      "KeyDName": "sviIf.vlanId",
+      "KeyDType": "int64",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "KeyList": [
+        "sviIf.id"
+      ],
+      "Options": []
+    },
+    {
+      "ChunkName": "rtctrlBDEvi",
+      "KeySName": "l2BD.accEncap",
+      "KeySType": "string",
+      "KeyDName": "rtctrlBDEvi.encap",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "KeyList": [
+        "rtctrlRttEntry.rtt"
+      ],
+      "Options": [
+        {
+          "optionKey": "rtctrlRttP.type",
+          "optionValue": "export"
+        },
+        {
+          "optionKey": "rtctrlRttP.type",
+          "optionValue": "import"
+        }
+      ]
+    },
+    {
+      "ChunkName": "ipv4Addr",
+      "KeySName": "sviIf.id",
+      "KeySType": "string",
+      "KeyDName": "ipv4If.id",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "KeyList": [
+        "ipv4Addr.addr",
+        "ipv4Addr.tag",
+        "ipv4Dom.name"
+      ],
+      "Options": []
+    },
+    {
+      "ChunkName": "hmmFwdIf",
+      "KeySName": "sviIf.id",
+      "KeySType": "string",
+      "KeyDName": "hmmFwdIf.id",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "KeyList": [
+        "hmmFwdIf.mode"
+      ],
+      "Options": []
+    },
+    {
+      "ChunkName": "nvoNw",
+      "KeySName": "vnid",
+      "KeySType": "string",
+      "KeyDName": "nvoNw.vni",
+      "KeyDType": "int64",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "KeyList": [
+        "nvoNw.vni",
+        "nvoNw.multisiteIngRepl",
+        "nvoNw.mcastGroup"
+      ],
+      "Options": []
+    }
+  ],
+  "ServiceComponents": [
+    {
+      "ComponentName": "L2VNI",
+      "ComponentKeys": [
+        {
+          "Name": "l2BD.accEncap",
+          "Value": "anyValue"
+        },
+        {
+          "Name": "rtctrlRttEntry.rtt.export",
+          "Value": "anyValue"
+        },
+        {
+          "Name": "rtctrlRttEntry.rtt.import",
+          "Value": "anyValue"
+        }
+      ]
+    },
+    {
+      "ComponentName": "AGW",
+      "ComponentKeys": [
+        {
+          "Name": "ipv4Addr.addr",
+          "Value": "anyValue"
+        },
+        {
+          "Name": "hmmFwdIf.mode",
+          "Value": "anycastGW"
+        }
+      ]
+    },
+    {
+      "ComponentName": "IR",
+      "ComponentKeys": [
+        {
+          "Name": "nvoIngRepl.rn",
+          "Value": "anyValue"
+        }
+      ]
+    },
+    {
+      "ComponentName": "PIM",
+      "ComponentKeys": [
+        {
+          "Name": "nvoNw.mcastGroup",
+          "Value": "anyValue"
+        },
+        {
+          "Name": "nvoNw.multisiteIngRepl",
+          "Value": "disable"
+        }
+      ]
+    }
+  ]
+}

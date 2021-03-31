@@ -16,6 +16,15 @@ import (
 	cu "github.com/achelovekov/collectorutils"
 )
 
+type MetaData struct {
+	Config        cu.Config
+	Enrich        cu.Enrich
+	Filter        cu.Filter
+	KeysMap       cu.KeysMap
+	DB            DB
+	ConversionMap cu.ConversionMap
+}
+
 type NXAPILoginBody struct {
 	AaaUser AaaUser `json:"aaaUser"`
 }
@@ -37,15 +46,6 @@ type NXAPILoginResponse struct {
 			}
 		}
 	}
-}
-
-type MetaData struct {
-	Config        cu.Config
-	Enrich        cu.Enrich
-	Filter        cu.Filter
-	KeysMap       cu.KeysMap
-	DB            DB
-	ConversionMap cu.ConversionMap
 }
 
 func NXAPICall(hmd cu.HostMetaData, DMEPath string) map[string]interface{} {
@@ -119,14 +119,13 @@ type DBEntry struct {
 type DMEChunkMap map[string]DMEChunk
 type DMEChunk []map[string]interface{}
 
-type DataDB map[string]DeviceData
-type DeviceData map[string]interface{}
-
 type ServiceDefinition struct {
+	DMEProcessing        []cu.KeyDefinition   `json:"DMEProcessing"`
 	ServiceName          string               `json:"ServiceName"`
 	ServiceConstructPath ServiceConstructPath `json:"ServiceConstructPath"`
 	ServiceComponents    ServiceComponents    `json:"ServiceComponents"`
 }
+
 type ServiceConstructPath []struct {
 	ChunkName string   `json:"ChunkName"`
 	KeySName  string   `json:"KeySName"`
@@ -170,29 +169,33 @@ func LoadServiceDefinition(fineName string) ServiceDefinition {
 	return ServiceDefinition
 }
 
-func PrettyPrintDataDB(DataDB DataDB) {
-	for k, v := range DataDB {
-		fmt.Println("Device:", k)
+func LoadKeysMap(KeysDefinition []cu.KeyDefinition) cu.KeysMap {
 
-		JSONData, err := json.MarshalIndent(v, "", "  ")
-		if err != nil {
-			log.Fatalf(err.Error())
-		}
-		fmt.Printf("Pretty processed output %s\n", string(JSONData))
-	}
-}
+	KeysMap := make(cu.KeysMap)
 
-func PrettyPrintDB(DB DB) {
-	for _, DBEntry := range DB {
-		fmt.Println("Device:", DBEntry.DeviceName)
+	for _, v := range KeysDefinition {
+		var Paths cu.Paths
 
-		for k, DMEChunk := range DBEntry.DMEChunkMap {
-			fmt.Println("	Key:", k)
-			for _, v := range DMEChunk {
-				cu.PrettyPrint(v)
+		for _, v := range v.Paths {
+			pathFile, err := os.Open(v.Path)
+			if err != nil {
+				fmt.Println(err)
 			}
+			defer pathFile.Close()
+
+			pathFileBytes, _ := ioutil.ReadAll(pathFile)
+			var Path cu.Path
+			err = json.Unmarshal(pathFileBytes, &Path)
+			if err != nil {
+				fmt.Println(err)
+			}
+			Paths = append(Paths, Path)
 		}
+
+		KeysMap[v.Key] = Paths
 	}
+
+	return KeysMap
 }
 
 func worker(src map[string]interface{}, path cu.Path, mode int, filter cu.Filter, enrich cu.Enrich) []map[string]interface{} {
@@ -226,11 +229,11 @@ func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
 	md.DB = append(md.DB, DBEntry)
 }
 
-func DeviceDataFill(DMEChunk DMEChunk, srcVal interface{}, KeyDName string, KeyList []string, DeviceData DeviceData, Options []Option, matchType string) {
+func DeviceDataFill(DMEChunk DMEChunk, KeySName string, KeyDName string, KeyList []string, DeviceData DeviceData, Options []Option, matchType string) {
 	if matchType == "full" {
 		if len(Options) == 0 {
 			for _, item := range DMEChunk {
-				if srcVal == item[KeyDName] {
+				if DeviceData[KeySName] == item[KeyDName] || (KeySName == "any" && KeyDName == "any") {
 					for _, v := range KeyList {
 						if _, ok := item[v]; ok {
 							DeviceData[v] = item[v]
@@ -241,7 +244,7 @@ func DeviceDataFill(DMEChunk DMEChunk, srcVal interface{}, KeyDName string, KeyL
 		} else {
 			for _, Option := range Options {
 				for _, item := range DMEChunk {
-					if srcVal == item[KeyDName] && item[Option.OptionKey] == Option.OptionValue {
+					if (DeviceData[KeySName] == item[KeyDName] && item[Option.OptionKey] == Option.OptionValue) || (KeySName == "any" && KeyDName == "any") {
 						for _, v := range KeyList {
 							if _, ok := item[v]; ok {
 								DeviceData[v+"."+Option.OptionValue] = item[v]
@@ -255,7 +258,7 @@ func DeviceDataFill(DMEChunk DMEChunk, srcVal interface{}, KeyDName string, KeyL
 	if matchType == "partial" {
 		if len(Options) == 0 {
 			for _, item := range DMEChunk {
-				if strings.Contains(item[KeyDName].(string), srcVal.(string)) {
+				if strings.Contains(item[KeyDName].(string), DeviceData[KeySName].(string)) || (KeySName == "any" && KeyDName == "any") {
 					for _, v := range KeyList {
 						if _, ok := item[v]; ok {
 							DeviceData[v] = item[v]
@@ -266,7 +269,7 @@ func DeviceDataFill(DMEChunk DMEChunk, srcVal interface{}, KeyDName string, KeyL
 		} else {
 			for _, Option := range Options {
 				for _, item := range DMEChunk {
-					if strings.Contains(item[KeyDName].(string), srcVal.(string)) && item[Option.OptionKey] == Option.OptionValue {
+					if (strings.Contains(item[KeyDName].(string), DeviceData[KeySName].(string)) && item[Option.OptionKey] == Option.OptionValue) || (KeySName == "any" && KeyDName == "any") {
 						for _, v := range KeyList {
 							if _, ok := item[v]; ok {
 								DeviceData[v+"."+Option.OptionValue] = item[v]
@@ -282,45 +285,67 @@ func DeviceDataFill(DMEChunk DMEChunk, srcVal interface{}, KeyDName string, KeyL
 func TypeConversion(srcType string, dstType string, srcVal interface{}, ConversionMap cu.ConversionMap) interface{} {
 	if srcType != dstType {
 		P := cu.Pair{SrcType: srcType, DstType: dstType}
-		fmt.Printf("%v %T", srcVal, srcVal)
 		return ConversionMap[P](srcVal)
 	} else {
 		return srcVal
 	}
 }
 
-func PrepareServiceData(DataDB DataDB, DB DB, srcVal interface{}, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) {
+type DeviceDataDB []DeviceDataDBEntry
+type DeviceDataDBEntry struct {
+	DeviceName string     `json:"DeviceName"`
+	DeviceData DeviceData `json:"DeviceData"`
+}
+type DeviceData map[string]interface{}
+
+func ConstructDeviceDataDB(DeviceDataDB *DeviceDataDB, DB DB, srcVal interface{}, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) {
 	for _, DBEntry := range DB {
+		var DeviceDataDBEntry DeviceDataDBEntry
 		DeviceData := make(DeviceData)
 		for _, v := range ServiceConstructPath {
 			if v.KeyLink == "direct" {
 				DeviceData[v.KeySName] = srcVal
 				DeviceData[v.KeySName] = TypeConversion(v.KeySType, v.KeyDType, DeviceData[v.KeySName], ConversionMap)
-				DeviceDataFill(DBEntry.DMEChunkMap[v.ChunkName], DeviceData[v.KeySName], v.KeyDName, v.KeyList, DeviceData, v.Options, v.MatchType)
-				fmt.Println("DeviceData after direct:", DeviceData)
+				DeviceDataFill(DBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, DeviceData, v.Options, v.MatchType)
 			}
-
 			if v.KeyLink == "indirect" {
 				if _, ok := DeviceData[v.KeySName]; ok {
 					DeviceData[v.KeySName] = TypeConversion(v.KeySType, v.KeyDType, DeviceData[v.KeySName], ConversionMap)
-					DeviceDataFill(DBEntry.DMEChunkMap[v.ChunkName], DeviceData[v.KeySName], v.KeyDName, v.KeyList, DeviceData, v.Options, v.MatchType)
-					fmt.Println("DeviceData after indirect:", DeviceData)
+					DeviceDataFill(DBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, DeviceData, v.Options, v.MatchType)
 				}
 			}
+			if v.KeyLink == "no-link" {
+				DeviceDataFill(DBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, DeviceData, v.Options, v.MatchType)
+			}
 		}
-		DataDB[DBEntry.DeviceName] = DeviceData
+		DeviceDataDBEntry.DeviceName = DBEntry.DeviceName
+		DeviceDataDBEntry.DeviceData = DeviceData
+		*DeviceDataDB = append(*DeviceDataDB, DeviceDataDBEntry)
 	}
 }
 
-type DeviceServiceDB map[string]DeviceServiceData
-type DeviceServiceData map[string]bool
+func PrettyPrint(src interface{}) {
+	JSONData, err := json.MarshalIndent(src, "", "  ")
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+	fmt.Printf("Pretty processed output: %s\n", string(JSONData))
+}
 
-func CheckServiceKeys(ComponentKeys []ComponentKey, DeviceData map[string]interface{}) bool {
+type ServiceLayoutDB []ServiceLayoutDBEntry
+type ServiceLayoutDBEntry struct {
+	ServiceComponentName       string   `json:"ServiceComponentName"`
+	ServiceComponentDeviceList []string `json:"ServiceComponentDeviceList"`
+}
+
+func CheckComponentKeys(ComponentKeys []ComponentKey, DeviceData map[string]interface{}) bool {
 	var flag bool = true
 	for _, ComponentKey := range ComponentKeys {
 		if v, ok := DeviceData[ComponentKey.Name]; ok {
 			if v == ComponentKey.Value || ComponentKey.Value == "anyValue" {
 				flag = flag && true
+			} else {
+				flag = flag && false
 			}
 		} else {
 			flag = flag && false
@@ -329,28 +354,30 @@ func CheckServiceKeys(ComponentKeys []ComponentKey, DeviceData map[string]interf
 	return flag
 }
 
-func ServiceConstruct(ServiceComponents ServiceComponents, DataDB DataDB, DeviceServiceDB DeviceServiceDB) {
-	for k, v := range DataDB {
-		DeviceServiceData := make(DeviceServiceData)
-		for _, Component := range ServiceComponents {
-			if CheckServiceKeys(Component.ComponentKeys, v) {
-				DeviceServiceData[Component.ComponentName] = true
-			} else {
-				DeviceServiceData[Component.ComponentName] = false
+func ServiceLayoutConstruct(ServiceComponents ServiceComponents, DeviceDataDB DeviceDataDB, ServiceLayoutDB *ServiceLayoutDB) {
+	for _, ServiceComponent := range ServiceComponents {
+		DeviceList := []string{}
+		var ServiceLayoutDBEntry ServiceLayoutDBEntry
+		for _, DeviceDataDBEntry := range DeviceDataDB {
+			if CheckComponentKeys(ServiceComponent.ComponentKeys, DeviceDataDBEntry.DeviceData) {
+				DeviceList = append(DeviceList, DeviceDataDBEntry.DeviceName)
 			}
 		}
-		DeviceServiceDB[k] = DeviceServiceData
+		ServiceLayoutDBEntry.ServiceComponentName = ServiceComponent.ComponentName
+		ServiceLayoutDBEntry.ServiceComponentDeviceList = DeviceList
+		*ServiceLayoutDB = append(*ServiceLayoutDB, ServiceLayoutDBEntry)
 	}
 }
 
 func main() {
 
 	Config, Filter, Enrich := cu.Initialize("config.json")
-	KeysMap := cu.LoadKeysMap(Config.KeysDefinitionFile)
 	Inventory := cu.LoadInventory("inventory.json")
+	ServiceDefinition := LoadServiceDefinition("VNI.service")
+	KeysMap := LoadKeysMap(ServiceDefinition.DMEProcessing)
+	ConversionMap := cu.CreateConversionMap()
 
 	var DB DB
-	ConversionMap := cu.CreateConversionMap()
 	MetaData := &MetaData{Config: Config, Filter: Filter, Enrich: Enrich, KeysMap: KeysMap, DB: DB, ConversionMap: ConversionMap}
 
 	for _, v := range Inventory {
@@ -358,20 +385,15 @@ func main() {
 		Processing(MetaData, v, src)
 	}
 
-	PrettyPrintDB(MetaData.DB)
-
 	srcVal := flag.String("key", "00000", "vnid to construct the model")
 	flag.Parse()
 
-	DataDB := make(DataDB)
-	var ServiceDefinition ServiceDefinition
-	ServiceDefinition = LoadServiceDefinition("VNI.service")
+	DeviceDataDB := make(DeviceDataDB, 0)
+	ServiceLayoutDB := make(ServiceLayoutDB, 0)
 
-	PrepareServiceData(DataDB, MetaData.DB, *srcVal, ServiceDefinition.ServiceConstructPath, MetaData.ConversionMap)
-	PrettyPrintDataDB(DataDB)
+	ConstructDeviceDataDB(&DeviceDataDB, MetaData.DB, *srcVal, ServiceDefinition.ServiceConstructPath, MetaData.ConversionMap)
+	PrettyPrint(DeviceDataDB)
 
-	DeviceServiceDB := make(DeviceServiceDB)
-	ServiceConstruct(ServiceDefinition.ServiceComponents, DataDB, DeviceServiceDB)
-
-	fmt.Println(DeviceServiceDB)
+	ServiceLayoutConstruct(ServiceDefinition.ServiceComponents, DeviceDataDB, &ServiceLayoutDB)
+	PrettyPrint(ServiceLayoutDB)
 }

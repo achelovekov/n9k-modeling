@@ -1,0 +1,449 @@
+{
+    "totalCount": "1",
+    "imdata": [
+        {
+            "ipv4Entity": {
+                "attributes": {
+                    "adminSt": "enabled",
+                    "dn": "sys/ipv4",
+                    "name": ""
+                },
+                "children": [
+                    {
+                        "ipv4Inst": {
+                            "attributes": {
+                                "accessListMatchLocal": "disabled",
+                                "adminSt": "enabled",
+                                "ctrl": "",
+                                "hardwareEcmpHashOffsetConcat": "disabled",
+                                "hardwareEcmpHashOffsetValue": "0",
+                                "hardwareEcmpHashPolynomial": "CRC16",
+                                "loggingLevel": "error",
+                                "name": "",
+                                "rn": "inst",
+                                "sourceRoute": "disabled"
+                            },
+                            "children": [
+                                {
+                                    "ipv4Dom": {
+                                        "attributes": {
+                                            "autoDiscard": "disabled",
+                                            "ipIcmpErrorsSrcIntf": "unspecified",
+                                            "name": "iAZ",
+                                            "rn": "dom-iAZ"
+                                        },
+                                        "children": [
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "lo1001",
+                                                        "rn": "if-[lo1001]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "100.1.1.1/32",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[100.1.1.1/32]",
+                                                                    "tag": "3901",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "enabled",
+                                                        "id": "vlan3901",
+                                                        "rn": "if-[vlan3901]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "vlan2009",
+                                                        "rn": "if-[vlan2009]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "10.12.255.250/16",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[10.12.255.250/16]",
+                                                                    "tag": "3901",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "vlan2008",
+                                                        "rn": "if-[vlan2008]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "10.2.255.250/16",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[10.2.255.250/16]",
+                                                                    "tag": "3901",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "ipv4Dom": {
+                                        "attributes": {
+                                            "autoDiscard": "disabled",
+                                            "ipIcmpErrorsSrcIntf": "unspecified",
+                                            "name": "default",
+                                            "rn": "dom-default"
+                                        },
+                                        "children": [
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "eth1/52",
+                                                        "rn": "if-[eth1/52]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "192.168.11.8/31",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[192.168.11.8/31]",
+                                                                    "tag": "0",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "lo0",
+                                                        "rn": "if-[lo0]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "172.16.1.1/32",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[172.16.1.1/32]",
+                                                                    "tag": "0",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "vlan3967",
+                                                        "rn": "if-[vlan3967]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "192.168.11.0/31",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[192.168.11.0/31]",
+                                                                    "tag": "0",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "eth1/49",
+                                                        "rn": "if-[eth1/49]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "192.168.11.2/31",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[192.168.11.2/31]",
+                                                                    "tag": "0",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "lo1",
+                                                        "rn": "if-[lo1]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "172.17.1.101/32",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[172.17.1.101/32]",
+                                                                    "tag": "0",
+                                                                    "type": "secondary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "172.17.1.1/32",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[172.17.1.1/32]",
+                                                                    "tag": "0",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "eth1/51",
+                                                        "rn": "if-[eth1/51]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "192.168.11.6/31",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[192.168.11.6/31]",
+                                                                    "tag": "0",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "eth1/50",
+                                                        "rn": "if-[eth1/50]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "192.168.11.4/31",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[192.168.11.4/31]",
+                                                                    "tag": "0",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "ipv4Dom": {
+                                        "attributes": {
+                                            "autoDiscard": "disabled",
+                                            "ipIcmpErrorsSrcIntf": "unspecified",
+                                            "name": "management",
+                                            "rn": "dom-management"
+                                        },
+                                        "children": [
+                                            {
+                                                "ipv4Route": {
+                                                    "attributes": {
+                                                        "ctrl": "",
+                                                        "descr": "",
+                                                        "name": "",
+                                                        "pcTag": "any",
+                                                        "pref": "1",
+                                                        "prefix": "0.0.0.0/0",
+                                                        "rn": "rt-[0.0.0.0/0]",
+                                                        "tag": "0"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Nexthop": {
+                                                                "attributes": {
+                                                                    "descr": "",
+                                                                    "name": "",
+                                                                    "nhAddr": "10.62.130.1/32",
+                                                                    "nhIf": "unspecified",
+                                                                    "nhVrf": "management",
+                                                                    "object": "0",
+                                                                    "pref": "0",
+                                                                    "rn": "nh-[unspecified]-addr-[10.62.130.1/32]-vrf-[management]",
+                                                                    "rtname": "",
+                                                                    "rwEncap": "unknown",
+                                                                    "tag": "0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "ipv4If": {
+                                                    "attributes": {
+                                                        "acl": "",
+                                                        "directedBroadcast": "disabled",
+                                                        "dropGlean": "disabled",
+                                                        "forward": "disabled",
+                                                        "id": "mgmt0",
+                                                        "rn": "if-[mgmt0]",
+                                                        "unnumbered": "unspecified",
+                                                        "urpf": "disabled"
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "ipv4Addr": {
+                                                                "attributes": {
+                                                                    "addr": "10.62.130.43/25",
+                                                                    "ctrl": "",
+                                                                    "pref": "0",
+                                                                    "rn": "addr-[10.62.130.43/25]",
+                                                                    "tag": "0",
+                                                                    "type": "primary",
+                                                                    "vpcPeer": "0.0.0.0"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

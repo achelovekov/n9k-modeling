@@ -159,7 +159,9 @@
       "KeyList": [
         "nvoNw.vni",
         "nvoNw.multisiteIngRepl",
-        "nvoNw.mcastGroup"
+        "nvoNw.mcastGroup",
+        "nvoIngRepl.proto",
+        "nvoIngRepl.rn"
       ],
       "Options": []
     },
@@ -183,15 +185,18 @@
       "ComponentKeys": [
         {
           "Name": "l2BD.accEncap",
-          "Value": "anyValue"
+          "Value": "anyValue",
+          "MatchType": "equal"
         },
         {
           "Name": "rtctrlRttEntry.rtt.export",
-          "Value": "anyValue"
+          "Value": "anyValue",
+          "MatchType": "equal"
         },
         {
           "Name": "rtctrlRttEntry.rtt.import",
-          "Value": "anyValue"
+          "Value": "anyValue",
+          "MatchType": "equal"
         }
       ]
     },
@@ -200,11 +205,13 @@
       "ComponentKeys": [
         {
           "Name": "ipv4Addr.addr",
-          "Value": "anyValue"
+          "Value": "anyValue",
+          "MatchType": "equal"
         },
         {
           "Name": "hmmFwdIf.mode",
-          "Value": "anycastGW"
+          "Value": "anycastGW",
+          "MatchType": "equal"
         }
       ]
     },
@@ -213,7 +220,8 @@
       "ComponentKeys": [
         {
           "Name": "nvoIngRepl.rn",
-          "Value": "anyValue"
+          "Value": "anyValue",
+          "MatchType": "equal"
         }
       ]
     },
@@ -222,7 +230,8 @@
       "ComponentKeys": [
         {
           "Name": "nvoNw.mcastGroup",
-          "Value": "anyValue"
+          "Value": "0.0.0.0",
+          "MatchType": "not-equal"
         }
       ]
     },
@@ -231,7 +240,8 @@
       "ComponentKeys": [
         {
           "Name": "nvoNw.multisiteIngRepl",
-          "Value": "enable"
+          "Value": "enable",
+          "MatchType": "equal"
         }
       ]
     }

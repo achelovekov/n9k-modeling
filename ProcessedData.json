@@ -1,0 +1,143 @@
+{
+  "ServiceName": "VNI",
+  "ServiceDataDB": [
+    {
+      "DeviceName": "site-1-ac-1",
+      "DeviceData": {
+        "bgpInst.asn": 1,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "10.99.254.250/16",
+        "ipv4Addr.tag": "3924",
+        "ipv4Dom.name": "iDEMOz",
+        "l2BD.accEncap": "vxlan-2012010",
+        "l2BD.id": 2010,
+        "l2BD.name": "i24Z_10.99.0.0/16",
+        "nvoIngRepl.proto": "bgp",
+        "nvoIngRepl.rn": "IngRepl",
+        "nvoNw.mcastGroup": "0.0.0.0",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.vni": 2012010,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
+        "sviIf.id": "vlan2010",
+        "vnid": 2012010
+      }
+    },
+    {
+      "DeviceName": "site-1-ac-2",
+      "DeviceData": {
+        "bgpInst.asn": 1,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "10.99.254.250/16",
+        "ipv4Addr.tag": "3924",
+        "ipv4Dom.name": "iDEMOz",
+        "l2BD.accEncap": "vxlan-2012010",
+        "l2BD.id": 2010,
+        "l2BD.name": "i24Z_10.99.0.0/16",
+        "nvoIngRepl.proto": "bgp",
+        "nvoIngRepl.rn": "IngRepl",
+        "nvoNw.mcastGroup": "0.0.0.0",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.vni": 2012010,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
+        "sviIf.id": "vlan2010",
+        "vnid": 2012010
+      }
+    },
+    {
+      "DeviceName": "site-1-ag-1",
+      "DeviceData": {
+        "bgpInst.asn": 1,
+        "l2BD.accEncap": "vxlan-2012010",
+        "l2BD.id": 2010,
+        "l2BD.name": "i24Z_10.99.0.0/16",
+        "nvoIngRepl.proto": "bgp",
+        "nvoIngRepl.rn": "IngRepl",
+        "nvoNw.mcastGroup": "0.0.0.0",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.vni": 2012010,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
+        "vnid": 2012010
+      }
+    }
+  ],
+  "ServiceLayoutDB": [
+    {
+      "DeviceName": "site-1-ac-1",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": true
+        },
+        {
+          "Name": "PIM",
+          "Value": false
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "site-1-ac-2",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": true
+        },
+        {
+          "Name": "PIM",
+          "Value": false
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "site-1-ag-1",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": true
+        },
+        {
+          "Name": "PIM",
+          "Value": false
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+package main
+
+import (
+	"flag"
+	m "n9k-modeling/modeling"
+
+	cu "github.com/achelovekov/collectorutils"
+)
+
+func main() {
+
+	srcVal := flag.String("key", "00000", "vnid to construct the model")
+	ServiceDefinitionFile := flag.String("service", "00000", "service definition")
+	flag.Parse()
+
+	Config, Filter, Enrich := cu.Initialize("config.json")
+	Inventory := cu.LoadInventory("inventory.json")
+	ServiceDefinition := m.LoadServiceDefinition(*ServiceDefinitionFile)
+	KeysMap := m.LoadKeysMap(ServiceDefinition.DMEProcessing)
+	ConversionMap := cu.CreateConversionMap()
+
+	var DB m.DB
+	MetaData := &m.MetaData{Config: Config, Filter: Filter, Enrich: Enrich, KeysMap: KeysMap, DB: DB, ConversionMap: ConversionMap}
+
+	for _, v := range Inventory {
+		src := m.NXAPICall(v, "sys")
+		m.Processing(MetaData, v, src)
+	}
+
+	ServiceDataDB := make(m.ServiceDataDB, 0)
+	ServiceLayoutDB := make(m.ServiceLayoutDB, 0)
+
+	m.ConstructServiceDataDB(&ServiceDataDB, MetaData.DB, *srcVal, ServiceDefinition.ServiceConstructPath, MetaData.ConversionMap)
+	m.ConstructServiceLayout(ServiceDefinition.ServiceComponents, ServiceDataDB, &ServiceLayoutDB)
+
+	var ProcessedData m.ProcessedData
+	ProcessedData.ServiceDataDB = ServiceDataDB
+	ProcessedData.ServiceLayoutDB = ServiceLayoutDB
+	ProcessedData.ServiceName = ServiceDefinition.ServiceName
+
+	m.PrettyPrint(ProcessedData)
+}

@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 
 	cu "github.com/achelovekov/collectorutils"
 )
@@ -20,7 +21,6 @@ type MetaData struct {
 	Enrich        cu.Enrich
 	Filter        cu.Filter
 	KeysMap       cu.KeysMap
-	DB            DB
 	ConversionMap cu.ConversionMap
 }
 
@@ -110,8 +110,8 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) map[string]interface{} {
 
 }
 
-type DB []DBEntry
-type DBEntry struct {
+type RawDataDB []RawDataDBEntry
+type RawDataDBEntry struct {
 	DeviceName  string
 	DMEChunkMap DMEChunkMap
 }
@@ -210,8 +210,8 @@ func worker(src map[string]interface{}, path cu.Path, mode int, filter cu.Filter
 	return buf
 }
 
-func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
-	var DBEntry DBEntry
+/* func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
+	var DBEntry RawDataDBEntry
 	DBEntry.DeviceName = hmd.Host.Hostname
 	DBEntry.DMEChunkMap = make(map[string]DMEChunk)
 
@@ -227,6 +227,34 @@ func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
 	}
 
 	md.DB = append(md.DB, DBEntry)
+} */
+
+func GetRawData(md *MetaData, hmd cu.HostMetaData, DMEPath string, ch chan<- RawDataDBEntry, wg *sync.WaitGroup) {
+	fmt.Println("started")
+	src := NXAPICall(hmd, DMEPath)
+	Processing(md, hmd, src, ch, wg)
+}
+
+func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}, ch chan<- RawDataDBEntry, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	var RawDataDBEntry RawDataDBEntry
+	RawDataDBEntry.DeviceName = hmd.Host.Hostname
+	RawDataDBEntry.DMEChunkMap = make(map[string]DMEChunk)
+
+	for MapKey, Paths := range md.KeysMap {
+		DMEChunk := make([]map[string]interface{}, 0)
+
+		buf := make([]map[string]interface{}, 0)
+		for _, Path := range Paths {
+			buf = worker(src, Path, cu.Cadence, md.Filter, md.Enrich)
+			DMEChunk = append(DMEChunk, buf...)
+		}
+		RawDataDBEntry.DMEChunkMap[MapKey] = DMEChunk
+	}
+
+	ch <- RawDataDBEntry
 }
 
 func DeviceDataFill(DMEChunk DMEChunk, KeySName string, KeyDName string, KeyList []string, DeviceData DeviceData, Options []Option, matchType string) {
@@ -298,8 +326,8 @@ type ServiceDataDBEntry struct {
 }
 type DeviceData map[string]interface{}
 
-func ConstructServiceDataDB(ServiceDataDB *ServiceDataDB, DB DB, srcVal interface{}, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) {
-	for _, DBEntry := range DB {
+func ConstructServiceDataDB(ServiceDataDB *ServiceDataDB, RawDataDB RawDataDB, srcVal interface{}, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) {
+	for _, DBEntry := range RawDataDB {
 		var ServiceDataDBEntry ServiceDataDBEntry
 		DeviceData := make(DeviceData)
 		for _, v := range ServiceConstructPath {

@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	m "n9k-modeling/modeling"
-	"sync"
 
 	cu "github.com/achelovekov/collectorutils"
 )
@@ -19,29 +18,19 @@ func main() {
 	ServiceDefinition := m.LoadServiceDefinition(*ServiceDefinitionFile)
 	KeysMap := m.LoadKeysMap(ServiceDefinition.DMEProcessing)
 	ConversionMap := cu.CreateConversionMap()
-	MetaData := &m.MetaData{Config: Config, Filter: Filter, Enrich: Enrich, KeysMap: KeysMap, ConversionMap: ConversionMap}
 
-	ch := make(chan m.RawDataDBEntry, len(Inventory))
-	var wg sync.WaitGroup
+	var DB m.DB
+	MetaData := &m.MetaData{Config: Config, Filter: Filter, Enrich: Enrich, KeysMap: KeysMap, DB: DB, ConversionMap: ConversionMap}
 
 	for _, v := range Inventory {
-		wg.Add(1)
-		go m.GetRawData(MetaData, v, "sys", ch, &wg)
-	}
-
-	wg.Wait()
-	close(ch)
-
-	var RawDataDB m.RawDataDB
-
-	for elem := range ch {
-		RawDataDB = append(RawDataDB, elem)
+		src := m.NXAPICall(v, "sys")
+		m.Processing(MetaData, v, src)
 	}
 
 	ServiceDataDB := make(m.ServiceDataDB, 0)
 	ServiceLayoutDB := make(m.ServiceLayoutDB, 0)
 
-	m.ConstructServiceDataDB(&ServiceDataDB, RawDataDB, *srcVal, ServiceDefinition.ServiceConstructPath, MetaData.ConversionMap)
+	m.ConstructServiceDataDB(&ServiceDataDB, MetaData.DB, *srcVal, ServiceDefinition.ServiceConstructPath, MetaData.ConversionMap)
 	m.ConstructServiceLayout(ServiceDefinition.ServiceComponents, ServiceDataDB, &ServiceLayoutDB)
 
 	var ProcessedData m.ProcessedData

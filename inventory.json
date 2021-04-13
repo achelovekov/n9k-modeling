@@ -14,13 +14,5 @@
       "username": "admin",
       "password": "cisco!123"
     }
-  },
-  {
-    "host": {
-      "url": "https://10.62.130.37",
-      "hostname": "site-1-ag-1",
-      "username": "admin",
-      "password": "cisco!123"
-    }
   }
 ]

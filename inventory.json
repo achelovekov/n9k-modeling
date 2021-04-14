@@ -12,6 +12,70 @@
       "url": "https://10.62.130.44",
       "hostname": "site-1-ac-2",
       "username": "admin",
+      "password": "cisco!1234"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.62.130.47",
+      "hostname": "site-1-ac-3",
+      "username": "admin",
+      "password": "cisco!123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.62.130.48",
+      "hostname": "site-1-ac-4",
+      "username": "admin",
+      "password": "cisco!123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.62.130.37",
+      "hostname": "site-1-ag-1",
+      "username": "admin",
+      "password": "cisco!123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.62.130.38",
+      "hostname": "site-1-ag-2",
+      "username": "admin",
+      "password": "cisco!123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.62.130.41",
+      "hostname": "mpod-bg-1",
+      "username": "admin",
+      "password": "cisco!123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.62.130.42",
+      "hostname": "mpod-bg-2",
+      "username": "admin",
+      "password": "cisco!123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.62.130.39",
+      "hostname": "mpod-ac-1",
+      "username": "admin",
+      "password": "cisco!123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.62.130.40",
+      "hostname": "mpod-ac-2",
+      "username": "admin",
       "password": "cisco!123"
     }
   }

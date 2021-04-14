@@ -2,8 +2,9 @@ package main
 
 import (
 	"flag"
-	m "n9k-modeling/modeling"
 	"sync"
+
+	m "n9k-modeling/modeling"
 
 	cu "github.com/achelovekov/collectorutils"
 )
@@ -48,6 +49,4 @@ func main() {
 	ProcessedData.ServiceDataDB = ServiceDataDB
 	ProcessedData.ServiceLayoutDB = ServiceLayoutDB
 	ProcessedData.ServiceName = ServiceDefinition.ServiceName
-
-	m.PrettyPrint(ProcessedData)
 }

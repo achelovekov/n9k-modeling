@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -47,7 +48,9 @@ type NXAPILoginResponse struct {
 	}
 }
 
-func NXAPICall(hmd cu.HostMetaData, DMEPath string) map[string]interface{} {
+func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, error) {
+	src := make(map[string]interface{})
+
 	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
@@ -65,19 +68,25 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) map[string]interface{} {
 
 	requestBody, err := json.MarshalIndent(NXAPILoginBody, "", "  ")
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	url := hmd.Host.URL + "/api/mo/aaaLogin.json"
 
 	res, err := client.Post(url, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return src, errors.New("Can't reach device API")
+	}
+
+	if res.StatusCode != 200 {
+		log.Println("Unauthorized acces or something goes wrong while receiving access cookie")
+		return src, fmt.Errorf("Can't get access cookie from device: %v", hmd.Host.Hostname)
 	}
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	res.Body.Close()
 
@@ -99,14 +108,12 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) map[string]interface{} {
 		fmt.Printf("error = %s \n", err)
 	}
 
-	src := make(map[string]interface{})
-
 	err = json.Unmarshal(data, &src)
 	if err != nil {
 		panic(err)
 	}
 
-	return src
+	return src, nil
 
 }
 
@@ -155,7 +162,7 @@ func LoadServiceDefinition(fineName string) ServiceDefinition {
 	var ServiceDefinition ServiceDefinition
 	ServiceDefinitionFile, err := os.Open(fineName)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 	defer ServiceDefinitionFile.Close()
 
@@ -163,7 +170,7 @@ func LoadServiceDefinition(fineName string) ServiceDefinition {
 
 	err = json.Unmarshal(ServiceDefinitionFileBytes, &ServiceDefinition)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 	return ServiceDefinition
@@ -179,7 +186,7 @@ func LoadKeysMap(KeysDefinition []cu.KeyDefinition) cu.KeysMap {
 		for _, v := range v.Paths {
 			pathFile, err := os.Open(v.Path)
 			if err != nil {
-				fmt.Println(err)
+				log.Println(err)
 			}
 			defer pathFile.Close()
 
@@ -187,7 +194,7 @@ func LoadKeysMap(KeysDefinition []cu.KeyDefinition) cu.KeysMap {
 			var Path cu.Path
 			err = json.Unmarshal(pathFileBytes, &Path)
 			if err != nil {
-				fmt.Println(err)
+				log.Println(err)
 			}
 			Paths = append(Paths, Path)
 		}
@@ -210,29 +217,15 @@ func worker(src map[string]interface{}, path cu.Path, mode int, filter cu.Filter
 	return buf
 }
 
-/* func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}) {
-	var DBEntry RawDataDBEntry
-	DBEntry.DeviceName = hmd.Host.Hostname
-	DBEntry.DMEChunkMap = make(map[string]DMEChunk)
-
-	for MapKey, Paths := range md.KeysMap {
-		DMEChunk := make([]map[string]interface{}, 0)
-
-		buf := make([]map[string]interface{}, 0)
-		for _, Path := range Paths {
-			buf = worker(src, Path, cu.Cadence, md.Filter, md.Enrich)
-			DMEChunk = append(DMEChunk, buf...)
-		}
-		DBEntry.DMEChunkMap[MapKey] = DMEChunk
-	}
-
-	md.DB = append(md.DB, DBEntry)
-} */
-
 func GetRawData(md *MetaData, hmd cu.HostMetaData, DMEPath string, ch chan<- RawDataDBEntry, wg *sync.WaitGroup) {
-	fmt.Println("started")
-	src := NXAPICall(hmd, DMEPath)
-	Processing(md, hmd, src, ch, wg)
+	src, err := NXAPICall(hmd, DMEPath)
+	if err != nil {
+		log.Println("Can't get data from device:", hmd.Host.Hostname)
+		wg.Done()
+	} else {
+		log.Println("Data received from defice:", hmd.Host.Hostname)
+		Processing(md, hmd, src, ch, wg)
+	}
 }
 
 func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}, ch chan<- RawDataDBEntry, wg *sync.WaitGroup) {

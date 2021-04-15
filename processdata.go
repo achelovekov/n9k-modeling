@@ -13,6 +13,7 @@ func main() {
 
 	srcVal := flag.String("key", "00000", "vnid to construct the model")
 	ServiceDefinitionFile := flag.String("service", "00000", "service definition")
+	OutputFile := flag.String("out", "00000", "output file for result storage and template processing")
 	flag.Parse()
 
 	Config, Filter, Enrich := cu.Initialize("config.json")
@@ -49,4 +50,8 @@ func main() {
 	ProcessedData.ServiceDataDB = ServiceDataDB
 	ProcessedData.ServiceLayoutDB = ServiceLayoutDB
 	ProcessedData.ServiceName = ServiceDefinition.ServiceName
+
+	MarshalledProcessedData := m.MarshalToJSON(ProcessedData)
+
+	m.WriteDataToFile(*OutputFile, MarshalledProcessedData)
 }

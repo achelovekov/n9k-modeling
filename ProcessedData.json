@@ -2,9 +2,26 @@
   "ServiceName": "VNI",
   "ServiceDataDB": [
     {
-      "DeviceName": "mpod-bg-2",
+      "DeviceName": "site-1-ac-3",
       "DeviceData": {
-        "bgpInst.asn": 64300,
+        "bgpInst.asn": 1,
+        "l2BD.accEncap": "vxlan-2012010",
+        "l2BD.id": 2010,
+        "l2BD.name": "achelove_noagw",
+        "nvoIngRepl.proto": "bgp",
+        "nvoIngRepl.rn": "IngRepl",
+        "nvoNw.mcastGroup": "0.0.0.0",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.vni": 2012010,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
+        "vnid": 2012010
+      }
+    },
+    {
+      "DeviceName": "site-1-ag-2",
+      "DeviceData": {
+        "bgpInst.asn": 1,
         "l2BD.accEncap": "vxlan-2012010",
         "l2BD.id": 2010,
         "l2BD.name": "achelove_noagw",
@@ -36,23 +53,6 @@
       }
     },
     {
-      "DeviceName": "site-1-ag-2",
-      "DeviceData": {
-        "bgpInst.asn": 1,
-        "l2BD.accEncap": "vxlan-2012010",
-        "l2BD.id": 2010,
-        "l2BD.name": "achelove_noagw",
-        "nvoIngRepl.proto": "bgp",
-        "nvoIngRepl.rn": "IngRepl",
-        "nvoNw.mcastGroup": "0.0.0.0",
-        "nvoNw.multisiteIngRepl": "enable",
-        "nvoNw.vni": 2012010,
-        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
-        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
-        "vnid": 2012010
-      }
-    },
-    {
       "DeviceName": "site-1-ag-1",
       "DeviceData": {
         "bgpInst.asn": 1,
@@ -70,16 +70,16 @@
       }
     },
     {
-      "DeviceName": "site-1-ac-3",
+      "DeviceName": "mpod-bg-2",
       "DeviceData": {
-        "bgpInst.asn": 1,
+        "bgpInst.asn": 64300,
         "l2BD.accEncap": "vxlan-2012010",
         "l2BD.id": 2010,
         "l2BD.name": "achelove_noagw",
         "nvoIngRepl.proto": "bgp",
         "nvoIngRepl.rn": "IngRepl",
         "nvoNw.mcastGroup": "0.0.0.0",
-        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.multisiteIngRepl": "enable",
         "nvoNw.vni": 2012010,
         "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
         "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
@@ -123,7 +123,32 @@
   ],
   "ServiceLayoutDB": [
     {
-      "DeviceName": "mpod-bg-2",
+      "DeviceName": "site-1-ac-3",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": true
+        },
+        {
+          "Name": "PIM",
+          "Value": false
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "site-1-ag-2",
       "ServiceLayout": [
         {
           "Name": "L2VNI",
@@ -173,31 +198,6 @@
       ]
     },
     {
-      "DeviceName": "site-1-ag-2",
-      "ServiceLayout": [
-        {
-          "Name": "L2VNI",
-          "Value": true
-        },
-        {
-          "Name": "AGW",
-          "Value": false
-        },
-        {
-          "Name": "IR",
-          "Value": true
-        },
-        {
-          "Name": "PIM",
-          "Value": false
-        },
-        {
-          "Name": "MS-IR",
-          "Value": true
-        }
-      ]
-    },
-    {
       "DeviceName": "site-1-ag-1",
       "ServiceLayout": [
         {
@@ -223,7 +223,7 @@
       ]
     },
     {
-      "DeviceName": "site-1-ac-3",
+      "DeviceName": "mpod-bg-2",
       "ServiceLayout": [
         {
           "Name": "L2VNI",
@@ -243,7 +243,7 @@
         },
         {
           "Name": "MS-IR",
-          "Value": false
+          "Value": true
         }
       ]
     },

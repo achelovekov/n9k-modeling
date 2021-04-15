@@ -345,14 +345,16 @@ func ConstructServiceDataDB(ServiceDataDB *ServiceDataDB, RawDataDB RawDataDB, s
 	}
 }
 
-func PrettyPrint(src interface{}) {
+func MarshalToJSON(src interface{}) []byte {
 	JSONData, err := json.MarshalIndent(src, "", "  ")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
-	fmt.Printf("Pretty processed output: %s\n", string(JSONData))
+	return JSONData
+}
 
-	file, err := os.Create("ProcessedData.json")
+func WriteDataToFile(fileName string, JSONData []byte) {
+	file, err := os.Create(fileName)
 	if err != nil {
 		log.Fatalf(err.Error())
 	}

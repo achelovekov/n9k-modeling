@@ -2,128 +2,389 @@
   "ServiceName": "VNI",
   "ServiceDataDB": [
     {
-      "DeviceName": "site-1-ac-3",
+      "DeviceName": "S2-Leaf-02",
       "DeviceData": {
-        "bgpInst.asn": 1,
-        "l2BD.accEncap": "vxlan-2012010",
-        "l2BD.id": 2010,
-        "l2BD.name": "achelove_noagw",
-        "nvoIngRepl.proto": "bgp",
-        "nvoIngRepl.rn": "IngRepl",
-        "nvoNw.mcastGroup": "0.0.0.0",
+        "bgpInst.asn": 64930,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
         "nvoNw.multisiteIngRepl": "disable",
-        "nvoNw.vni": 2012010,
-        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
-        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
-        "vnid": 2012010
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
       }
     },
     {
-      "DeviceName": "site-1-ag-2",
+      "DeviceName": "S2-Leaf-01",
       "DeviceData": {
-        "bgpInst.asn": 1,
-        "l2BD.accEncap": "vxlan-2012010",
-        "l2BD.id": 2010,
-        "l2BD.name": "achelove_noagw",
-        "nvoIngRepl.proto": "bgp",
-        "nvoIngRepl.rn": "IngRepl",
-        "nvoNw.mcastGroup": "0.0.0.0",
-        "nvoNw.multisiteIngRepl": "enable",
-        "nvoNw.vni": 2012010,
-        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
-        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
-        "vnid": 2012010
-      }
-    },
-    {
-      "DeviceName": "mpod-bg-1",
-      "DeviceData": {
-        "bgpInst.asn": 64300,
-        "l2BD.accEncap": "vxlan-2012010",
-        "l2BD.id": 2010,
-        "l2BD.name": "achelove_noagw",
-        "nvoIngRepl.proto": "bgp",
-        "nvoIngRepl.rn": "IngRepl",
-        "nvoNw.mcastGroup": "0.0.0.0",
-        "nvoNw.multisiteIngRepl": "enable",
-        "nvoNw.vni": 2012010,
-        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
-        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
-        "vnid": 2012010
-      }
-    },
-    {
-      "DeviceName": "site-1-ag-1",
-      "DeviceData": {
-        "bgpInst.asn": 1,
-        "l2BD.accEncap": "vxlan-2012010",
-        "l2BD.id": 2010,
-        "l2BD.name": "achelove_noagw",
-        "nvoIngRepl.proto": "bgp",
-        "nvoIngRepl.rn": "IngRepl",
-        "nvoNw.mcastGroup": "0.0.0.0",
-        "nvoNw.multisiteIngRepl": "enable",
-        "nvoNw.vni": 2012010,
-        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
-        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
-        "vnid": 2012010
-      }
-    },
-    {
-      "DeviceName": "mpod-bg-2",
-      "DeviceData": {
-        "bgpInst.asn": 64300,
-        "l2BD.accEncap": "vxlan-2012010",
-        "l2BD.id": 2010,
-        "l2BD.name": "achelove_noagw",
-        "nvoIngRepl.proto": "bgp",
-        "nvoIngRepl.rn": "IngRepl",
-        "nvoNw.mcastGroup": "0.0.0.0",
-        "nvoNw.multisiteIngRepl": "enable",
-        "nvoNw.vni": 2012010,
-        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
-        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
-        "vnid": 2012010
-      }
-    },
-    {
-      "DeviceName": "mpod-ac-1",
-      "DeviceData": {
-        "bgpInst.asn": 2,
-        "l2BD.accEncap": "vxlan-2012010",
-        "l2BD.id": 2010,
-        "l2BD.name": "achelove_noagw",
-        "nvoIngRepl.proto": "bgp",
-        "nvoIngRepl.rn": "IngRepl",
-        "nvoNw.mcastGroup": "0.0.0.0",
+        "bgpInst.asn": 64930,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
         "nvoNw.multisiteIngRepl": "disable",
-        "nvoNw.vni": 2012010,
-        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
-        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
-        "vnid": 2012010
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
       }
     },
     {
-      "DeviceName": "mpod-ac-2",
+      "DeviceName": "S1-Leaf-02",
       "DeviceData": {
-        "bgpInst.asn": 2,
-        "l2BD.accEncap": "vxlan-2012010",
-        "l2BD.id": 2010,
-        "l2BD.name": "achelove_noagw",
-        "nvoIngRepl.proto": "bgp",
-        "nvoIngRepl.rn": "IngRepl",
-        "nvoNw.mcastGroup": "0.0.0.0",
+        "bgpInst.asn": 64923,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
         "nvoNw.multisiteIngRepl": "disable",
-        "nvoNw.vni": 2012010,
-        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:1:2012010",
-        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:1:2012010",
-        "vnid": 2012010
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S1-Leaf-04",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S2-Leaf-03",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S1-Leaf-03",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S2-Leaf-04",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S1-Leaf-01",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "MPOD-Leaf-01",
+      "DeviceData": {
+        "bgpInst.asn": 64911,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S2-AG-01",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "MPOD-Leaf-04",
+      "DeviceData": {
+        "bgpInst.asn": 64911,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "MPOD-Leaf-02",
+      "DeviceData": {
+        "bgpInst.asn": 64911,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S2-AG-04",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S2-AG-03",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S2-AG-02",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S1-AG-03",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S1-AG-04",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S1-AG-02",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "S1-AG-01",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "vnid": 2012452
+      }
+    },
+    {
+      "DeviceName": "MPOD-Leaf-03",
+      "DeviceData": {
+        "bgpInst.asn": 64911,
+        "hmmFwdIf.mode": "anycastGW",
+        "ipv4Addr.addr": "100.24.52.254/24",
+        "ipv4Addr.tag": 3901,
+        "ipv4Dom.name": "iAZ",
+        "l2BD.accEncap": "vxlan-2012452",
+        "l2BD.id": 2452,
+        "l2BD.name": "iAZ_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "enabled",
+        "nvoNw.vni": 2012452,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+        "sviIf.id": "vlan2452",
+        "vnid": 2012452
       }
     }
   ],
   "ServiceLayoutDB": [
     {
-      "DeviceName": "site-1-ac-3",
+      "DeviceName": "S2-Leaf-02",
       "ServiceLayout": [
         {
           "Name": "L2VNI",
@@ -131,15 +392,19 @@
         },
         {
           "Name": "AGW",
-          "Value": false
-        },
-        {
-          "Name": "IR",
           "Value": true
         },
         {
-          "Name": "PIM",
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
           "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
         },
         {
           "Name": "MS-IR",
@@ -148,7 +413,7 @@
       ]
     },
     {
-      "DeviceName": "site-1-ag-2",
+      "DeviceName": "S2-Leaf-01",
       "ServiceLayout": [
         {
           "Name": "L2VNI",
@@ -156,115 +421,19 @@
         },
         {
           "Name": "AGW",
-          "Value": false
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
         },
         {
           "Name": "IR",
-          "Value": true
+          "Value": false
         },
         {
           "Name": "PIM",
-          "Value": false
-        },
-        {
-          "Name": "MS-IR",
           "Value": true
-        }
-      ]
-    },
-    {
-      "DeviceName": "mpod-bg-1",
-      "ServiceLayout": [
-        {
-          "Name": "L2VNI",
-          "Value": true
-        },
-        {
-          "Name": "AGW",
-          "Value": false
-        },
-        {
-          "Name": "IR",
-          "Value": true
-        },
-        {
-          "Name": "PIM",
-          "Value": false
-        },
-        {
-          "Name": "MS-IR",
-          "Value": true
-        }
-      ]
-    },
-    {
-      "DeviceName": "site-1-ag-1",
-      "ServiceLayout": [
-        {
-          "Name": "L2VNI",
-          "Value": true
-        },
-        {
-          "Name": "AGW",
-          "Value": false
-        },
-        {
-          "Name": "IR",
-          "Value": true
-        },
-        {
-          "Name": "PIM",
-          "Value": false
-        },
-        {
-          "Name": "MS-IR",
-          "Value": true
-        }
-      ]
-    },
-    {
-      "DeviceName": "mpod-bg-2",
-      "ServiceLayout": [
-        {
-          "Name": "L2VNI",
-          "Value": true
-        },
-        {
-          "Name": "AGW",
-          "Value": false
-        },
-        {
-          "Name": "IR",
-          "Value": true
-        },
-        {
-          "Name": "PIM",
-          "Value": false
-        },
-        {
-          "Name": "MS-IR",
-          "Value": true
-        }
-      ]
-    },
-    {
-      "DeviceName": "mpod-ac-1",
-      "ServiceLayout": [
-        {
-          "Name": "L2VNI",
-          "Value": true
-        },
-        {
-          "Name": "AGW",
-          "Value": false
-        },
-        {
-          "Name": "IR",
-          "Value": true
-        },
-        {
-          "Name": "PIM",
-          "Value": false
         },
         {
           "Name": "MS-IR",
@@ -273,7 +442,210 @@
       ]
     },
     {
-      "DeviceName": "mpod-ac-2",
+      "DeviceName": "S1-Leaf-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-Leaf-04",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-Leaf-03",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-Leaf-03",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-Leaf-04",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-Leaf-01",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "MPOD-Leaf-01",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-AG-01",
       "ServiceLayout": [
         {
           "Name": "L2VNI",
@@ -284,12 +656,306 @@
           "Value": false
         },
         {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
           "Name": "IR",
-          "Value": true
+          "Value": false
         },
         {
           "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "MPOD-Leaf-04",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
           "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "MPOD-Leaf-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-AG-04",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-AG-03",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-AG-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-AG-03",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-AG-04",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-AG-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-AG-01",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "MPOD-Leaf-03",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": true
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": true
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
         },
         {
           "Name": "MS-IR",

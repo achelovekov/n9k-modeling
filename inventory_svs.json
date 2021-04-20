@@ -1,0 +1,162 @@
+[ 
+  {
+    "host": {
+      "url": "https://10.2.16.42",
+      "hostname": "MPOD-Leaf-01",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.16.43",
+      "hostname": "MPOD-Leaf-02",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.16.44",
+      "hostname": "MPOD-Leaf-03",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.16.45",
+      "hostname": "MPOD-Leaf-04",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.1",
+      "hostname": "S1-AG-01",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.8",
+      "hostname": "S1-AG-02",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.15",
+      "hostname": "S1-AG-03",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.22",
+      "hostname": "S1-AG-04",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.29",
+      "hostname": "S1-Leaf-01",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.30",
+      "hostname": "S1-Leaf-02",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.31",
+      "hostname": "S1-Leaf-03",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.32",
+      "hostname": "S1-Leaf-04",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.42",
+      "hostname": "S2-AG-01",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.43",
+      "hostname": "S2-AG-02",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.38",
+      "hostname": "S2-AG-03",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.40",
+      "hostname": "S2-AG-04",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.37",
+      "hostname": "S2-Leaf-01",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.36",
+      "hostname": "S2-Leaf-02",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.35",
+      "hostname": "S2-Leaf-03",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.17.34",
+      "hostname": "S2-Leaf-04",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  }
+]

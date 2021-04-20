@@ -59,6 +59,7 @@ func LoadTemplateComponentsMap() TemplateComponentsDB {
 	TemplateComponentsDBEntry["PIM"] = MakePIMTemplate
 	TemplateComponentsDBEntry["IR"] = MakeIRTemplate
 	TemplateComponentsDBEntry["MS-IR"] = MakeMSIRTemplate
+	TemplateComponentsDBEntry["ARP-Suppress"] = MakeARPSuppressTemplate
 
 	TemplateComponentsDB["VNI"] = TemplateComponentsDBEntry
 
@@ -73,6 +74,7 @@ func MakeL2VNITemplate(M map[string]interface{}, VariablesMap map[string]interfa
 	M["rtctrlRttEntry.rtt.export"] = "route-target:as2-nn4:" + strconv.FormatInt(int64(AddOptionsDB[DeviceName]["bgpInst.asn"].(float64)), 10) + ":" + VariablesMap["VNID"].(string)
 	M["rtctrlRttEntry.rtt.import"] = "route-target:as2-nn4:" + strconv.FormatInt(int64(AddOptionsDB[DeviceName]["bgpInst.asn"].(float64)), 10) + ":" + VariablesMap["VNID"].(string)
 	M["bgpInst.asn"] = AddOptionsDB[DeviceName]["bgpInst.asn"]
+	M["nvoNw.suppressARP"] = "off"
 }
 
 func MakeAGWTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
@@ -92,13 +94,17 @@ func MakeIRTemplate(M map[string]interface{}, VariablesMap map[string]interface{
 }
 
 func MakePIMTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
-	M["nvoNw.mcastGroup"] = "239.1.0." + VariablesMap["ZoneID"].(string)
+	M["nvoNw.mcastGroup"] = "225.1.0." + VariablesMap["ZoneID"].(string)
 	M["nvoNw.multisiteIngRepl"] = "disable"
 	M["nvoNw.vni"], _ = strconv.ParseInt(VariablesMap["VNID"].(string), 10, 64)
 }
 
 func MakeMSIRTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
 	M["nvoNw.multisiteIngRepl"] = "enable"
+}
+
+func MakeARPSuppressTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
+	M["nvoNw.suppressARP"] = "enabled"
 }
 
 type AddOptionsDB map[string]AddOptionsDBEntry

@@ -161,7 +161,8 @@
         "nvoNw.multisiteIngRepl",
         "nvoNw.mcastGroup",
         "nvoIngRepl.proto",
-        "nvoIngRepl.rn"
+        "nvoIngRepl.rn",
+        "nvoNw.suppressARP"
       ],
       "Options": []
     },
@@ -211,6 +212,16 @@
         {
           "Name": "hmmFwdIf.mode",
           "Value": "anycastGW",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "ARP-Suppress",
+      "ComponentKeys": [
+        {
+          "Name": "nvoNw.suppressARP",
+          "Value": "enabled",
           "MatchType": "equal"
         }
       ]

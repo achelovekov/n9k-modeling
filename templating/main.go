@@ -71,8 +71,8 @@ func MakeL2VNITemplate(M map[string]interface{}, VariablesMap map[string]interfa
 	M["l2BD.accEncap"] = "vxlan-" + VariablesMap["VNID"].(string)
 	M["l2BD.id"], _ = strconv.ParseInt(VariablesMap["VNID"].(string)[3:], 10, 64)
 	M["l2BD.name"] = VariablesMap["Segment"].(string) + VariablesMap["ZoneID"].(string) + "Z_" + VariablesMap["Subnet"].(string) + "/" + VariablesMap["Mask"].(string)
-	M["rtctrlRttEntry.rtt.export"] = "route-target:as2-nn4:" + strconv.FormatInt(int64(AddOptionsDB[DeviceName]["bgpInst.asn"].(float64)), 10) + ":" + VariablesMap["VNID"].(string)
-	M["rtctrlRttEntry.rtt.import"] = "route-target:as2-nn4:" + strconv.FormatInt(int64(AddOptionsDB[DeviceName]["bgpInst.asn"].(float64)), 10) + ":" + VariablesMap["VNID"].(string)
+	M["rtctrlRttEntry.rtt.export"] = "route-target:as2-nn4:" + VariablesMap["evpnAS"].(string) + ":" + VariablesMap["VNID"].(string)
+	M["rtctrlRttEntry.rtt.import"] = "route-target:as2-nn4:" + VariablesMap["evpnAS"].(string) + ":" + VariablesMap["VNID"].(string)
 	M["bgpInst.asn"] = AddOptionsDB[DeviceName]["bgpInst.asn"]
 	M["nvoNw.suppressARP"] = "off"
 }
@@ -94,7 +94,7 @@ func MakeIRTemplate(M map[string]interface{}, VariablesMap map[string]interface{
 }
 
 func MakePIMTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
-	M["nvoNw.mcastGroup"] = "225.1.0." + VariablesMap["ZoneID"].(string)
+	M["nvoNw.mcastGroup"] = "225.1.0." + VariablesMap["ZoneIDForMcast"].(string)
 	M["nvoNw.multisiteIngRepl"] = "disable"
 	M["nvoNw.vni"], _ = strconv.ParseInt(VariablesMap["VNID"].(string), 10, 64)
 }
@@ -112,7 +112,7 @@ type AddOptionsDBEntry map[string]interface{}
 
 func LoadAddOptions(ProcessedData m.ProcessedData, OptionList []string) AddOptionsDB {
 	AddOptionsDB := make(AddOptionsDB)
-	for _, Device := range ProcessedData.ServiceDataDB {
+	for _, Device := range ProcessedData.DeviceFootprintDB {
 		AddOptionsDBEntry := make(AddOptionsDBEntry)
 		for _, Option := range OptionList {
 			if v, ok := Device.DeviceData[Option]; ok {
@@ -121,7 +121,6 @@ func LoadAddOptions(ProcessedData m.ProcessedData, OptionList []string) AddOptio
 		}
 		AddOptionsDB[Device.DeviceName] = AddOptionsDBEntry
 	}
-	fmt.Println(AddOptionsDB)
 	return AddOptionsDB
 }
 
@@ -152,15 +151,79 @@ func LoadProcessedData(fineName string) m.ProcessedData {
 }
 
 func TemplateConstruct(ProcessedData m.ProcessedData, TemplatedData *m.ProcessedData, AddOptions AddOptionsDB, TemplateDataMap map[string]interface{}, TemplateComponentsMap TemplateComponentsDB) {
-	for _, Device := range ProcessedData.ServiceLayoutDB {
-		var ServiceDataDBEntry m.ServiceDataDBEntry
-		ServiceDataDBEntry.DeviceName = Device.DeviceName
-		ServiceDataDBEntry.DeviceData = make(map[string]interface{})
+	for _, Device := range ProcessedData.ServiceFootprintDB {
+		var DeviceFootprintDBEntry m.DeviceFootprintDBEntry
+		DeviceFootprintDBEntry.DeviceName = Device.DeviceName
+		DeviceFootprintDBEntry.DeviceData = make(map[string]interface{})
 		for _, Component := range Device.ServiceLayout {
 			if Component.Value == true {
-				TemplateComponentsMap[TemplatedData.ServiceName][Component.Name](ServiceDataDBEntry.DeviceData, TemplateDataMap, AddOptions, ServiceDataDBEntry.DeviceName)
+				TemplateComponentsMap[TemplatedData.ServiceName][Component.Name](DeviceFootprintDBEntry.DeviceData, TemplateDataMap, AddOptions, DeviceFootprintDBEntry.DeviceName)
 			}
 		}
-		TemplatedData.ServiceDataDB = append(TemplatedData.ServiceDataDB, ServiceDataDBEntry)
+		TemplatedData.DeviceFootprintDB = append(TemplatedData.DeviceFootprintDB, DeviceFootprintDBEntry)
 	}
+}
+
+func FindCommonKeys(src map[string]interface{}, dst map[string]interface{}) []string {
+	result := make([]string, 0)
+	for k, _ := range src {
+		if _, ok := dst[k]; ok {
+			result = append(result, k)
+		}
+	}
+	return result
+}
+
+func FindDistinctKeys(src map[string]interface{}, dst map[string]interface{}) []string {
+	result := make([]string, 0)
+	for k, _ := range src {
+		if _, ok := dst[k]; !ok {
+			result = append(result, k)
+		}
+	}
+	return result
+}
+
+type DeviceDiffDB []DeviceDiffDBEntry
+type DeviceDiffDBEntry struct {
+	DeviceName string
+	ToChange   map[string]interface{}
+	ToAdd      map[string]interface{}
+	ToDelete   map[string]interface{}
+}
+
+func ConstrustDeficeDiffDB(tmpl m.DeviceFootprintDB, orig m.DeviceFootprintDB, DeviceDiffDB *DeviceDiffDB) {
+	for i, v := range tmpl {
+		var DeviceDiffDBEntry DeviceDiffDBEntry
+		DeviceDiffDBEntry.DeviceName = v.DeviceName
+
+		ToChange := make(map[string]interface{})
+		ToAdd := make(map[string]interface{})
+		ToDelete := make(map[string]interface{})
+		tmplDeviceData := v.DeviceData
+		origDeviceData := orig[i].DeviceData
+		commonKeys := FindCommonKeys(tmplDeviceData, origDeviceData)
+		distinctKeysSrcOnly := FindDistinctKeys(tmplDeviceData, origDeviceData)
+		distinctKeysDstOnly := FindDistinctKeys(origDeviceData, tmplDeviceData)
+
+		for _, v := range commonKeys {
+			if tmplDeviceData[v] != origDeviceData[v] {
+				ToChange[v] = tmplDeviceData[v]
+			}
+		}
+
+		for _, v := range distinctKeysSrcOnly {
+			ToAdd[v] = tmplDeviceData[v]
+		}
+
+		for _, v := range distinctKeysDstOnly {
+			ToDelete[v] = origDeviceData[v]
+		}
+		DeviceDiffDBEntry.ToChange = ToChange
+		DeviceDiffDBEntry.ToAdd = ToAdd
+		DeviceDiffDBEntry.ToDelete = ToDelete
+		*DeviceDiffDB = append(*DeviceDiffDB, DeviceDiffDBEntry)
+
+	}
+
 }

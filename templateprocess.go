@@ -20,8 +20,9 @@ func main() {
 
 	ProcessedData := t.LoadProcessedData(*InputFile)
 	TemplatedData.ServiceName = ProcessedData.ServiceName
-	TemplatedData.ServiceLayoutDB = ProcessedData.ServiceLayoutDB
-	TemplatedData.ServiceDataDB = make([]m.ServiceDataDBEntry, 0)
+	TemplatedData.DeviceFootprintDB = make(m.DeviceFootprintDB, 0)
+	TemplatedData.ServiceFootprintDB = ProcessedData.ServiceFootprintDB
+
 	AddOptions := t.LoadAddOptions(ProcessedData, TemplateData.AddOptions)
 
 	t.TemplateConstruct(ProcessedData, &TemplatedData, AddOptions, TemplateDataMap, TemplateComponentsMap)

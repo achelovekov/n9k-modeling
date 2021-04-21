@@ -2,6 +2,7 @@ package modeling
 
 import (
 	"bytes"
+	"context"
 	"crypto/tls"
 	"encoding/json"
 	"errors"
@@ -14,7 +15,10 @@ import (
 	"strings"
 	"sync"
 
+	mo "n9k-modeling/mongo"
+
 	cu "github.com/achelovekov/collectorutils"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type MetaData struct {
@@ -117,8 +121,8 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, err
 
 }
 
-type RawDataDB []RawDataDBEntry
-type RawDataDBEntry struct {
+type DeviceChunksDB []DeviceChunksDBEntry
+type DeviceChunksDBEntry struct {
 	DeviceName  string
 	DMEChunkMap DMEChunkMap
 }
@@ -205,36 +209,37 @@ func LoadKeysMap(KeysDefinition []cu.KeyDefinition) cu.KeysMap {
 	return KeysMap
 }
 
-func worker(src map[string]interface{}, path cu.Path, mode int, filter cu.Filter, enrich cu.Enrich) []map[string]interface{} {
+func worker(src interface{}, path cu.Path, mode int, filter cu.Filter, enrich cu.Enrich) []map[string]interface{} {
 	var pathIndex int
 	header := make(map[string]interface{})
 	buf := make([]map[string]interface{}, 0)
 	pathPassed := make([]string, 0)
 	keysLeftFromPrevLayer := bool(false)
 
-	cu.FlattenMap(src, path, pathIndex, pathPassed, mode, header, &buf, filter, enrich, keysLeftFromPrevLayer)
+	cu.FlattenMapMongo(src, path, pathIndex, pathPassed, mode, header, &buf, filter, enrich, keysLeftFromPrevLayer)
 
 	return buf
 }
 
-func GetRawData(md *MetaData, hmd cu.HostMetaData, DMEPath string, ch chan<- RawDataDBEntry, wg *sync.WaitGroup) {
+func GetRawData(ctx context.Context, collection *mongo.Collection, hmd cu.HostMetaData, DMEPath string, wg *sync.WaitGroup) {
+
 	src, err := NXAPICall(hmd, DMEPath)
 	if err != nil {
 		log.Println("Can't get data from device:", hmd.Host.Hostname)
 		wg.Done()
-	} else {
-		log.Println("Data received from defice:", hmd.Host.Hostname)
-		Processing(md, hmd, src, ch, wg)
 	}
+	fmt.Println("got data from:", hmd.Host.Hostname)
+
+	mo.UpdateOne(ctx, collection, "DeviceName", hmd.Host.Hostname, "DeviceDMEData", src)
+	wg.Done()
+
 }
 
-func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}, ch chan<- RawDataDBEntry, wg *sync.WaitGroup) {
+func Processing(md *MetaData, hmd cu.HostMetaData, src interface{}) DeviceChunksDBEntry {
 
-	defer wg.Done()
-
-	var RawDataDBEntry RawDataDBEntry
-	RawDataDBEntry.DeviceName = hmd.Host.Hostname
-	RawDataDBEntry.DMEChunkMap = make(map[string]DMEChunk)
+	var DeviceChunksDBEntryVal DeviceChunksDBEntry
+	DeviceChunksDBEntryVal.DeviceName = hmd.Host.Hostname
+	DeviceChunksDBEntryVal.DMEChunkMap = make(map[string]DMEChunk)
 
 	for MapKey, Paths := range md.KeysMap {
 		DMEChunk := make([]map[string]interface{}, 0)
@@ -244,10 +249,9 @@ func Processing(md *MetaData, hmd cu.HostMetaData, src map[string]interface{}, c
 			buf = worker(src, Path, cu.Cadence, md.Filter, md.Enrich)
 			DMEChunk = append(DMEChunk, buf...)
 		}
-		RawDataDBEntry.DMEChunkMap[MapKey] = DMEChunk
+		DeviceChunksDBEntryVal.DMEChunkMap[MapKey] = DMEChunk
 	}
-
-	ch <- RawDataDBEntry
+	return DeviceChunksDBEntryVal
 }
 
 func DeviceDataFill(DMEChunk DMEChunk, KeySName string, KeyDName string, KeyList []string, DeviceData DeviceData, Options []Option, matchType string) {
@@ -312,16 +316,16 @@ func TypeConversion(srcType string, dstType string, srcVal interface{}, Conversi
 	}
 }
 
-type ServiceDataDB []ServiceDataDBEntry
-type ServiceDataDBEntry struct {
+type DeviceFootprintDB []DeviceFootprintDBEntry
+type DeviceFootprintDBEntry struct {
 	DeviceName string     `json:"DeviceName"`
 	DeviceData DeviceData `json:"DeviceData"`
 }
 type DeviceData map[string]interface{}
 
-func ConstructServiceDataDB(ServiceDataDB *ServiceDataDB, RawDataDB RawDataDB, srcVal interface{}, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) {
-	for _, DBEntry := range RawDataDB {
-		var ServiceDataDBEntry ServiceDataDBEntry
+func ConstructDeviceFootprintDB(DeviceFootprintDB *DeviceFootprintDB, DeviceChunksDB DeviceChunksDB, srcVal interface{}, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) {
+	for _, DBEntry := range DeviceChunksDB {
+		var DeviceFootprintDBEntry DeviceFootprintDBEntry
 		DeviceData := make(DeviceData)
 		for _, v := range ServiceConstructPath {
 			if v.KeyLink == "direct" {
@@ -339,9 +343,9 @@ func ConstructServiceDataDB(ServiceDataDB *ServiceDataDB, RawDataDB RawDataDB, s
 				DeviceDataFill(DBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, DeviceData, v.Options, v.MatchType)
 			}
 		}
-		ServiceDataDBEntry.DeviceName = DBEntry.DeviceName
-		ServiceDataDBEntry.DeviceData = DeviceData
-		*ServiceDataDB = append(*ServiceDataDB, ServiceDataDBEntry)
+		DeviceFootprintDBEntry.DeviceName = DBEntry.DeviceName
+		DeviceFootprintDBEntry.DeviceData = DeviceData
+		*DeviceFootprintDB = append(*DeviceFootprintDB, DeviceFootprintDBEntry)
 	}
 }
 
@@ -365,8 +369,8 @@ func WriteDataToFile(fileName string, JSONData []byte) {
 	}
 }
 
-type ServiceLayoutDB []ServiceLayoutDBEntry
-type ServiceLayoutDBEntry struct {
+type ServiceFootprintDB []ServiceFootprintDBEntry
+type ServiceFootprintDBEntry struct {
 	DeviceName    string        `json:"DeviceName"`
 	ServiceLayout ServiceLayout `json:"ServiceLayout"`
 }
@@ -401,26 +405,26 @@ func CheckComponentKeys(ComponentKeys []ComponentKey, DeviceData map[string]inte
 	return flag
 }
 
-func ConstructServiceLayout(ServiceComponents ServiceComponents, ServiceDataDB ServiceDataDB, ServiceLayoutDB *ServiceLayoutDB) {
-	for _, ServiceDataDBEntry := range ServiceDataDB {
-		var ServiceLayoutDBEntry ServiceLayoutDBEntry
+func ConstructServiceFootprintDB(ServiceComponents ServiceComponents, DeviceFootprintDB DeviceFootprintDB, ServiceFootprintDB *ServiceFootprintDB) {
+	for _, DeviceFootprintDBEntry := range DeviceFootprintDB {
+		var ServiceFootprintDBEntry ServiceFootprintDBEntry
 		for _, ServiceComponent := range ServiceComponents {
 			var ComponentBitMap ComponentBitMap
-			if CheckComponentKeys(ServiceComponent.ComponentKeys, ServiceDataDBEntry.DeviceData) {
+			if CheckComponentKeys(ServiceComponent.ComponentKeys, DeviceFootprintDBEntry.DeviceData) {
 				ComponentBitMap.Value = true
 			} else {
 				ComponentBitMap.Value = false
 			}
 			ComponentBitMap.Name = ServiceComponent.ComponentName
-			ServiceLayoutDBEntry.ServiceLayout = append(ServiceLayoutDBEntry.ServiceLayout, ComponentBitMap)
-			ServiceLayoutDBEntry.DeviceName = ServiceDataDBEntry.DeviceName
+			ServiceFootprintDBEntry.ServiceLayout = append(ServiceFootprintDBEntry.ServiceLayout, ComponentBitMap)
+			ServiceFootprintDBEntry.DeviceName = DeviceFootprintDBEntry.DeviceName
 		}
-		*ServiceLayoutDB = append(*ServiceLayoutDB, ServiceLayoutDBEntry)
+		*ServiceFootprintDB = append(*ServiceFootprintDB, ServiceFootprintDBEntry)
 	}
 }
 
 type ProcessedData struct {
-	ServiceName     string          `json:"ServiceName"`
-	ServiceDataDB   ServiceDataDB   `json:"ServiceDataDB"`
-	ServiceLayoutDB ServiceLayoutDB `json:"ServiceLayoutDB"`
+	ServiceName        string             `json:"ServiceName"`
+	DeviceFootprintDB  DeviceFootprintDB  `json:"DeviceFootprintDB"`
+	ServiceFootprintDB ServiceFootprintDB `json:"ServiceFootprintDB"`
 }

@@ -158,5 +158,37 @@
       "username": "admin",
       "password": "C1sco123"
     }
+  },
+  {
+    "host": {
+      "url": "https://10.2.14.39",
+      "hostname": "BL-NEW-01",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.14.40",
+      "hostname": "BL-NEW-02",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.14.24",
+      "hostname": "BL-01",
+      "username": "admin",
+      "password": "C1sco123"
+    }
+  },
+  {
+    "host": {
+      "url": "https://10.2.14.31",
+      "hostname": "BL-02",
+      "username": "admin",
+      "password": "C1sco123"
+    }
   }
 ]

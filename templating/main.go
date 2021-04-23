@@ -60,6 +60,7 @@ func LoadTemplateComponentsMap() TemplateComponentsDB {
 	TemplateComponentsDBEntry["IR"] = MakeIRTemplate
 	TemplateComponentsDBEntry["MS-IR"] = MakeMSIRTemplate
 	TemplateComponentsDBEntry["ARP-Suppress"] = MakeARPSuppressTemplate
+	TemplateComponentsDBEntry["Default"] = MakeDefaultTemplate
 
 	TemplateComponentsDB["VNI"] = TemplateComponentsDBEntry
 
@@ -105,6 +106,11 @@ func MakeMSIRTemplate(M map[string]interface{}, VariablesMap map[string]interfac
 
 func MakeARPSuppressTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
 	M["nvoNw.suppressARP"] = "enabled"
+}
+
+func MakeDefaultTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
+	M["bgpInst.asn"] = AddOptionsDB[DeviceName]["bgpInst.asn"]
+	M["vnid"], _ = strconv.ParseInt(VariablesMap["VNID"].(string), 10, 64)
 }
 
 type AddOptionsDB map[string]AddOptionsDBEntry
@@ -155,6 +161,7 @@ func TemplateConstruct(ProcessedData m.ProcessedData, TemplatedData *m.Processed
 		var DeviceFootprintDBEntry m.DeviceFootprintDBEntry
 		DeviceFootprintDBEntry.DeviceName = Device.DeviceName
 		DeviceFootprintDBEntry.DeviceData = make(map[string]interface{})
+		TemplateComponentsMap[TemplatedData.ServiceName]["Default"](DeviceFootprintDBEntry.DeviceData, TemplateDataMap, AddOptions, DeviceFootprintDBEntry.DeviceName)
 		for _, Component := range Device.ServiceLayout {
 			if Component.Value == true {
 				TemplateComponentsMap[TemplatedData.ServiceName][Component.Name](DeviceFootprintDBEntry.DeviceData, TemplateDataMap, AddOptions, DeviceFootprintDBEntry.DeviceName)

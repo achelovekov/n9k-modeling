@@ -1,0 +1,1073 @@
+{
+  "ServiceName": "VNI",
+  "DeviceFootprintDB": [
+    {
+      "DeviceName": "MPOD-Leaf-01",
+      "DeviceData": {
+        "bgpInst.asn": 64911,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "MPOD-Leaf-02",
+      "DeviceData": {
+        "bgpInst.asn": 64911,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "MPOD-Leaf-03",
+      "DeviceData": {
+        "bgpInst.asn": 64911,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "MPOD-Leaf-04",
+      "DeviceData": {
+        "bgpInst.asn": 64911,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S1-AG-01",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S1-AG-02",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S1-AG-03",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S1-AG-04",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S1-Leaf-01",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S1-Leaf-02",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S1-Leaf-03",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S1-Leaf-04",
+      "DeviceData": {
+        "bgpInst.asn": 64923,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S2-AG-01",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S2-AG-02",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S2-AG-03",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S2-AG-04",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "enable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S2-Leaf-01",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S2-Leaf-02",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S2-Leaf-03",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "S2-Leaf-04",
+      "DeviceData": {
+        "bgpInst.asn": 64930,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoNw.mcastGroup": "225.1.0.1",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "BL-NEW-01",
+      "DeviceData": {
+        "bgpInst.asn": 64996,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoIngRepl.proto": "bgp",
+        "nvoIngRepl.rn": "IngRepl",
+        "nvoNw.mcastGroup": "0.0.0.0",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "BL-NEW-02",
+      "DeviceData": {
+        "bgpInst.asn": 64996,
+        "l2BD.accEncap": "vxlan-9012440",
+        "l2BD.id": 2440,
+        "l2BD.name": "i01Z_100.24.52.0/24",
+        "nvoIngRepl.proto": "bgp",
+        "nvoIngRepl.rn": "IngRepl",
+        "nvoNw.mcastGroup": "0.0.0.0",
+        "nvoNw.multisiteIngRepl": "disable",
+        "nvoNw.suppressARP": "off",
+        "nvoNw.vni": 9012440,
+        "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+        "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440",
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "BL-01",
+      "DeviceData": {
+        "bgpInst.asn": 64997,
+        "vnid": 9012440
+      }
+    },
+    {
+      "DeviceName": "BL-02",
+      "DeviceData": {
+        "bgpInst.asn": 64997,
+        "vnid": 9012440
+      }
+    }
+  ],
+  "ServiceFootprintDB": [
+    {
+      "DeviceName": "MPOD-Leaf-01",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "MPOD-Leaf-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "MPOD-Leaf-03",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "MPOD-Leaf-04",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-AG-01",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-AG-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-AG-03",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-AG-04",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-Leaf-01",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-Leaf-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-Leaf-03",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S1-Leaf-04",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-AG-01",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-AG-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-AG-03",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-AG-04",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": true
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-Leaf-01",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-Leaf-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-Leaf-03",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "S2-Leaf-04",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": true
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "BL-NEW-01",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": true
+        },
+        {
+          "Name": "PIM",
+          "Value": false
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "BL-NEW-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": true
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": true
+        },
+        {
+          "Name": "PIM",
+          "Value": false
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "BL-01",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": false
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": false
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    },
+    {
+      "DeviceName": "BL-02",
+      "ServiceLayout": [
+        {
+          "Name": "L2VNI",
+          "Value": false
+        },
+        {
+          "Name": "AGW",
+          "Value": false
+        },
+        {
+          "Name": "ARP-Suppress",
+          "Value": false
+        },
+        {
+          "Name": "IR",
+          "Value": false
+        },
+        {
+          "Name": "PIM",
+          "Value": false
+        },
+        {
+          "Name": "MS-IR",
+          "Value": false
+        }
+      ]
+    }
+  ]
+}

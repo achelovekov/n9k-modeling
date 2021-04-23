@@ -1,0 +1,196 @@
+[
+  {
+    "DeviceName": "MPOD-Leaf-01",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24",
+      "nvoNw.mcastGroup": "225.1.0.1",
+      "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+      "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "MPOD-Leaf-02",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {
+      "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:9012440",
+      "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:9012440"
+    },
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "MPOD-Leaf-03",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "MPOD-Leaf-04",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S1-AG-01",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S1-AG-02",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S1-AG-03",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S1-AG-04",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S1-Leaf-01",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S1-Leaf-02",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S1-Leaf-03",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S1-Leaf-04",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S2-AG-01",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S2-AG-02",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S2-AG-03",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S2-AG-04",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S2-Leaf-01",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S2-Leaf-02",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S2-Leaf-03",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "S2-Leaf-04",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "BL-NEW-01",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "BL-NEW-02",
+    "ToChange": {
+      "l2BD.name": "i01Z_100.24.52.0/24"
+    },
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "BL-01",
+    "ToChange": {},
+    "ToAdd": {},
+    "ToDelete": {}
+  },
+  {
+    "DeviceName": "BL-02",
+    "ToChange": {},
+    "ToAdd": {},
+    "ToDelete": {}
+  }
+]

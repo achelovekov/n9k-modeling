@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Type Submit</title>
+</head>
+<body>
+<h2>{{.ServiceName}}</h2>
+{{range .DeviceFootprintDB}}
+<code>DeviceName: {{.DeviceName}}</code><br>
+{{range $k, $v := .DeviceData}}
+<code>  {{$k}}: {{$v}}</code><br>
+{{end}}
+<br>
+{{end}}
+</body>
+</html>

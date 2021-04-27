@@ -1,0 +1,8 @@
+{
+    "FilterFile" : "filter.json",
+    "EnrichFile" : "enrich.json",
+    "DBName":         "RawDME",
+    "CollectionName": "DevicesRawDME",
+    "URL":            "mongodb://localhost:27017"
+}
+  

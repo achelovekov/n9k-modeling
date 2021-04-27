@@ -15,7 +15,7 @@ import (
 	"strings"
 	"sync"
 
-	mo "n9k-modeling/mongo"
+	mo "github.com/achelovekov/n9k-modeling/mongo"
 
 	cu "github.com/achelovekov/collectorutils"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -121,14 +121,6 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, err
 
 }
 
-type DeviceChunksDB []DeviceChunksDBEntry
-type DeviceChunksDBEntry struct {
-	DeviceName  string
-	DMEChunkMap DMEChunkMap
-}
-type DMEChunkMap map[string]DMEChunk
-type DMEChunk []map[string]interface{}
-
 type ServiceDefinition struct {
 	DMEProcessing        []cu.KeyDefinition   `json:"DMEProcessing"`
 	ServiceName          string               `json:"ServiceName"`
@@ -209,6 +201,26 @@ func LoadKeysMap(KeysDefinition []cu.KeyDefinition) cu.KeysMap {
 	return KeysMap
 }
 
+type SrcValList []interface{}
+
+func LoadSrcValList(fileName string) SrcValList {
+	var srcValList SrcValList
+	srcValListFile, err := os.Open(fileName)
+	if err != nil {
+		log.Println(err)
+	}
+	defer srcValListFile.Close()
+
+	ServiceDefinitionFileBytes, _ := ioutil.ReadAll(srcValListFile)
+
+	err = json.Unmarshal(ServiceDefinitionFileBytes, &srcValList)
+	if err != nil {
+		log.Println(err)
+	}
+
+	return srcValList
+}
+
 func worker(src interface{}, path cu.Path, mode int, filter cu.Filter, enrich cu.Enrich) []map[string]interface{} {
 	var pathIndex int
 	header := make(map[string]interface{})
@@ -254,14 +266,14 @@ func Processing(md *MetaData, hmd cu.HostMetaData, src interface{}) DeviceChunks
 	return DeviceChunksDBEntryVal
 }
 
-func DeviceDataFill(DMEChunk DMEChunk, KeySName string, KeyDName string, KeyList []string, DeviceData DeviceData, Options []Option, matchType string) {
+func DeviceDataFill(DMEChunk DMEChunk, KeySName string, KeyDName string, KeyList []string, data Data, Options []Option, matchType string) {
 	if matchType == "full" {
 		if len(Options) == 0 {
 			for _, item := range DMEChunk {
-				if DeviceData[KeySName] == item[KeyDName] || (KeySName == "any" && KeyDName == "any") {
+				if data[KeySName] == item[KeyDName] || (KeySName == "any" && KeyDName == "any") {
 					for _, v := range KeyList {
 						if _, ok := item[v]; ok {
-							DeviceData[v] = item[v]
+							data[v] = item[v]
 						}
 					}
 				}
@@ -269,10 +281,10 @@ func DeviceDataFill(DMEChunk DMEChunk, KeySName string, KeyDName string, KeyList
 		} else {
 			for _, Option := range Options {
 				for _, item := range DMEChunk {
-					if (DeviceData[KeySName] == item[KeyDName] && item[Option.OptionKey] == Option.OptionValue) || (KeySName == "any" && KeyDName == "any") {
+					if (data[KeySName] == item[KeyDName] && item[Option.OptionKey] == Option.OptionValue) || (KeySName == "any" && KeyDName == "any") {
 						for _, v := range KeyList {
 							if _, ok := item[v]; ok {
-								DeviceData[v+"."+Option.OptionValue] = item[v]
+								data[v+"."+Option.OptionValue] = item[v]
 							}
 						}
 					}
@@ -283,10 +295,10 @@ func DeviceDataFill(DMEChunk DMEChunk, KeySName string, KeyDName string, KeyList
 	if matchType == "partial" {
 		if len(Options) == 0 {
 			for _, item := range DMEChunk {
-				if strings.Contains(item[KeyDName].(string), DeviceData[KeySName].(string)) || (KeySName == "any" && KeyDName == "any") {
+				if strings.Contains(item[KeyDName].(string), data[KeySName].(string)) || (KeySName == "any" && KeyDName == "any") {
 					for _, v := range KeyList {
 						if _, ok := item[v]; ok {
-							DeviceData[v] = item[v]
+							data[v] = item[v]
 						}
 					}
 				}
@@ -294,10 +306,10 @@ func DeviceDataFill(DMEChunk DMEChunk, KeySName string, KeyDName string, KeyList
 		} else {
 			for _, Option := range Options {
 				for _, item := range DMEChunk {
-					if (strings.Contains(item[KeyDName].(string), DeviceData[KeySName].(string)) && item[Option.OptionKey] == Option.OptionValue) || (KeySName == "any" && KeyDName == "any") {
+					if (strings.Contains(item[KeyDName].(string), data[KeySName].(string)) && item[Option.OptionKey] == Option.OptionValue) || (KeySName == "any" && KeyDName == "any") {
 						for _, v := range KeyList {
 							if _, ok := item[v]; ok {
-								DeviceData[v+"."+Option.OptionValue] = item[v]
+								data[v+"."+Option.OptionValue] = item[v]
 							}
 						}
 					}
@@ -316,37 +328,70 @@ func TypeConversion(srcType string, dstType string, srcVal interface{}, Conversi
 	}
 }
 
+type DeviceChunksDB []DeviceChunksDBEntry
+type DeviceChunksDBEntry struct {
+	DeviceName  string
+	DMEChunkMap DMEChunkMap
+}
+type DMEChunkMap map[string]DMEChunk
+type DMEChunk []map[string]interface{}
+
 type DeviceFootprintDB []DeviceFootprintDBEntry
 type DeviceFootprintDBEntry struct {
 	DeviceName string     `json:"DeviceName"`
 	DeviceData DeviceData `json:"DeviceData"`
 }
-type DeviceData map[string]interface{}
+type DeviceData []DeviceDataEntry
+type DeviceDataEntry struct {
+	Key  interface{} `json:"Key"`
+	Data Data        `json:"Data"`
+}
+type Data map[string]interface{}
 
-func ConstructDeviceFootprintDB(DeviceFootprintDB *DeviceFootprintDB, DeviceChunksDB DeviceChunksDB, srcVal interface{}, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) {
-	for _, DBEntry := range DeviceChunksDB {
-		var DeviceFootprintDBEntry DeviceFootprintDBEntry
-		DeviceData := make(DeviceData)
-		for _, v := range ServiceConstructPath {
-			if v.KeyLink == "direct" {
-				DeviceData[v.KeySName] = srcVal
-				DeviceData[v.KeySName] = TypeConversion(v.KeySType, v.KeyDType, DeviceData[v.KeySName], ConversionMap)
-				DeviceDataFill(DBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, DeviceData, v.Options, v.MatchType)
-			}
-			if v.KeyLink == "indirect" {
-				if _, ok := DeviceData[v.KeySName]; ok {
-					DeviceData[v.KeySName] = TypeConversion(v.KeySType, v.KeyDType, DeviceData[v.KeySName], ConversionMap)
-					DeviceDataFill(DBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, DeviceData, v.Options, v.MatchType)
-				}
-			}
-			if v.KeyLink == "no-link" {
-				DeviceDataFill(DBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, DeviceData, v.Options, v.MatchType)
+func ConstructDeviceDataEntry(srcVal interface{}, deviceChunksDBEntry DeviceChunksDBEntry, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceDataEntry {
+	var deviceDataEntry DeviceDataEntry
+	data := make(Data)
+
+	deviceDataEntry.Key = srcVal
+	deviceDataEntry.Data = data
+
+	for _, v := range ServiceConstructPath {
+		if v.KeyLink == "direct" {
+			data[v.KeySName] = srcVal
+			data[v.KeySName] = TypeConversion(v.KeySType, v.KeyDType, data[v.KeySName], ConversionMap)
+			DeviceDataFill(deviceChunksDBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, data, v.Options, v.MatchType)
+		}
+		if v.KeyLink == "indirect" {
+			if _, ok := data[v.KeySName]; ok {
+				data[v.KeySName] = TypeConversion(v.KeySType, v.KeyDType, data[v.KeySName], ConversionMap)
+				DeviceDataFill(deviceChunksDBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, data, v.Options, v.MatchType)
 			}
 		}
-		DeviceFootprintDBEntry.DeviceName = DBEntry.DeviceName
-		DeviceFootprintDBEntry.DeviceData = DeviceData
-		*DeviceFootprintDB = append(*DeviceFootprintDB, DeviceFootprintDBEntry)
+		if v.KeyLink == "no-link" {
+			DeviceDataFill(deviceChunksDBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, data, v.Options, v.MatchType)
+		}
 	}
+
+	return deviceDataEntry
+}
+
+func ConstructDeviceFootprintDB(DeviceChunksDB DeviceChunksDB, srcValList []interface{}, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceFootprintDB {
+
+	deviceFootprintDB := make(DeviceFootprintDB, 0)
+
+	for _, deviceChunksDBEntry := range DeviceChunksDB {
+		var deviceFootprintDBEntry DeviceFootprintDBEntry
+
+		deviceFootprintDBEntry.DeviceName = deviceChunksDBEntry.DeviceName
+
+		for _, srcVal := range srcValList {
+			deviceDataEntry := ConstructDeviceDataEntry(srcVal, deviceChunksDBEntry, ServiceConstructPath, ConversionMap)
+			deviceFootprintDBEntry.DeviceData = append(deviceFootprintDBEntry.DeviceData, deviceDataEntry)
+		}
+		deviceFootprintDB = append(deviceFootprintDB, deviceFootprintDBEntry)
+	}
+
+	return deviceFootprintDB
 }
 
 func MarshalToJSON(src interface{}) []byte {
@@ -371,13 +416,52 @@ func WriteDataToFile(fileName string, JSONData []byte) {
 
 type ServiceFootprintDB []ServiceFootprintDBEntry
 type ServiceFootprintDBEntry struct {
-	DeviceName    string        `json:"DeviceName"`
-	ServiceLayout ServiceLayout `json:"ServiceLayout"`
+	DeviceName     string          `json:"DeviceName"`
+	ServiceLayouts []ServiceLayout `json:"ServiceLayouts"`
 }
-type ServiceLayout []ComponentBitMap
-type ComponentBitMap struct {
+
+type ServiceLayout struct {
+	Key  interface{}             `json:"Key"`
+	Data ServiceComponentBitMaps `json:"Data"`
+}
+
+type ServiceComponentBitMaps []ServiceComponentBitMap
+type ServiceComponentBitMap struct {
 	Name  string `json:"Name"`
 	Value bool   `json:"Value"`
+}
+
+func ConstructServiceFootprintDB(ServiceComponents ServiceComponents, DeviceFootprintDB DeviceFootprintDB) ServiceFootprintDB {
+
+	serviceFootprintDB := make(ServiceFootprintDB, 0)
+
+	for _, deviceFootprintDBEntry := range DeviceFootprintDB {
+		var serviceFootprintDBEntry ServiceFootprintDBEntry
+		serviceFootprintDBEntry.DeviceName = deviceFootprintDBEntry.DeviceName
+
+		for _, deviceDataEntry := range deviceFootprintDBEntry.DeviceData {
+
+			var serviceLayout ServiceLayout
+			serviceLayout.Key = deviceDataEntry.Key
+
+			for _, serviceComponent := range ServiceComponents {
+
+				var serviceComponentBitMap ServiceComponentBitMap
+				serviceComponentBitMap.Name = serviceComponent.ComponentName
+
+				if CheckComponentKeys(serviceComponent.ComponentKeys, deviceDataEntry.Data) {
+					serviceComponentBitMap.Value = true
+				} else {
+					serviceComponentBitMap.Value = false
+				}
+
+				serviceLayout.Data = append(serviceLayout.Data, serviceComponentBitMap)
+			}
+			serviceFootprintDBEntry.ServiceLayouts = append(serviceFootprintDBEntry.ServiceLayouts, serviceLayout)
+		}
+		serviceFootprintDB = append(serviceFootprintDB, serviceFootprintDBEntry)
+	}
+	return serviceFootprintDB
 }
 
 func CheckComponentKeys(ComponentKeys []ComponentKey, DeviceData map[string]interface{}) bool {
@@ -403,24 +487,6 @@ func CheckComponentKeys(ComponentKeys []ComponentKey, DeviceData map[string]inte
 		}
 	}
 	return flag
-}
-
-func ConstructServiceFootprintDB(ServiceComponents ServiceComponents, DeviceFootprintDB DeviceFootprintDB, ServiceFootprintDB *ServiceFootprintDB) {
-	for _, DeviceFootprintDBEntry := range DeviceFootprintDB {
-		var ServiceFootprintDBEntry ServiceFootprintDBEntry
-		for _, ServiceComponent := range ServiceComponents {
-			var ComponentBitMap ComponentBitMap
-			if CheckComponentKeys(ServiceComponent.ComponentKeys, DeviceFootprintDBEntry.DeviceData) {
-				ComponentBitMap.Value = true
-			} else {
-				ComponentBitMap.Value = false
-			}
-			ComponentBitMap.Name = ServiceComponent.ComponentName
-			ServiceFootprintDBEntry.ServiceLayout = append(ServiceFootprintDBEntry.ServiceLayout, ComponentBitMap)
-			ServiceFootprintDBEntry.DeviceName = DeviceFootprintDBEntry.DeviceName
-		}
-		*ServiceFootprintDB = append(*ServiceFootprintDB, ServiceFootprintDBEntry)
-	}
 }
 
 type ProcessedData struct {

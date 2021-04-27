@@ -1,0 +1,130 @@
+{
+  "ServiceName": "OSPF",
+  "DMEProcessing": [
+    {
+      "Key": "ospfIf",
+      "Paths": [
+        {
+          "Path": "PathFiles/ospfIf.json"
+        }
+      ]
+    },
+    {
+      "Key": "ospfLsaCtrl",
+      "Paths": [
+        {
+          "Path": "PathFiles/ospfLsaCtrl.json"
+        }
+      ]
+    }
+  ],
+  "ServiceConstructPath": [
+    {
+      "ChunkName": "ospfIf",
+      "KeySName": "ifid",
+      "KeySType": "string",
+      "KeyDName": "ospfIf.id",
+      "KeyDType": "string",
+      "KeyLink": "direct",
+      "MatchType": "full",
+      "KeyList": [
+        "ospfIf.nwT",
+        "ospfIf.area",
+        "ospfDom.name",
+        "ospfIf.id"
+      ],
+      "Options": []
+    },
+    {
+      "ChunkName": "ospfLsaCtrl",
+      "KeySName": "ospfDom.name",
+      "KeySType": "string",
+      "KeyDName": "ospfDom.name",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "KeyList": [
+        "ospfLsaCtrl.arrivalIntvl",
+        "ospfLsaCtrl.gpPacingIntvl"
+      ],
+      "Options": []
+    }
+  ],
+  "ServiceComponents": [
+    {
+      "ComponentName": "L2VNI",
+      "ComponentKeys": [
+        {
+          "Name": "l2BD.accEncap",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "rtctrlRttEntry.rtt.export",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "rtctrlRttEntry.rtt.import",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "AGW",
+      "ComponentKeys": [
+        {
+          "Name": "ipv4Addr.addr",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "hmmFwdIf.mode",
+          "Value": "anycastGW",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "ARP-Suppress",
+      "ComponentKeys": [
+        {
+          "Name": "nvoNw.suppressARP",
+          "Value": "enabled",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "IR",
+      "ComponentKeys": [
+        {
+          "Name": "nvoIngRepl.rn",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "PIM",
+      "ComponentKeys": [
+        {
+          "Name": "nvoNw.mcastGroup",
+          "Value": "0.0.0.0",
+          "MatchType": "not-equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "MS-IR",
+      "ComponentKeys": [
+        {
+          "Name": "nvoNw.multisiteIngRepl",
+          "Value": "enable",
+          "MatchType": "equal"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1514 @@
+[
+  {
+    "DeviceName": "MPOD-Leaf-01",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "MPOD-Leaf-02",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "MPOD-Leaf-03",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "MPOD-Leaf-04",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-01",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-02",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-03",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-04",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-01",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-02",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-03",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-04",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-01",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-02",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-03",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-04",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-01",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-02",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-03",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-04",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": true
+          },
+          {
+            "Name": "AGW",
+            "Value": true
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": true
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": true
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-NEW-01",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": false
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": false
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": false
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": false
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-NEW-02",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": false
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": false
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": false
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": false
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-01",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": false
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": false
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": false
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": false
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-02",
+    "ServiceLayouts": [
+      {
+        "Key": "2012452",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": false
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": false
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Key": "2012453",
+        "Data": [
+          {
+            "Name": "L2VNI",
+            "Value": false
+          },
+          {
+            "Name": "AGW",
+            "Value": false
+          },
+          {
+            "Name": "ARP-Suppress",
+            "Value": false
+          },
+          {
+            "Name": "IR",
+            "Value": false
+          },
+          {
+            "Name": "PIM",
+            "Value": false
+          },
+          {
+            "Name": "MS-IR",
+            "Value": false
+          }
+        ]
+      }
+    ]
+  }
+]

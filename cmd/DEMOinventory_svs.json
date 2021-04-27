@@ -1,0 +1,10 @@
+[ 
+    {
+      "host": {
+        "url": "https://10.2.16.42",
+        "hostname": "MPOD-Leaf-01",
+        "username": "admin",
+        "password": "C1sco123"
+      }
+    }
+  ]

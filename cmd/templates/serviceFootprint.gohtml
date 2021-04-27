@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Type Submit</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Key</th>
+            {{range $i, $v := index . "ServiceComponents"}}
+            <th>{{$v}}</th>
+            {{end}}
+        </tr>
+        {{range $i, $v := index . "ServiceLayouts"}}
+        <tr>
+            <th>{{$v.Key}}</th>
+            {{range $i, $v := $v.Data}}
+                {{ if $v.Value }}
+                <td>True</td>
+                {{else}}
+                <td>False</td>
+                {{end}}
+            {{end}}
+        </tr>
+        {{end}}
+    </table>
+</body>
+</html>

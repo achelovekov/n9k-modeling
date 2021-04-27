@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Type Submit</title>
+</head>
+<form action="/deviceFootprint" method="POST">
+    <label for="device">Show device footprint:</label>
+    <select id="device" name="device">
+        <option value="">--Please choose an option--</option>
+        {{ range $i, $v := .DeviceFootprintDB }}
+        <option value="{{$v.DeviceName}}">{{$v.DeviceName}}</option>
+        {{end}}
+    </select>
+    <input type="submit" value="Submit">
+</form>
+<form action="/serviceFootprint" method="POST">
+    <label for="device">Show service footprint:</label>
+    <select id="device" name="device">
+        <option value="">--Please choose an option--</option>
+        {{ range $i, $v := .DeviceFootprintDB }}
+        <option value="{{$v.DeviceName}}">{{$v.DeviceName}}</option>
+        {{end}}
+    </select>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

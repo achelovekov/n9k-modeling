@@ -17,8 +17,8 @@ import (
 func main() {
 	srcValListFile := flag.String("keys", "00000", "keys list to construct")
 	serviceDefinitionFile := flag.String("service", "00000", "service definition")
-	outputFile := flag.String("out", "00000", "output file for result storage and template processing")
-	inventoryFile := flag.String("i", "00000", "inventory file to proceess")
+	/* 	outputFile := flag.String("out", "00000", "output file for result storage and template processing")
+	 */inventoryFile := flag.String("i", "00000", "inventory file to proceess")
 	flag.Parse()
 
 	config, filter, enrich := cu.Initialize("config.json")
@@ -37,32 +37,26 @@ func main() {
 		log.Println(err)
 	}
 
-	collection := client.Database(config.DBName).Collection(config.CollectionName)
+	rawDataCollection := client.Database(config.DBName).Collection(config.CollectionName)
+	processedDataCollection := client.Database(serviceDefinition.ServiceName).Collection("ServiceData")
 
 	var deviceChunksDB m.DeviceChunksDB
 
 	for _, v := range inventory {
-		src := mo.FindOne(ctx, collection, "DeviceName", v.Host.Hostname)["DeviceDMEData"]
+		src := mo.FindOne(ctx, rawDataCollection, "DeviceName", v.Host.Hostname)["DeviceDMEData"]
 		deviceChunksDB = append(deviceChunksDB, m.Processing(MetaData, v, src))
 	}
-
-	/* 	ServiceFootprintDB := make(m.ServiceFootprintDB, 0) */
 
 	deviceFootprintDB := m.ConstructDeviceFootprintDB(deviceChunksDB, srcValList, serviceDefinition.ServiceConstructPath, MetaData.ConversionMap)
 	serviceFootprintDB := m.ConstructServiceFootprintDB(serviceDefinition.ServiceComponents, deviceFootprintDB)
 
-	marshalledProcessedData := m.MarshalToJSON(serviceFootprintDB)
+	var processedData m.ProcessedData
+	processedData.ServiceName = serviceDefinition.ServiceName
+	processedData.Keys = srcValList
+	processedData.ServiceComponents = m.GetServiceComponentsList(serviceDefinition)
+	processedData.DeviceFootprintDB = deviceFootprintDB
+	processedData.ServiceFootprintDB = serviceFootprintDB
 
-	m.WriteDataToFile(*outputFile, marshalledProcessedData)
-	/* 	m.ConstructDeviceFootprintDB(&DeviceFootprintDB, DeviceChunksDB, *srcVal, serviceDefinition.ServiceConstructPath, MetaData.ConversionMap)
-	   	m.ConstructServiceFootprintDB(serviceDefinition.ServiceComponents, DeviceFootprintDB, &ServiceFootprintDB)
-
-	   	var ProcessedData m.ProcessedData
-	   	ProcessedData.DeviceFootprintDB = DeviceFootprintDB
-	   	ProcessedData.ServiceFootprintDB = ServiceFootprintDB
-	   	ProcessedData.ServiceName = serviceDefinition.ServiceName
-
-	   	MarshalledProcessedData := m.MarshalToJSON(ProcessedData)
-
-	   	m.WriteDataToFile(*outputFile, MarshalledProcessedData) */
+	processedDataCollection.Drop(ctx)
+	mo.InsertOne(ctx, processedDataCollection, processedData)
 }

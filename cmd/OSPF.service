@@ -28,10 +28,13 @@
       "KeyLink": "direct",
       "MatchType": "full",
       "KeyList": [
-        "ospfIf.nwT",
-        "ospfIf.area",
-        "ospfDom.name",
-        "ospfIf.id"
+       "ospfIf.adminSt",
+       "ospfIf.area",
+       "ospfIf.bfdCtrl",
+       "ospfIf.helloIntvl",
+       "ospfIf.nwT",
+       "ospfIf.rexmitIntvl",
+       "ospfDom.name"
       ],
       "Options": []
     },
@@ -45,7 +48,11 @@
       "MatchType": "full",
       "KeyList": [
         "ospfLsaCtrl.arrivalIntvl",
-        "ospfLsaCtrl.gpPacingIntvl"
+        "ospfLsaCtrl.gpPacingIntvl",
+        "ospfLsaCtrl.holdIntvl",
+        "ospfLsaCtrl.maxIntvl",
+        "ospfDom.ctrl",
+        "ospfInst.name"
       ],
       "Options": []
     }

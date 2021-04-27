@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Type Submit</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Key</th>
+            <th>Data</th>
+        </tr>
+        {{range $i, $v := index . "DeviceData"}}
+        <tr>
+            <th>{{$v.Key}}</th>
+            <td>
+                {{range $k, $v := $v.Data}}
+                <code>{{$k}}: {{$v}}</code><br>
+                {{end}}
+            </td>
+        </tr>
+        {{end}}
+    </table>
+</body>
+</html>

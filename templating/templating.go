@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	m "n9k-modeling/modeling"
 	"os"
 	"strconv"
+
+	m "github.com/achelovekov/n9k-modeling/modeling"
 )
 
 type VariablesDB struct {

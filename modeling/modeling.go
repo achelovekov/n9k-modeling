@@ -338,13 +338,13 @@ type DMEChunk []map[string]interface{}
 
 type DeviceFootprintDB []DeviceFootprintDBEntry
 type DeviceFootprintDBEntry struct {
-	DeviceName string     `json:"DeviceName"`
-	DeviceData DeviceData `json:"DeviceData"`
+	DeviceName string     `bson:"DeviceName"`
+	DeviceData DeviceData `bson:"DeviceData"`
 }
 type DeviceData []DeviceDataEntry
 type DeviceDataEntry struct {
-	Key  interface{} `json:"Key"`
-	Data Data        `json:"Data"`
+	Key  interface{} `bson:"Key"`
+	Data Data        `bson:"Data"`
 }
 type Data map[string]interface{}
 
@@ -416,19 +416,19 @@ func WriteDataToFile(fileName string, JSONData []byte) {
 
 type ServiceFootprintDB []ServiceFootprintDBEntry
 type ServiceFootprintDBEntry struct {
-	DeviceName     string          `json:"DeviceName"`
-	ServiceLayouts []ServiceLayout `json:"ServiceLayouts"`
+	DeviceName     string          `bson:"DeviceName"`
+	ServiceLayouts []ServiceLayout `bson:"ServiceLayouts"`
 }
 
 type ServiceLayout struct {
-	Key  interface{}             `json:"Key"`
-	Data ServiceComponentBitMaps `json:"Data"`
+	Key  interface{}             `bson:"Key"`
+	Data ServiceComponentBitMaps `bson:"Data"`
 }
 
 type ServiceComponentBitMaps []ServiceComponentBitMap
 type ServiceComponentBitMap struct {
-	Name  string `json:"Name"`
-	Value bool   `json:"Value"`
+	Name  string `bson:"Name"`
+	Value bool   `bson:"Value"`
 }
 
 func ConstructServiceFootprintDB(ServiceComponents ServiceComponents, DeviceFootprintDB DeviceFootprintDB) ServiceFootprintDB {
@@ -489,8 +489,21 @@ func CheckComponentKeys(ComponentKeys []ComponentKey, DeviceData map[string]inte
 	return flag
 }
 
+func GetServiceComponentsList(serviceDefinition ServiceDefinition) []string {
+	var result []string
+
+	for _, serviceComponent := range serviceDefinition.ServiceComponents {
+		result = append(result, serviceComponent.ComponentName)
+		fmt.Println(result)
+	}
+
+	return result
+}
+
 type ProcessedData struct {
-	ServiceName        string             `json:"ServiceName"`
-	DeviceFootprintDB  DeviceFootprintDB  `json:"DeviceFootprintDB"`
-	ServiceFootprintDB ServiceFootprintDB `json:"ServiceFootprintDB"`
+	ServiceName        string             `bson:"ServiceName"`
+	Keys               []interface{}      `bson:"Keys"`
+	ServiceComponents  []string           `bson:"ServiceComponents"`
+	DeviceFootprintDB  DeviceFootprintDB  `bson:"DeviceFootprintDB"`
+	ServiceFootprintDB ServiceFootprintDB `bson:"ServiceFootprintDB"`
 }

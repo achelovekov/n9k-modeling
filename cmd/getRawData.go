@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	m "n9k-modeling/modeling"
+	m "github.com/achelovekov/n9k-modeling/modeling"
 
-	mo "n9k-modeling/mongo"
+	mo "github.com/achelovekov/n9k-modeling/mongo"
 
 	cu "github.com/achelovekov/collectorutils"
 	"go.mongodb.org/mongo-driver/mongo"

@@ -21,7 +21,7 @@ type MongoDBMetaData struct {
 	URL            string
 }
 
-func UpdateOne(ctx context.Context, collection *mongo.Collection, filterFieldName string, filterFieldValue interface{}, updateFieldName string, updateFieldValue map[string]interface{}) {
+func UpdateOne(ctx context.Context, collection *mongo.Collection, filterFieldName string, filterFieldValue interface{}, updateFieldName string, updateFieldValue interface{}) {
 	opts := options.Update().SetUpsert(true)
 	filter := bson.D{{filterFieldName, filterFieldValue}}
 	update := bson.D{{"$set", bson.D{{updateFieldName, updateFieldValue}}}}
@@ -50,7 +50,7 @@ func InsertOne(ctx context.Context, collection *mongo.Collection, document inter
 	return id, nil
 }
 
-func FindOne(ctx context.Context, collection *mongo.Collection, filterFieldName string, filterFieldValue interface{}) map[string]interface{} {
+func FindOne(ctx context.Context, collection *mongo.Collection, filterFieldName string, filterFieldValue interface{}) bson.M {
 	var result bson.M
 
 	filter := bson.D{{filterFieldName, filterFieldValue}}

@@ -38,7 +38,7 @@ func main() {
 	}
 
 	rawDataCollection := client.Database(config.DBName).Collection(config.CollectionName)
-	processedDataCollection := client.Database(serviceDefinition.ServiceName).Collection("ServiceData")
+	processedDataCollection := client.Database(serviceDefinition.ServiceName).Collection("processedData")
 
 	var deviceChunksDB m.DeviceChunksDB
 

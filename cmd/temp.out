@@ -1,0 +1,1310 @@
+[
+  {
+    "DeviceName": "MPOD-Leaf-01",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "MPOD-Leaf-02",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "MPOD-Leaf-03",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "MPOD-Leaf-04",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64911,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-01",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-02",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-03",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-04",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-01",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-02",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-03",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-04",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64923,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-01",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-02",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-03",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-04",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "enable",
+          "nvoNw.suppressARP": "off",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-01",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-02",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-03",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-04",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.52.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012452",
+          "l2BD.id": 2452,
+          "l2BD.name": "i01Z_100.24.52.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012452,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012452",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012452",
+          "sviIf.id": "vlan2452",
+          "vnid": 2012452
+        }
+      },
+      {
+        "Key": "2012453",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.53.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012453",
+          "l2BD.id": 2453,
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012453,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012453",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012453",
+          "sviIf.id": "vlan2453",
+          "vnid": 2012453
+        }
+      },
+      {
+        "Key": "2012454",
+        "Data": {
+          "bgpInst.asn": 64930,
+          "hmmFwdIf.mode": "anycastGW",
+          "ipv4Addr.addr": "100.24.54.254/24",
+          "ipv4Addr.tag": 3901,
+          "ipv4Dom.name": "iAZ",
+          "l2BD.accEncap": "vxlan-2012454",
+          "l2BD.id": 2454,
+          "l2BD.name": "i01Z_100.24.54.0/24",
+          "nvoNw.mcastGroup": "225.1.0.1",
+          "nvoNw.multisiteIngRepl": "disable",
+          "nvoNw.suppressARP": "enabled",
+          "nvoNw.vni": 2012454,
+          "rtctrlRttEntry.rtt.export": "route-target:as2-nn4:64998:2012454",
+          "rtctrlRttEntry.rtt.import": "route-target:as2-nn4:64998:2012454",
+          "sviIf.id": "vlan2454",
+          "vnid": 2012454
+        }
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-NEW-01",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {}
+      },
+      {
+        "Key": "2012453",
+        "Data": {}
+      },
+      {
+        "Key": "2012454",
+        "Data": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-NEW-02",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {}
+      },
+      {
+        "Key": "2012453",
+        "Data": {}
+      },
+      {
+        "Key": "2012454",
+        "Data": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-01",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {}
+      },
+      {
+        "Key": "2012453",
+        "Data": {}
+      },
+      {
+        "Key": "2012454",
+        "Data": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-02",
+    "DeviceData": [
+      {
+        "Key": "2012452",
+        "Data": {}
+      },
+      {
+        "Key": "2012453",
+        "Data": {}
+      },
+      {
+        "Key": "2012454",
+        "Data": {}
+      }
+    ]
+  }
+]

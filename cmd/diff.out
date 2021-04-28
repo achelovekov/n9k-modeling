@@ -1,0 +1,694 @@
+[
+  {
+    "DeviceName": "MPOD-Leaf-01",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "MPOD-Leaf-02",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "MPOD-Leaf-03",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "MPOD-Leaf-04",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-01",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-02",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-03",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-AG-04",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-01",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-02",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-03",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S1-Leaf-04",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-01",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-02",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-03",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-AG-04",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-01",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-02",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-03",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "S2-Leaf-04",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.52.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.53.0/24",
+          "nvoNw.mcastGroup": "225.1.0.2"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {
+          "l2BD.name": "i01Z_100.24.54.0/24"
+        },
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-NEW-01",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-NEW-02",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-01",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  },
+  {
+    "DeviceName": "BL-02",
+    "DiffData": [
+      {
+        "Key": "2012452",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012453",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      },
+      {
+        "Key": "2012454",
+        "ToChange": {},
+        "ToAdd": {},
+        "ToDelete": {}
+      }
+    ]
+  }
+]

@@ -9,126 +9,211 @@ import (
 	"strconv"
 
 	m "github.com/achelovekov/n9k-modeling/modeling"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
-type VariablesDB struct {
-	ServiceName      string `json:"ServiceName"`
-	ServiceVariables []struct {
-		VariableName  string      `json:"VariableName"`
-		VariableValue interface{} `json:"VariableValue"`
-	} `json:"ServiceVariables"`
-	AddOptions []string `json:"AddOptions"`
+type ServiceVariablesDB struct {
+	Name              string                  `json:"Name"`
+	Variables         []ServiceVariablesEntry `json:"Variables"`
+	IndirectVariables []string                `json:"IndirectVariables"`
 }
 
-func LoadTemplateData(fileName string) VariablesDB {
-	var VariablesDB VariablesDB
-	VariablesDBFile, err := os.Open(fileName)
+type ServiceVariablesEntry struct {
+	Key  string         `json:"Key"`
+	Data []VariableData `json:"Data"`
+}
+
+type VariableData struct {
+	Name  string      `json:"Name"`
+	Value interface{} `json:"Value"`
+}
+
+func LoadServiceVariablesDB(fileName string) ServiceVariablesDB {
+	var serviceVariablesDB ServiceVariablesDB
+	serviceVariablesDBFile, err := os.Open(fileName)
 	if err != nil {
 		fmt.Println(err)
 	}
-	defer VariablesDBFile.Close()
+	defer serviceVariablesDBFile.Close()
 
-	VariablesDBFileBytes, _ := ioutil.ReadAll(VariablesDBFile)
+	VariablesDBFileBytes, _ := ioutil.ReadAll(serviceVariablesDBFile)
 
-	err = json.Unmarshal(VariablesDBFileBytes, &VariablesDB)
+	err = json.Unmarshal(VariablesDBFileBytes, &serviceVariablesDB)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	return VariablesDB
+	return serviceVariablesDB
 }
 
-func LoadTemplateDataMap(VariablesDB VariablesDB) map[string]interface{} {
-	m := make(map[string]interface{})
-	m["ServiceName"] = VariablesDB.ServiceName
-	for _, ServiceVariable := range VariablesDB.ServiceVariables {
-		m[ServiceVariable.VariableName] = ServiceVariable.VariableValue
+type ServiceVariablesDBProcessed map[string]map[string]interface{}
+
+func LoadServiceVariablesDBProcessed(serviceVariablesDB ServiceVariablesDB) ServiceVariablesDBProcessed {
+	serviceVariablesDBProcessed := make(ServiceVariablesDBProcessed)
+
+	for _, serviceVariablesEntry := range serviceVariablesDB.Variables {
+
+		data := make(map[string]interface{})
+
+		for _, dataEntry := range serviceVariablesEntry.Data {
+			data[dataEntry.Name] = dataEntry.Value
+		}
+		serviceVariablesDBProcessed[serviceVariablesEntry.Key] = data
 	}
-	return m
+
+	return serviceVariablesDBProcessed
 }
 
-type fn func(map[string]interface{}, map[string]interface{}, AddOptionsDB, string)
-type TemplateComponentsDB map[string]TemplateComponentsDBEntry
-type TemplateComponentsDBEntry map[string]fn
+type IndirectVariablesDB map[string]IndirectVariablesDBData
+type IndirectVariablesDBData map[string]IndirectVariablesDBDataForKey
+type IndirectVariablesDBDataForKey map[string]interface{}
 
-func LoadTemplateComponentsMap() TemplateComponentsDB {
-	TemplateComponentsDB := make(TemplateComponentsDB)
+func LoadIndirectVariablesDB(processedData interface{}, variablesList []string) IndirectVariablesDB {
+	indirectVariablesDB := make(IndirectVariablesDB)
 
-	TemplateComponentsDBEntry := make(TemplateComponentsDBEntry)
-	TemplateComponentsDBEntry["L2VNI"] = MakeL2VNITemplate
-	TemplateComponentsDBEntry["AGW"] = MakeAGWTemplate
-	TemplateComponentsDBEntry["PIM"] = MakePIMTemplate
-	TemplateComponentsDBEntry["IR"] = MakeIRTemplate
-	TemplateComponentsDBEntry["MS-IR"] = MakeMSIRTemplate
-	TemplateComponentsDBEntry["ARP-Suppress"] = MakeARPSuppressTemplate
-	TemplateComponentsDBEntry["Default"] = MakeDefaultTemplate
+	for _, deviceFootprintDBEntry := range processedData.(bson.M)["DeviceFootprintDB"].(bson.A) {
+		indirectVariablesDBData := make(IndirectVariablesDBData)
+		indirectVariablesDB[deviceFootprintDBEntry.(bson.M)["DeviceName"].(string)] = indirectVariablesDBData
 
-	TemplateComponentsDB["VNI"] = TemplateComponentsDBEntry
+		for _, deviceDataEntry := range deviceFootprintDBEntry.(bson.M)["DeviceData"].(bson.A) {
+			indirectVariablesDBDataForKey := make(IndirectVariablesDBDataForKey)
+			indirectVariablesDBData[deviceDataEntry.(bson.M)["Key"].(string)] = indirectVariablesDBDataForKey
+			for _, variable := range variablesList {
+				if v, ok := deviceDataEntry.(bson.M)["Data"].(bson.M)[variable]; ok {
+					indirectVariablesDBDataForKey[variable] = v
+				}
+			}
+		}
 
-	return TemplateComponentsDB
+	}
+	return indirectVariablesDB
 }
 
-func MakeL2VNITemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
-	M["vnid"], _ = strconv.ParseInt(VariablesMap["VNID"].(string), 10, 64)
-	M["l2BD.accEncap"] = "vxlan-" + VariablesMap["VNID"].(string)
-	M["l2BD.id"], _ = strconv.ParseInt(VariablesMap["VNID"].(string)[3:], 10, 64)
-	M["l2BD.name"] = VariablesMap["Segment"].(string) + VariablesMap["ZoneID"].(string) + "Z_" + VariablesMap["Subnet"].(string) + "/" + VariablesMap["Mask"].(string)
-	M["rtctrlRttEntry.rtt.export"] = "route-target:as2-nn4:" + VariablesMap["evpnAS"].(string) + ":" + VariablesMap["VNID"].(string)
-	M["rtctrlRttEntry.rtt.import"] = "route-target:as2-nn4:" + VariablesMap["evpnAS"].(string) + ":" + VariablesMap["VNID"].(string)
-	M["bgpInst.asn"] = AddOptionsDB[DeviceName]["bgpInst.asn"]
+func TemplateConstruct(serviceName string, serviceFootprintDB interface{}, serviceVariablesDBProcessed ServiceVariablesDBProcessed, indirectVariablesDB IndirectVariablesDB, generalTemplateConstructor GeneralTemplateConstructor) m.DeviceFootprintDB {
+
+	var deviceFootprintDB m.DeviceFootprintDB
+
+	for _, serviceFootprintDBEntry := range serviceFootprintDB.(bson.A) {
+
+		var deviceFootprintDBEntry m.DeviceFootprintDBEntry
+		deviceFootprintDBEntry.DeviceName = serviceFootprintDBEntry.(bson.M)["DeviceName"].(string)
+
+		for _, serviceLayoutEntry := range serviceFootprintDBEntry.(bson.M)["ServiceLayouts"].(bson.A) {
+
+			var deviceDataEntry m.DeviceDataEntry
+			deviceDataEntry.Key = serviceLayoutEntry.(bson.M)["Key"].(string)
+			m := make(map[string]interface{})
+			deviceDataEntry.Data = m
+			generalTemplateConstructor[serviceName]["Default"](m, serviceLayoutEntry.(bson.M)["Key"].(string), serviceVariablesDBProcessed, indirectVariablesDB, serviceFootprintDBEntry.(bson.M)["DeviceName"].(string))
+			for _, dataEntry := range serviceLayoutEntry.(bson.M)["Data"].(bson.A) {
+				if dataEntry.(bson.M)["Value"] == true {
+					generalTemplateConstructor[serviceName][dataEntry.(bson.M)["Name"].(string)](m, serviceLayoutEntry.(bson.M)["Key"].(string), serviceVariablesDBProcessed, indirectVariablesDB, serviceFootprintDBEntry.(bson.M)["DeviceName"].(string))
+				}
+			}
+
+			deviceFootprintDBEntry.DeviceData = append(deviceFootprintDBEntry.DeviceData, deviceDataEntry)
+
+		}
+
+		deviceFootprintDB = append(deviceFootprintDB, deviceFootprintDBEntry)
+	}
+
+	return deviceFootprintDB
+}
+
+func Transform(mongoDeviceFootprintDB interface{}) m.DeviceFootprintDB {
+	var deviceFootprintDB m.DeviceFootprintDB
+
+	for _, mongoDeviceFootprintDBEntry := range mongoDeviceFootprintDB.(bson.A) {
+
+		var deviceFootprintDBEntry m.DeviceFootprintDBEntry
+		deviceFootprintDBEntry.DeviceName = mongoDeviceFootprintDBEntry.(bson.M)["DeviceName"].(string)
+
+		for _, mongoDeviceDataEntry := range mongoDeviceFootprintDBEntry.(bson.M)["DeviceData"].(bson.A) {
+
+			var deviceDataEntry m.DeviceDataEntry
+			deviceDataEntry.Key = mongoDeviceDataEntry.(bson.M)["Key"].(string)
+			m := make(map[string]interface{})
+			deviceDataEntry.Data = m
+
+			for k, v := range mongoDeviceDataEntry.(bson.M)["Data"].(bson.M) {
+				m[k] = v
+			}
+			deviceFootprintDBEntry.DeviceData = append(deviceFootprintDBEntry.DeviceData, deviceDataEntry)
+		}
+
+		deviceFootprintDB = append(deviceFootprintDB, deviceFootprintDBEntry)
+
+	}
+
+	return deviceFootprintDB
+}
+
+type fn func(map[string]interface{}, string, ServiceVariablesDBProcessed, IndirectVariablesDB, string)
+type GeneralTemplateConstructor map[string]ServiceConstructor
+type ServiceConstructor map[string]fn
+
+func LoadGeneralTemplateConstructor() GeneralTemplateConstructor {
+	GeneralTemplateConstructor := make(GeneralTemplateConstructor)
+
+	ServiceConstructor := make(ServiceConstructor)
+	ServiceConstructor["L2VNI"] = MakeL2VNITemplate
+	ServiceConstructor["AGW"] = MakeAGWTemplate
+	ServiceConstructor["PIM"] = MakePIMTemplate
+	ServiceConstructor["IR"] = MakeIRTemplate
+	ServiceConstructor["MS-IR"] = MakeMSIRTemplate
+	ServiceConstructor["ARP-Suppress"] = MakeARPSuppressTemplate
+	ServiceConstructor["Default"] = MakeDefaultTemplate
+
+	GeneralTemplateConstructor["VNI"] = ServiceConstructor
+
+	return GeneralTemplateConstructor
+}
+
+func MakeL2VNITemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["vnid"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
+	M["l2BD.accEncap"] = "vxlan-" + serviceVariablesDB[key]["VNID"].(string)
+	M["l2BD.id"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string)[3:], 10, 64)
+	M["l2BD.name"] = serviceVariablesDB[key]["Segment"].(string) + serviceVariablesDB[key]["ZoneID"].(string) + "Z_" + serviceVariablesDB[key]["Subnet"].(string) + "/" + serviceVariablesDB[key]["Mask"].(string)
+	M["rtctrlRttEntry.rtt.export"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["VNID"].(string)
+	M["rtctrlRttEntry.rtt.import"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["VNID"].(string)
+	M["bgpInst.asn"] = IndirectVariablesDB[deviceName][key]["bgpInst.asn"]
 	M["nvoNw.suppressARP"] = "off"
 }
 
-func MakeAGWTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
+func MakeAGWTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["hmmFwdIf.mode"] = "anycastGW"
-	M["ipv4Addr.addr"] = VariablesMap["IPAddress"].(string) + "/" + VariablesMap["Mask"].(string)
-	M["ipv4Addr.tag"], _ = strconv.ParseInt("39"+VariablesMap["ZoneID"].(string), 10, 64)
-	M["ipv4Dom.name"] = VariablesMap["ZoneName"].(string)
-	M["sviIf.id"] = "vlan" + VariablesMap["VNID"].(string)[3:]
+	M["ipv4Addr.addr"] = serviceVariablesDB[key]["IPAddress"].(string) + "/" + serviceVariablesDB[key]["Mask"].(string)
+	M["ipv4Addr.tag"], _ = strconv.ParseInt("39"+serviceVariablesDB[key]["ZoneID"].(string), 10, 64)
+	M["ipv4Dom.name"] = serviceVariablesDB[key]["ZoneName"].(string)
+	M["sviIf.id"] = "vlan" + serviceVariablesDB[key]["VNID"].(string)[3:]
 }
 
-func MakeIRTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
+func MakeIRTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["nvoNw.mcastGroup"] = "0.0.0.0"
 	M["nvoNw.multisiteIngRepl"] = "disable"
-	M["nvoNw.vni"], _ = strconv.ParseInt(VariablesMap["VNID"].(string), 10, 64)
+	M["nvoNw.vni"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
 	M["nvoIngRepl.proto"] = "bgp"
 	M["nvoIngRepl.rn"] = "IngRepl"
 }
 
-func MakePIMTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
-	M["nvoNw.mcastGroup"] = "225.1.0." + VariablesMap["ZoneIDForMcast"].(string)
+func MakePIMTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["nvoNw.mcastGroup"] = "225.1.0." + serviceVariablesDB[key]["ZoneIDForMcast"].(string)
 	M["nvoNw.multisiteIngRepl"] = "disable"
-	M["nvoNw.vni"], _ = strconv.ParseInt(VariablesMap["VNID"].(string), 10, 64)
+	M["nvoNw.vni"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
 }
 
-func MakeMSIRTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
+func MakeMSIRTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["nvoNw.multisiteIngRepl"] = "enable"
 }
 
-func MakeARPSuppressTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
+func MakeARPSuppressTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["nvoNw.suppressARP"] = "enabled"
 }
 
-func MakeDefaultTemplate(M map[string]interface{}, VariablesMap map[string]interface{}, AddOptionsDB AddOptionsDB, DeviceName string) {
-	M["bgpInst.asn"] = AddOptionsDB[DeviceName]["bgpInst.asn"]
-	M["vnid"], _ = strconv.ParseInt(VariablesMap["VNID"].(string), 10, 64)
-}
-
-type AddOptionsDB map[string]AddOptionsDBEntry
-type AddOptionsDBEntry map[string]interface{}
-
-func LoadAddOptions(ProcessedData m.ProcessedData, OptionList []string) AddOptionsDB {
-	AddOptionsDB := make(AddOptionsDB)
-	for _, Device := range ProcessedData.DeviceFootprintDB {
-		AddOptionsDBEntry := make(AddOptionsDBEntry)
-		for _, Option := range OptionList {
-			if v, ok := Device.DeviceData[Option]; ok {
-				AddOptionsDBEntry[Option] = v
-			}
-		}
-		AddOptionsDB[Device.DeviceName] = AddOptionsDBEntry
-	}
-	return AddOptionsDB
+func MakeDefaultTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["bgpInst.asn"] = IndirectVariablesDB[deviceName][key]["bgpInst.asn"]
+	M["vnid"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
 }
 
 func PrettyPrint(src interface{}) {
@@ -157,21 +242,6 @@ func LoadProcessedData(fineName string) m.ProcessedData {
 	return ProcessedData
 }
 
-func TemplateConstruct(ProcessedData m.ProcessedData, TemplatedData *m.ProcessedData, AddOptions AddOptionsDB, TemplateDataMap map[string]interface{}, TemplateComponentsMap TemplateComponentsDB) {
-	for _, Device := range ProcessedData.ServiceFootprintDB {
-		var DeviceFootprintDBEntry m.DeviceFootprintDBEntry
-		DeviceFootprintDBEntry.DeviceName = Device.DeviceName
-		DeviceFootprintDBEntry.DeviceData = make(map[string]interface{})
-		TemplateComponentsMap[TemplatedData.ServiceName]["Default"](DeviceFootprintDBEntry.DeviceData, TemplateDataMap, AddOptions, DeviceFootprintDBEntry.DeviceName)
-		for _, Component := range Device.ServiceLayout {
-			if Component.Value == true {
-				TemplateComponentsMap[TemplatedData.ServiceName][Component.Name](DeviceFootprintDBEntry.DeviceData, TemplateDataMap, AddOptions, DeviceFootprintDBEntry.DeviceName)
-			}
-		}
-		TemplatedData.DeviceFootprintDB = append(TemplatedData.DeviceFootprintDB, DeviceFootprintDBEntry)
-	}
-}
-
 func FindCommonKeys(src map[string]interface{}, dst map[string]interface{}) []string {
 	result := make([]string, 0)
 	for k, _ := range src {
@@ -195,43 +265,62 @@ func FindDistinctKeys(src map[string]interface{}, dst map[string]interface{}) []
 type DeviceDiffDB []DeviceDiffDBEntry
 type DeviceDiffDBEntry struct {
 	DeviceName string
-	ToChange   map[string]interface{}
-	ToAdd      map[string]interface{}
-	ToDelete   map[string]interface{}
+	DiffData   []DiffDataEntry
+}
+type DiffDataEntry struct {
+	Key      interface{}
+	ToChange map[string]interface{}
+	ToAdd    map[string]interface{}
+	ToDelete map[string]interface{}
 }
 
-func ConstrustDeficeDiffDB(tmpl m.DeviceFootprintDB, orig m.DeviceFootprintDB, DeviceDiffDB *DeviceDiffDB) {
-	for i, v := range tmpl {
+func ConstrustDeficeDiffDB(t m.DeviceFootprintDB, o m.DeviceFootprintDB) DeviceDiffDB {
+
+	var deviceDiffDB DeviceDiffDB
+
+	for deviceDataDBEntryIndex, deviceDataDBEntry := range t {
 		var DeviceDiffDBEntry DeviceDiffDBEntry
-		DeviceDiffDBEntry.DeviceName = v.DeviceName
+		DeviceDiffDBEntry.DeviceName = deviceDataDBEntry.DeviceName
 
-		ToChange := make(map[string]interface{})
-		ToAdd := make(map[string]interface{})
-		ToDelete := make(map[string]interface{})
-		tmplDeviceData := v.DeviceData
-		origDeviceData := orig[i].DeviceData
-		commonKeys := FindCommonKeys(tmplDeviceData, origDeviceData)
-		distinctKeysSrcOnly := FindDistinctKeys(tmplDeviceData, origDeviceData)
-		distinctKeysDstOnly := FindDistinctKeys(origDeviceData, tmplDeviceData)
+		for deviceDataEntryIndex, deviceDataEntry := range deviceDataDBEntry.DeviceData {
+			var diffDataEntry DiffDataEntry
+			diffDataEntry.Key = deviceDataEntry.Key
 
-		for _, v := range commonKeys {
-			if tmplDeviceData[v] != origDeviceData[v] {
-				ToChange[v] = tmplDeviceData[v]
+			ToChange := make(map[string]interface{})
+			ToAdd := make(map[string]interface{})
+			ToDelete := make(map[string]interface{})
+
+			diffDataEntry.ToChange = ToChange
+			diffDataEntry.ToAdd = ToAdd
+			diffDataEntry.ToDelete = ToDelete
+
+			tmplDeviceData := deviceDataEntry.Data
+			origDeviceData := o[deviceDataDBEntryIndex].DeviceData[deviceDataEntryIndex].Data
+
+			commonKeys := FindCommonKeys(tmplDeviceData, origDeviceData)
+			distinctKeysSrcOnly := FindDistinctKeys(tmplDeviceData, origDeviceData)
+			distinctKeysDstOnly := FindDistinctKeys(tmplDeviceData, origDeviceData)
+
+			for _, v := range commonKeys {
+				if tmplDeviceData[v] != origDeviceData[v] {
+					ToChange[v] = tmplDeviceData[v]
+				}
 			}
+
+			for _, v := range distinctKeysSrcOnly {
+				ToAdd[v] = tmplDeviceData[v]
+			}
+
+			for _, v := range distinctKeysDstOnly {
+				ToDelete[v] = origDeviceData[v]
+			}
+
+			DeviceDiffDBEntry.DiffData = append(DeviceDiffDBEntry.DiffData, diffDataEntry)
 		}
 
-		for _, v := range distinctKeysSrcOnly {
-			ToAdd[v] = tmplDeviceData[v]
-		}
-
-		for _, v := range distinctKeysDstOnly {
-			ToDelete[v] = origDeviceData[v]
-		}
-		DeviceDiffDBEntry.ToChange = ToChange
-		DeviceDiffDBEntry.ToAdd = ToAdd
-		DeviceDiffDBEntry.ToDelete = ToDelete
-		*DeviceDiffDB = append(*DeviceDiffDB, DeviceDiffDBEntry)
+		deviceDiffDB = append(deviceDiffDB, DeviceDiffDBEntry)
 
 	}
 
+	return deviceDiffDB
 }

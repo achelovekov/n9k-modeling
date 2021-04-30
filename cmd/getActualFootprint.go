@@ -25,9 +25,9 @@ func main() {
 	srcValList := m.LoadSrcValList(*srcValListFile)
 	inventory := cu.LoadInventory(*inventoryFile)
 	serviceDefinition := m.LoadServiceDefinition(*serviceDefinitionFile)
-	keysMap := m.LoadKeysMap(serviceDefinition.DMEProcessing)
+	chunksProcessingPaths := m.LoadChunksProcessingPaths(serviceDefinition.DMEProcessing)
 	conversionMap := cu.CreateConversionMap()
-	MetaData := &m.MetaData{Config: config, Filter: filter, Enrich: enrich, KeysMap: keysMap, ConversionMap: conversionMap}
+	MetaData := &m.MetaData{Config: config, Filter: filter, Enrich: enrich, ChunksProcessingPaths: chunksProcessingPaths, ConversionMap: conversionMap}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()

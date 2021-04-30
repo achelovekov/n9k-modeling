@@ -4,25 +4,37 @@
     <meta charset="UTF-8">
     <title>Input Type Submit</title>
 </head>
-<form action="/deviceFootprint" method="POST">
-    <label for="device">Show device footprint:</label>
-    <select id="device" name="device">
-        <option value="">--Please choose an option--</option>
-        {{ range $i, $v := .DeviceFootprintDB }}
-        <option value="{{$v.DeviceName}}">{{$v.DeviceName}}</option>
-        {{end}}
-    </select>
-    <input type="submit" value="Submit">
+<form action="loadInventory">
+    <input type="submit" value="loadInventory" />
 </form>
-<form action="/serviceFootprint" method="POST">
-    <label for="device">Show service footprint:</label>
-    <select id="device" name="device">
+<form action="loadServiceNames">
+    <input type="submit" value="loadServiceNames" />
+</form>
+<form action="getActualFootprint">
+    <input type="submit" value="getActualFootprint" />
+</form>
+<form action="getActualDeviceFootprint">
+    <select id="serviceName" name="serviceName">
         <option value="">--Please choose an option--</option>
-        {{ range $i, $v := .DeviceFootprintDB }}
-        <option value="{{$v.DeviceName}}">{{$v.DeviceName}}</option>
+        {{range $i, $v := .ServiceList}}
+            {{$value := index $v "ServiceName"}}
+            <option value="{{$value}}">{{$value}}</option>
         {{end}}
     </select>
-    <input type="submit" value="Submit">
+    <select id="hostName" name="hostName">
+        <option value="">--Please choose an option--</option>
+        {{range $i, $v := .Inventory}}
+            {{$value := index $v "HostName"}}
+            <option value="{{$value}}">{{$value}}</option>
+        {{end}}
+    </select>
+    <input type="submit" value="getActualDeviceFootprint" />
+</form>
+<form action="getServiceFootprint">
+    <input type="submit" value="getServiceFootprint" />
+</form>
+<form action="getCompience">
+    <input type="submit" value="getCompience" />
 </form>
 </body>
 </html>

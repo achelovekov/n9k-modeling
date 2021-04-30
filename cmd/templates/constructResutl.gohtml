@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Type Submit</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Key</th>
+            <th>ToChange</th>
+            <th>ToAdd</th>
+            <th>ToDelete</th>
+        </tr>
+        {{range $i, $v := index . "DiffData"}}
+        <tr>
+            <th>{{$v.Key}}</th>
+            <td>
+                {{range $k, $v := $v.ToChange}}
+                <code>{{$k}}: {{$v}}</code><br>
+                {{end}}
+            </td>
+            <td>
+                {{range $k, $v := $v.ToAdd}}
+                <code>{{$k}}: {{$v}}</code><br>
+                {{end}}
+            </td>
+            <td>
+                {{range $k, $v := $v.ToDelete}}
+                <code>{{$k}}: {{$v}}</code><br>
+                {{end}}
+            </td>
+        </tr>
+        {{end}}
+    </table>
+</body>
+</html>

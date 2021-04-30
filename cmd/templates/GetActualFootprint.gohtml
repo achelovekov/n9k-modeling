@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Type Submit</title>
+</head>
+<form action="/doGetActualFootprint" method="POST">
+    <label for="serviceName">Choose serviceName:</label>
+    <select id="serviceName" name="serviceName">
+        <option value="">--Please choose an option--</option>
+        {{range $i, $v := .}}
+            {{$value := index $v "ServiceName"}}
+            <option value="{{$value}}">{{$value}}</option>
+        {{end}}
+    </select>
+    <label for="keys">Keys:</label>
+    <textarea name="keys" cols="40" rows="5"></textarea><br>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

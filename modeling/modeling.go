@@ -22,11 +22,11 @@ import (
 )
 
 type MetaData struct {
-	Config        cu.Config
-	Enrich        cu.Enrich
-	Filter        cu.Filter
-	KeysMap       cu.KeysMap
-	ConversionMap cu.ConversionMap
+	Config                cu.Config
+	Enrich                cu.Enrich
+	Filter                cu.Filter
+	ChunksProcessingPaths cu.ChunksProcessingPaths
+	ConversionMap         cu.ConversionMap
 }
 
 type NXAPILoginBody struct {
@@ -64,8 +64,8 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, err
 	NXAPILoginBody := &NXAPILoginBody{
 		AaaUser: AaaUser{
 			Attributes: Attributes{
-				Name: hmd.Host.Username,
-				Pwd:  hmd.Host.Password,
+				Name: hmd.HostData.Username,
+				Pwd:  hmd.HostData.Password,
 			},
 		},
 	}
@@ -75,7 +75,7 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, err
 		log.Println(err)
 	}
 
-	url := hmd.Host.URL + "/api/mo/aaaLogin.json"
+	url := hmd.HostData.URL + "/api/mo/aaaLogin.json"
 
 	res, err := client.Post(url, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
@@ -85,7 +85,7 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, err
 
 	if res.StatusCode != 200 {
 		log.Println("Unauthorized acces or something goes wrong while receiving access cookie")
-		return src, fmt.Errorf("Can't get access cookie from device: %v", hmd.Host.Hostname)
+		return src, fmt.Errorf("Can't get access cookie from device: %v", hmd.HostName)
 	}
 
 	body, err := ioutil.ReadAll(res.Body)
@@ -100,7 +100,7 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, err
 
 	token := "APIC-cookie=" + NXAPILoginResponse.Imdata[0].AaaLogin.Attributes.Token
 
-	url = hmd.Host.URL + "/api/mo/" + DMEPath + ".json?rsp-subtree=full&rsp-prop-include=config-only"
+	url = hmd.HostData.URL + "/api/mo/" + DMEPath + ".json?rsp-subtree=full&rsp-prop-include=config-only"
 
 	req, err := http.NewRequest("GET", url, io.Reader(nil))
 	req.Header.Set("Cookie", token)
@@ -122,7 +122,7 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, err
 }
 
 type ServiceDefinition struct {
-	DMEProcessing        []cu.KeyDefinition   `json:"DMEProcessing"`
+	DMEProcessing        []cu.ChunkDefinition `json:"DMEProcessing"`
 	ServiceName          string               `json:"ServiceName"`
 	ServiceConstructPath ServiceConstructPath `json:"ServiceConstructPath"`
 	ServiceComponents    ServiceComponents    `json:"ServiceComponents"`
@@ -172,11 +172,11 @@ func LoadServiceDefinition(fineName string) ServiceDefinition {
 	return ServiceDefinition
 }
 
-func LoadKeysMap(KeysDefinition []cu.KeyDefinition) cu.KeysMap {
+func LoadChunksProcessingPaths(chunksDefinition []cu.ChunkDefinition) cu.ChunksProcessingPaths {
 
-	KeysMap := make(cu.KeysMap)
+	ChunksProcessingPaths := make(cu.ChunksProcessingPaths)
 
-	for _, v := range KeysDefinition {
+	for _, v := range chunksDefinition {
 		var Paths cu.Paths
 
 		for _, v := range v.Paths {
@@ -195,10 +195,10 @@ func LoadKeysMap(KeysDefinition []cu.KeyDefinition) cu.KeysMap {
 			Paths = append(Paths, Path)
 		}
 
-		KeysMap[v.Key] = Paths
+		ChunksProcessingPaths[v.ChunkName] = Paths
 	}
 
-	return KeysMap
+	return ChunksProcessingPaths
 }
 
 type SrcValList []interface{}
@@ -237,33 +237,33 @@ func GetRawData(ctx context.Context, collection *mongo.Collection, hmd cu.HostMe
 
 	src, err := NXAPICall(hmd, DMEPath)
 	if err != nil {
-		log.Println("Can't get data from device:", hmd.Host.Hostname)
+		log.Println("Can't get data from device:", hmd.HostName)
 		wg.Done()
 	}
-	fmt.Println("got data from:", hmd.Host.Hostname)
+	fmt.Println("got data from:", hmd.HostName)
 
-	mo.UpdateOne(ctx, collection, "DeviceName", hmd.Host.Hostname, "DeviceDMEData", src)
+	mo.UpdateOne(ctx, collection, "DeviceName", hmd.HostName, "DeviceDMEData", src)
 	wg.Done()
 
 }
 
 func Processing(md *MetaData, hmd cu.HostMetaData, src interface{}) DeviceChunksDBEntry {
 
-	var DeviceChunksDBEntryVal DeviceChunksDBEntry
-	DeviceChunksDBEntryVal.DeviceName = hmd.Host.Hostname
-	DeviceChunksDBEntryVal.DMEChunkMap = make(map[string]DMEChunk)
+	var deviceChunksDBEntry DeviceChunksDBEntry
+	deviceChunksDBEntry.DeviceName = hmd.HostName
+	deviceChunksDBEntry.DMEChunkMap = make(map[string]DMEChunk)
 
-	for MapKey, Paths := range md.KeysMap {
+	for chunk, paths := range md.ChunksProcessingPaths {
 		DMEChunk := make([]map[string]interface{}, 0)
 
 		buf := make([]map[string]interface{}, 0)
-		for _, Path := range Paths {
-			buf = worker(src, Path, cu.Cadence, md.Filter, md.Enrich)
+		for _, path := range paths {
+			buf = worker(src, path, cu.Cadence, md.Filter, md.Enrich)
 			DMEChunk = append(DMEChunk, buf...)
 		}
-		DeviceChunksDBEntryVal.DMEChunkMap[MapKey] = DMEChunk
+		deviceChunksDBEntry.DMEChunkMap[chunk] = DMEChunk
 	}
-	return DeviceChunksDBEntryVal
+	return deviceChunksDBEntry
 }
 
 func DeviceDataFill(DMEChunk DMEChunk, KeySName string, KeyDName string, KeyList []string, data Data, Options []Option, matchType string) {
@@ -375,7 +375,7 @@ func ConstructDeviceDataEntry(srcVal interface{}, deviceChunksDBEntry DeviceChun
 	return deviceDataEntry
 }
 
-func ConstructDeviceFootprintDB(DeviceChunksDB DeviceChunksDB, srcValList []interface{}, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceFootprintDB {
+func ConstructDeviceFootprintDB(DeviceChunksDB DeviceChunksDB, srcValList []interface{}, serviceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceFootprintDB {
 
 	deviceFootprintDB := make(DeviceFootprintDB, 0)
 
@@ -385,7 +385,7 @@ func ConstructDeviceFootprintDB(DeviceChunksDB DeviceChunksDB, srcValList []inte
 		deviceFootprintDBEntry.DeviceName = deviceChunksDBEntry.DeviceName
 
 		for _, srcVal := range srcValList {
-			deviceDataEntry := ConstructDeviceDataEntry(srcVal, deviceChunksDBEntry, ServiceConstructPath, ConversionMap)
+			deviceDataEntry := ConstructDeviceDataEntry(srcVal, deviceChunksDBEntry, serviceConstructPath, ConversionMap)
 			deviceFootprintDBEntry.DeviceData = append(deviceFootprintDBEntry.DeviceData, deviceDataEntry)
 		}
 		deviceFootprintDB = append(deviceFootprintDB, deviceFootprintDBEntry)
@@ -506,4 +506,9 @@ type ProcessedData struct {
 	ServiceComponents  []string           `bson:"ServiceComponents"`
 	DeviceFootprintDB  DeviceFootprintDB  `bson:"DeviceFootprintDB"`
 	ServiceFootprintDB ServiceFootprintDB `bson:"ServiceFootprintDB"`
+}
+
+type ServiceList []ServiceListEntry
+type ServiceListEntry struct {
+	ServiceName string `bson:"ServiceName"`
 }

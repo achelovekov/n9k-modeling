@@ -264,14 +264,14 @@ func FindDistinctKeys(src map[string]interface{}, dst map[string]interface{}) []
 
 type DeviceDiffDB []DeviceDiffDBEntry
 type DeviceDiffDBEntry struct {
-	DeviceName string
-	DiffData   []DiffDataEntry
+	DeviceName string          `bson:"DeviceName"`
+	DiffData   []DiffDataEntry `bson:"DiffData"`
 }
 type DiffDataEntry struct {
-	Key      interface{}
-	ToChange map[string]interface{}
-	ToAdd    map[string]interface{}
-	ToDelete map[string]interface{}
+	Key      interface{}            `bson:"Key"`
+	ToChange map[string]interface{} `bson:"ToChange"`
+	ToAdd    map[string]interface{} `bson:"ToAdd"`
+	ToDelete map[string]interface{} `bson:"ToDelete"`
 }
 
 func ConstrustDeficeDiffDB(t m.DeviceFootprintDB, o m.DeviceFootprintDB) DeviceDiffDB {
@@ -323,4 +323,27 @@ func ConstrustDeficeDiffDB(t m.DeviceFootprintDB, o m.DeviceFootprintDB) DeviceD
 	}
 
 	return deviceDiffDB
+}
+
+func CheckForChanges(deviceDiffDB DeviceDiffDB) []string {
+
+	var result []string
+
+	for _, deviceDiffDBEntry := range deviceDiffDB {
+
+		var marker bool
+
+		for _, diffDataEntry := range deviceDiffDBEntry.DiffData {
+			if len(diffDataEntry.ToAdd) == 0 && len(diffDataEntry.ToChange) == 0 && len(diffDataEntry.ToDelete) == 0 {
+				continue
+			} else {
+				marker = marker || true
+			}
+		}
+
+		if marker {
+			result = append(result, deviceDiffDBEntry.DeviceName)
+		}
+	}
+	return result
 }

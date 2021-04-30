@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Type Submit</title>
+</head>
+<form action="/constructResult" method="POST">
+    <label for="device">Choose device to see required changes:</label>
+    <select id="device" name="device">
+        <option value="">--Please choose an option--</option>
+        {{ range $i, $v := . }}
+        <option value="{{$v}}">{{$v}}</option>
+        {{end}}
+    </select>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

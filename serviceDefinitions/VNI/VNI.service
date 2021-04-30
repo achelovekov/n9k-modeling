@@ -2,69 +2,69 @@
   "ServiceName": "VNI",
   "DMEProcessing": [
     {
-      "Key": "hmmFwdIf",
+      "ChunkName": "hmmFwdIf",
       "Paths": [
         {
-          "Path": "PathFiles/hmmFwdIf.json"
+          "Path": "../serviceDefinitions/VNI/PathFiles/hmmFwdIf.json"
         }
       ]
     },
     {
-      "Key": "rtctrlBDEvi",
+      "ChunkName": "rtctrlBDEvi",
       "Paths": [
         {
-          "Path": "PathFiles/rtctrlBDEvi.json"
+          "Path": "../serviceDefinitions/VNI/PathFiles/rtctrlBDEvi.json"
         }
       ]
     },
     {
-      "Key": "ipv4Addr",
+      "ChunkName": "ipv4Addr",
       "Paths": [
         {
-          "Path": "PathFiles/ipv4Addr.json"
+          "Path": "../serviceDefinitions/VNI/PathFiles/ipv4Addr.json"
         }
       ]
     },
     {
-      "Key": "sviIf",
+      "ChunkName": "sviIf",
       "Paths": [
         {
-          "Path": "PathFiles/sviIf.json"
+          "Path": "../serviceDefinitions/VNI/PathFiles/sviIf.json"
         }
       ]
     },
     {
-      "Key": "l2BD",
+      "ChunkName": "l2BD",
       "Paths": [
         {
-          "Path": "PathFiles/l2BD.json"
+          "Path": "../serviceDefinitions/VNI/PathFiles/l2BD.json"
         }
       ]
     },
     {
-      "Key": "nvoEvpnMultisiteBordergw",
+      "ChunkName": "nvoEvpnMultisiteBordergw",
       "Paths": [
         {
-          "Path": "PathFiles/nvoEvpnMultisiteBordergw.json"
+          "Path": "../serviceDefinitions/VNI/PathFiles/nvoEvpnMultisiteBordergw.json"
         }
       ]
     },
     {
-      "Key": "nvoNw",
+      "ChunkName": "nvoNw",
       "Paths": [
         {
-          "Path": "PathFiles/nvoNw.json"
+          "Path": "../serviceDefinitions/VNI/PathFiles/nvoNw.json"
         },
         {
-          "Path": "PathFiles/nvoNwsnvoIngRepl.json"
+          "Path": "../serviceDefinitions/VNI/PathFiles/nvoNwsnvoIngRepl.json"
         }
       ]
     },
     {
-      "Key": "bgpInst",
+      "ChunkName": "bgpInst",
       "Paths": [
         {
-          "Path": "PathFiles/bgpInst.json"
+          "Path": "../serviceDefinitions/VNI/PathFiles/bgpInst.json"
         }
       ]
     }

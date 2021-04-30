@@ -201,7 +201,7 @@ func LoadChunksProcessingPaths(chunksDefinition []cu.ChunkDefinition) cu.ChunksP
 	return ChunksProcessingPaths
 }
 
-type SrcValList []interface{}
+type SrcValList []string
 
 func LoadSrcValList(fileName string) SrcValList {
 	var srcValList SrcValList
@@ -343,12 +343,12 @@ type DeviceFootprintDBEntry struct {
 }
 type DeviceData []DeviceDataEntry
 type DeviceDataEntry struct {
-	Key  interface{} `bson:"Key"`
-	Data Data        `bson:"Data"`
+	Key  string `bson:"Key"`
+	Data Data   `bson:"Data"`
 }
 type Data map[string]interface{}
 
-func ConstructDeviceDataEntry(srcVal interface{}, deviceChunksDBEntry DeviceChunksDBEntry, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceDataEntry {
+func ConstructDeviceDataEntry(srcVal string, deviceChunksDBEntry DeviceChunksDBEntry, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceDataEntry {
 	var deviceDataEntry DeviceDataEntry
 	data := make(Data)
 
@@ -375,7 +375,7 @@ func ConstructDeviceDataEntry(srcVal interface{}, deviceChunksDBEntry DeviceChun
 	return deviceDataEntry
 }
 
-func ConstructDeviceFootprintDB(DeviceChunksDB DeviceChunksDB, srcValList []interface{}, serviceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceFootprintDB {
+func ConstructDeviceFootprintDB(DeviceChunksDB DeviceChunksDB, srcValList []string, serviceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceFootprintDB {
 
 	deviceFootprintDB := make(DeviceFootprintDB, 0)
 
@@ -421,7 +421,7 @@ type ServiceFootprintDBEntry struct {
 }
 
 type ServiceLayout struct {
-	Key  interface{}             `bson:"Key"`
+	Key  string                  `bson:"Key"`
 	Data ServiceComponentBitMaps `bson:"Data"`
 }
 
@@ -494,7 +494,6 @@ func GetServiceComponentsList(serviceDefinition ServiceDefinition) []string {
 
 	for _, serviceComponent := range serviceDefinition.ServiceComponents {
 		result = append(result, serviceComponent.ComponentName)
-		fmt.Println(result)
 	}
 
 	return result
@@ -502,7 +501,7 @@ func GetServiceComponentsList(serviceDefinition ServiceDefinition) []string {
 
 type ProcessedData struct {
 	ServiceName        string             `bson:"ServiceName"`
-	Keys               []interface{}      `bson:"Keys"`
+	Keys               []string           `bson:"Keys"`
 	ServiceComponents  []string           `bson:"ServiceComponents"`
 	DeviceFootprintDB  DeviceFootprintDB  `bson:"DeviceFootprintDB"`
 	ServiceFootprintDB ServiceFootprintDB `bson:"ServiceFootprintDB"`

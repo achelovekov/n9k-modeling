@@ -68,18 +68,18 @@ type IndirectVariablesDB map[string]IndirectVariablesDBData
 type IndirectVariablesDBData map[string]IndirectVariablesDBDataForKey
 type IndirectVariablesDBDataForKey map[string]interface{}
 
-func LoadIndirectVariablesDB(processedData interface{}, variablesList []string) IndirectVariablesDB {
+func LoadIndirectVariablesDB(processedData m.ProcessedData, variablesList []string) IndirectVariablesDB {
 	indirectVariablesDB := make(IndirectVariablesDB)
 
-	for _, deviceFootprintDBEntry := range processedData.(bson.M)["DeviceFootprintDB"].(bson.A) {
+	for _, deviceFootprintDBEntry := range processedData.DeviceFootprintDB {
 		indirectVariablesDBData := make(IndirectVariablesDBData)
-		indirectVariablesDB[deviceFootprintDBEntry.(bson.M)["DeviceName"].(string)] = indirectVariablesDBData
+		indirectVariablesDB[deviceFootprintDBEntry.DeviceName] = indirectVariablesDBData
 
-		for _, deviceDataEntry := range deviceFootprintDBEntry.(bson.M)["DeviceData"].(bson.A) {
+		for _, deviceDataEntry := range deviceFootprintDBEntry.DeviceData {
 			indirectVariablesDBDataForKey := make(IndirectVariablesDBDataForKey)
-			indirectVariablesDBData[deviceDataEntry.(bson.M)["Key"].(string)] = indirectVariablesDBDataForKey
+			indirectVariablesDBData[deviceDataEntry.Key] = indirectVariablesDBDataForKey
 			for _, variable := range variablesList {
-				if v, ok := deviceDataEntry.(bson.M)["Data"].(bson.M)[variable]; ok {
+				if v, ok := deviceDataEntry.Data[variable]; ok {
 					indirectVariablesDBDataForKey[variable] = v
 				}
 			}
@@ -89,25 +89,25 @@ func LoadIndirectVariablesDB(processedData interface{}, variablesList []string) 
 	return indirectVariablesDB
 }
 
-func TemplateConstruct(serviceName string, serviceFootprintDB interface{}, serviceVariablesDBProcessed ServiceVariablesDBProcessed, indirectVariablesDB IndirectVariablesDB, generalTemplateConstructor GeneralTemplateConstructor) m.DeviceFootprintDB {
+func TemplateConstruct(serviceName string, serviceFootprintDB m.ServiceFootprintDB, serviceVariablesDBProcessed ServiceVariablesDBProcessed, indirectVariablesDB IndirectVariablesDB, generalTemplateConstructor GeneralTemplateConstructor) m.DeviceFootprintDB {
 
 	var deviceFootprintDB m.DeviceFootprintDB
 
-	for _, serviceFootprintDBEntry := range serviceFootprintDB.(bson.A) {
+	for _, serviceFootprintDBEntry := range serviceFootprintDB {
 
 		var deviceFootprintDBEntry m.DeviceFootprintDBEntry
-		deviceFootprintDBEntry.DeviceName = serviceFootprintDBEntry.(bson.M)["DeviceName"].(string)
+		deviceFootprintDBEntry.DeviceName = serviceFootprintDBEntry.DeviceName
 
-		for _, serviceLayoutEntry := range serviceFootprintDBEntry.(bson.M)["ServiceLayouts"].(bson.A) {
+		for _, serviceLayoutEntry := range serviceFootprintDBEntry.ServiceLayouts {
 
 			var deviceDataEntry m.DeviceDataEntry
-			deviceDataEntry.Key = serviceLayoutEntry.(bson.M)["Key"].(string)
+			deviceDataEntry.Key = serviceLayoutEntry.Key
 			m := make(map[string]interface{})
 			deviceDataEntry.Data = m
-			generalTemplateConstructor[serviceName]["Default"](m, serviceLayoutEntry.(bson.M)["Key"].(string), serviceVariablesDBProcessed, indirectVariablesDB, serviceFootprintDBEntry.(bson.M)["DeviceName"].(string))
-			for _, dataEntry := range serviceLayoutEntry.(bson.M)["Data"].(bson.A) {
-				if dataEntry.(bson.M)["Value"] == true {
-					generalTemplateConstructor[serviceName][dataEntry.(bson.M)["Name"].(string)](m, serviceLayoutEntry.(bson.M)["Key"].(string), serviceVariablesDBProcessed, indirectVariablesDB, serviceFootprintDBEntry.(bson.M)["DeviceName"].(string))
+			generalTemplateConstructor[serviceName]["Default"](m, serviceLayoutEntry.Key, serviceVariablesDBProcessed, indirectVariablesDB, serviceFootprintDBEntry.DeviceName)
+			for _, dataEntry := range serviceLayoutEntry.Data {
+				if dataEntry.Value {
+					generalTemplateConstructor[serviceName][dataEntry.Name](m, serviceLayoutEntry.Key, serviceVariablesDBProcessed, indirectVariablesDB, serviceFootprintDBEntry.DeviceName)
 				}
 			}
 
@@ -268,7 +268,7 @@ type DeviceDiffDBEntry struct {
 	DiffData   []DiffDataEntry `bson:"DiffData"`
 }
 type DiffDataEntry struct {
-	Key      interface{}            `bson:"Key"`
+	Key      string                 `bson:"Key"`
 	ToChange map[string]interface{} `bson:"ToChange"`
 	ToAdd    map[string]interface{} `bson:"ToAdd"`
 	ToDelete map[string]interface{} `bson:"ToDelete"`

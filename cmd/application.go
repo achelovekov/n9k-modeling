@@ -172,7 +172,9 @@ func (md *MetaData) DoGetActualFootprint(w http.ResponseWriter, r *http.Request)
 	serviceDefinitionFile := "../serviceDefinitions/" + r.FormValue("serviceName") + "/" + r.FormValue("serviceName") + ".service"
 
 	serviceDefinition := m.LoadServiceDefinition(serviceDefinitionFile)
+
 	chunksProcessingPaths := m.LoadChunksProcessingPaths(serviceDefinition.DMEProcessing)
+
 	conversionMap := cu.CreateConversionMap()
 	MetaData := &m.MetaData{Config: md.Config, Filter: md.Filter, Enrich: md.Enrich, ChunksProcessingPaths: chunksProcessingPaths, ConversionMap: conversionMap}
 

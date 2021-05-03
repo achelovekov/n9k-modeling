@@ -2,18 +2,18 @@
   "ServiceName": "OSPF",
   "DMEProcessing": [
     {
-      "Key": "ospfIf",
+      "ChunkName": "ospfIf",
       "Paths": [
         {
-          "Path": "PathFiles/ospfIf.json"
+          "Path": "../serviceDefinitions/OSPF/PathFiles/ospfIf.json"
         }
       ]
     },
     {
-      "Key": "ospfLsaCtrl",
+      "ChunkName": "ospfLsaCtrl",
       "Paths": [
         {
-          "Path": "PathFiles/ospfLsaCtrl.json"
+          "Path": "../serviceDefinitions/OSPF/PathFiles/ospfLsaCtrl.json"
         }
       ]
     }

@@ -176,10 +176,10 @@ func LoadChunksProcessingPaths(chunksDefinition []cu.ChunkDefinition) cu.ChunksP
 
 	ChunksProcessingPaths := make(cu.ChunksProcessingPaths)
 
-	for _, v := range chunksDefinition {
+	for _, chunksDefinitionEntry := range chunksDefinition {
 		var Paths cu.Paths
 
-		for _, v := range v.Paths {
+		for _, v := range chunksDefinitionEntry.Paths {
 			pathFile, err := os.Open(v.Path)
 			if err != nil {
 				log.Println(err)
@@ -189,13 +189,14 @@ func LoadChunksProcessingPaths(chunksDefinition []cu.ChunkDefinition) cu.ChunksP
 			pathFileBytes, _ := ioutil.ReadAll(pathFile)
 			var Path cu.Path
 			err = json.Unmarshal(pathFileBytes, &Path)
+			fmt.Println(Path)
 			if err != nil {
 				log.Println(err)
 			}
 			Paths = append(Paths, Path)
 		}
 
-		ChunksProcessingPaths[v.ChunkName] = Paths
+		ChunksProcessingPaths[chunksDefinitionEntry.ChunkName] = Paths
 	}
 
 	return ChunksProcessingPaths

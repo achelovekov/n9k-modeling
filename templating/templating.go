@@ -156,21 +156,29 @@ type ServiceConstructor map[string]fn
 func LoadGeneralTemplateConstructor() GeneralTemplateConstructor {
 	GeneralTemplateConstructor := make(GeneralTemplateConstructor)
 
-	ServiceConstructor := make(ServiceConstructor)
-	ServiceConstructor["L2VNI"] = MakeL2VNITemplate
-	ServiceConstructor["AGW"] = MakeAGWTemplate
-	ServiceConstructor["PIM"] = MakePIMTemplate
-	ServiceConstructor["IR"] = MakeIRTemplate
-	ServiceConstructor["MS-IR"] = MakeMSIRTemplate
-	ServiceConstructor["ARP-Suppress"] = MakeARPSuppressTemplate
-	ServiceConstructor["Default"] = MakeDefaultTemplate
+	VNIServiceConstructor := make(ServiceConstructor)
+	VNIServiceConstructor["L2VNI"] = VNIMakeL2VNITemplate
+	VNIServiceConstructor["AGW"] = VNIMakeAGWTemplate
+	VNIServiceConstructor["PIM"] = VNIMakePIMTemplate
+	VNIServiceConstructor["IR"] = VNIMakeIRTemplate
+	VNIServiceConstructor["MS-IR"] = VNIMakeMSIRTemplate
+	VNIServiceConstructor["ARP-Suppress"] = VNIMakeARPSuppressTemplate
+	VNIServiceConstructor["Default"] = VNIMakeDefaultTemplate
 
-	GeneralTemplateConstructor["VNI"] = ServiceConstructor
+	GeneralTemplateConstructor["VNI"] = VNIServiceConstructor
+
+	OSPFServiceConstructor := make(ServiceConstructor)
+	OSPFServiceConstructor["Interface"] = OSPFMakeInterfaceTemplate
+	OSPFServiceConstructor["LSA-control"] = OSPFMakeLSAControlTemplate
+	OSPFServiceConstructor["BFD"] = OSPFMakeBFDTemplate
+	OSPFServiceConstructor["Default"] = OSPFMakeBFDTemplate
+
+	GeneralTemplateConstructor["OSPF"] = OSPFServiceConstructor
 
 	return GeneralTemplateConstructor
 }
 
-func MakeL2VNITemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func VNIMakeL2VNITemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["vnid"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
 	M["l2BD.accEncap"] = "vxlan-" + serviceVariablesDB[key]["VNID"].(string)
 	M["l2BD.id"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string)[3:], 10, 64)
@@ -181,7 +189,7 @@ func MakeL2VNITemplate(M map[string]interface{}, key string, serviceVariablesDB 
 	M["nvoNw.suppressARP"] = "off"
 }
 
-func MakeAGWTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func VNIMakeAGWTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["hmmFwdIf.mode"] = "anycastGW"
 	M["ipv4Addr.addr"] = serviceVariablesDB[key]["IPAddress"].(string) + "/" + serviceVariablesDB[key]["Mask"].(string)
 	M["ipv4Addr.tag"], _ = strconv.ParseInt("39"+serviceVariablesDB[key]["ZoneID"].(string), 10, 64)
@@ -189,7 +197,7 @@ func MakeAGWTemplate(M map[string]interface{}, key string, serviceVariablesDB Se
 	M["sviIf.id"] = "vlan" + serviceVariablesDB[key]["VNID"].(string)[3:]
 }
 
-func MakeIRTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func VNIMakeIRTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["nvoNw.mcastGroup"] = "0.0.0.0"
 	M["nvoNw.multisiteIngRepl"] = "disable"
 	M["nvoNw.vni"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
@@ -197,23 +205,47 @@ func MakeIRTemplate(M map[string]interface{}, key string, serviceVariablesDB Ser
 	M["nvoIngRepl.rn"] = "IngRepl"
 }
 
-func MakePIMTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func VNIMakePIMTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["nvoNw.mcastGroup"] = "225.1.0." + serviceVariablesDB[key]["ZoneIDForMcast"].(string)
 	M["nvoNw.multisiteIngRepl"] = "disable"
 	M["nvoNw.vni"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
 }
 
-func MakeMSIRTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func VNIMakeMSIRTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["nvoNw.multisiteIngRepl"] = "enable"
 }
 
-func MakeARPSuppressTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func VNIMakeARPSuppressTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["nvoNw.suppressARP"] = "enabled"
 }
 
-func MakeDefaultTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func VNIMakeDefaultTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["bgpInst.asn"] = IndirectVariablesDB[deviceName][key]["bgpInst.asn"]
 	M["vnid"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
+}
+
+func OSPFMakeInterfaceTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["ospfIf.adminSt"] = "enabled"
+	M["ospfIf.area"] = serviceVariablesDB[key]["Area"].(string)
+	M["ospfIf.helloIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["HelloIntvl"].(string), 10, 64)
+	M["ospfIf.nwT"] = serviceVariablesDB[key]["nwT"].(string)
+	M["ospfIf.rexmitIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["RexmitIntvl"].(string), 10, 64)
+}
+
+func OSPFMakeLSAControlTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["ospfLsaCtrl.arrivalIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["ArrivalIntvl"].(string), 10, 64)
+	M["ospfLsaCtrl.gpPacingIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["GpPacingIntvl"].(string), 10, 64)
+	M["ospfLsaCtrl.holdIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["HoldIntvl"].(string), 10, 64)
+	M["ospfLsaCtrl.maxIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["MaxIntvl"].(string), 10, 64)
+}
+
+func OSPFMakeBFDTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["ospfIf.bfdCtrl"] = "enabled"
+	M["ospfDom.ctrl"] = "bfd"
+}
+
+func OSPFMakeDefaultTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["ifid"] = serviceVariablesDB[key]["Name"].(string)
 }
 
 func PrettyPrint(src interface{}) {

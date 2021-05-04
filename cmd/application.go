@@ -85,6 +85,8 @@ func (md *MetaData) GetRawData(w http.ResponseWriter, r *http.Request) {
 		inventory = append(inventory, hostMetaData)
 	}
 
+	fmt.Println("Inventory:", inventory)
+
 	rawDataCollection := client.Database(md.Config.DBName).Collection(md.Config.CollectionName)
 
 	var wg sync.WaitGroup
@@ -186,6 +188,9 @@ func (md *MetaData) DoGetActualFootprint(w http.ResponseWriter, r *http.Request)
 		src := mo.FindOne(ctx, devicesRawDMECollection, "DeviceName", v.HostName)["DeviceDMEData"]
 		deviceChunksDB = append(deviceChunksDB, m.Processing(MetaData, v, src))
 	}
+
+	JSONData := m.MarshalToJSON(deviceChunksDB)
+	m.WriteDataToFile("BGPJSONData.out", JSONData)
 
 	deviceFootprintDB := m.ConstructDeviceFootprintDB(deviceChunksDB, srcValList, serviceDefinition.ServiceConstructPath, MetaData.ConversionMap)
 	serviceFootprintDB := m.ConstructServiceFootprintDB(serviceDefinition.ServiceComponents, deviceFootprintDB)

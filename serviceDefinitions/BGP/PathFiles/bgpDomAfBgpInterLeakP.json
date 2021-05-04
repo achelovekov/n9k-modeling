@@ -1,0 +1,149 @@
+{
+    "PathOptions": {
+      "IgnoreTail": false
+    },
+    "PathData": [
+      {
+        "Node": [
+          {
+            "NodeName": "imdata",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "topSystem",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "bgpEntity",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "bgpInst",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "bgpDom",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "bgpDomAf",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "bgpInterLeakP",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      }
+    ]
+  }

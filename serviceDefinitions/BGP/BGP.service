@@ -1,60 +1,84 @@
 {
-  "ServiceName": "OSPF",
+  "ServiceName": "BGP",
   "DMEProcessing": [
     {
-      "ChunkName": "ospfIf",
+      "ChunkName": "bgpPeerCont",
       "Paths": [
         {
-          "Path": "../serviceDefinitions/OSPF/PathFiles/ospfIf.json"
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeerContNoAFIOptions.json"
+        },
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeerContBgpRtCtrlP.json"
+        },
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeerContBgpMaxPfxP.json"
         }
       ]
     },
     {
-      "ChunkName": "ospfLsaCtrl",
+      "ChunkName": "bgpDomAf",
       "Paths": [
         {
-          "Path": "../serviceDefinitions/OSPF/PathFiles/ospfLsaCtrl.json"
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpDomAfNoBgpInterLeakP.json"
+        },
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpDomAfBgpInterLeakP.json"
+        }
+      ]
+    },
+    {
+      "ChunkName": "bgpPeer",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeer.json"
         }
       ]
     }
   ],
   "ServiceConstructPath": [
     {
-      "ChunkName": "ospfIf",
-      "KeySName": "ifid",
+      "ChunkName": "bgpPeer",
+      "KeySName": "addr",
       "KeySType": "string",
-      "KeyDName": "ospfIf.id",
+      "KeyDName": "bgpPeer.addr",
       "KeyDType": "string",
       "KeyLink": "direct",
       "MatchType": "full",
       "KeyList": [
-       "ospfIf.adminSt",
-       "ospfIf.area",
-       "ospfIf.bfdCtrl",
-       "ospfIf.helloIntvl",
-       "ospfIf.nwT",
-       "ospfIf.rexmitIntvl",
-       "ospfDom.name"
+       "bgpDom.bestPathIntvl",
+       "bgpDom.holdIntvl",
+       "bgpDom.kaIntvl",
+       "bgpDom.pfxPeerTimeout",
+       "bgpDom.pfxPeerWaitTime",
+       "bgpDom.reConnIntvl",
+       "bgpPeer.peerImp"
       ],
       "Options": []
     },
     {
-      "ChunkName": "ospfLsaCtrl",
-      "KeySName": "ospfDom.name",
+      "ChunkName": "bgpPeerCont",
+      "KeySName": "bgpPeer.peerImp",
       "KeySType": "string",
-      "KeyDName": "ospfDom.name",
+      "KeyDName": "bgpPeerCont.name",
       "KeyDType": "string",
       "KeyLink": "indirect",
       "MatchType": "full",
       "KeyList": [
-        "ospfLsaCtrl.arrivalIntvl",
-        "ospfLsaCtrl.gpPacingIntvl",
-        "ospfLsaCtrl.holdIntvl",
-        "ospfLsaCtrl.maxIntvl",
-        "ospfDom.ctrl",
-        "ospfInst.name"
+        "bgpMaxPfxP.maxPfx",
+        "bgpPeerCont.asn",
+        "bgpRtCtrlP.rtMap",
+        "bgpRtCtrlP.direction"
       ],
-      "Options": []
+      "Options": [
+        {
+          "optionKey": "bgpPeerAf.type",
+          "optionValue": "ipv4-ucast"
+        },
+        {
+          "optionKey": "bgpPeerAf.type",
+          "optionValue": "l2vpn-evpn"
+        }
+      ]
     }
   ],
   "ServiceComponents": [

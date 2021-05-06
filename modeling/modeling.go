@@ -141,7 +141,7 @@ type ServiceConstructPath []struct {
 }
 type Option struct {
 	OptionKey   string `json:"optionKey"`
-	OptionValue string `json:"optionValue"`
+	OptionValue string `json:"optionValue12341234"`
 }
 type ServiceComponents []ServiceComponent
 type ServiceComponent struct {

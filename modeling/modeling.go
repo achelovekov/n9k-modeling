@@ -129,20 +129,22 @@ type ServiceDefinition struct {
 }
 
 type ServiceConstructPath []struct {
-	ChunkName string   `json:"ChunkName"`
-	KeySName  string   `json:"KeySName"`
-	KeySType  string   `json:"KeySType"`
-	KeyDName  string   `json:"KeyDName"`
-	KeyDType  string   `json:"KeyDType"`
-	KeyLink   string   `json:"KeyLink"`
-	MatchType string   `json:"MatchType"`
-	KeyList   []string `json:"KeyList"`
-	Options   []Option `json:"Options"`
+	ChunkName string    `json:"ChunkName"`
+	KeySName  string    `json:"KeySName"`
+	KeySType  string    `json:"KeySType"`
+	KeyDName  string    `json:"KeyDName"`
+	KeyDType  string    `json:"KeyDType"`
+	KeyLink   string    `json:"KeyLink"`
+	MatchType string    `json:"MatchType"`
+	KeyList   []string  `json:"KeyList"`
+	CombineBy CombineBy `json:"CombineBy"`
 }
-type Option struct {
-	OptionKey   string `json:"optionKey"`
-	OptionValue string `json:"optionValue12341234"`
+
+type CombineBy struct {
+	OptionName string   `json:"OptionName"`
+	OptionKeys []string `json:"OptionKeys"`
 }
+
 type ServiceComponents []ServiceComponent
 type ServiceComponent struct {
 	ComponentName string         `json:"ComponentName"`

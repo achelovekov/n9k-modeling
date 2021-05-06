@@ -117,6 +117,52 @@
         "Node": [
           {
             "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "bgpPeerEntry",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "bgpPeerAfEntry",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
             "ToDive": false,
             "ToCombine": false
           }

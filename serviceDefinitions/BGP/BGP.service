@@ -45,30 +45,21 @@
       "KeyLink": "direct",
       "MatchType": "full",
       "KeyList": [
-       "bgpDom.name",
-       "bgpDom.bestPathIntvl",
-       "bgpDom.holdIntvl",
-       "bgpDom.kaIntvl",
-       "bgpDom.pfxPeerTimeout",
-       "bgpDom.pfxPeerWaitTime",
-       "bgpDom.reConnIntvl",
-       "bgpPeer.peerImp",
-       "bgpPeerAfEntry.type"
-      ],
-      "Options": [
-        {
-          "optionKey": "bgpPeerAfEntry.type",
-          "optionValue": "ipv4-ucast"
-        },
-        {
-          "optionKey": "bgpPeerAfEntry.type",
-          "optionValue": "l2vpn-evpn"
-        }
-      ]
+        "bgpDom.name",
+        "bgpDom.bestPathIntvl",
+        "bgpDom.holdIntvl",
+        "bgpPeer.peerImp"
+       ],
+      "CombineBy": {
+        "OptionName": "bgpPeerAfEntry.type",
+        "OptionKeys": [
+          "bgpPeerAfEntry.type"
+        ]
+      }
     },
     {
       "ChunkName": "bgpPeerCont",
-      "KeySName": "bgpPeer.peerImp.ipv4-ucast",
+      "KeySName": "bgpPeer.peerImp",
       "KeySType": "string",
       "KeyDName": "bgpPeerCont.name",
       "KeyDType": "string",
@@ -76,41 +67,16 @@
       "MatchType": "full",
       "KeyList": [
         "bgpMaxPfxP.maxPfx",
-        "bgpPeerCont.asn",
-        "bgpRtCtrlP.rtMap",
-        "bgpRtCtrlP.direction"
-      ],
-      "Options": [
-        {
-          "optionKey": "bgpPeerAf.type",
-          "optionValue": "ipv4-ucast"
-        }
-      ]
-    },
-    {
-      "ChunkName": "bgpPeerCont",
-      "KeySName": "bgpPeer.peerImp.l2vpn-evpn",
-      "KeySType": "string",
-      "KeyDName": "bgpPeerCont.name",
-      "KeyDType": "string",
-      "KeyLink": "indirect",
-      "MatchType": "full",
-      "KeyList": [
-        "bgpMaxPfxP.maxPfx",
-        "bgpPeerCont.asn",
-        "bgpRtCtrlP.rtMap",
-        "bgpRtCtrlP.direction"
-      ],
-      "Options": [
-        {
-          "optionKey": "bgpPeerAf.type",
-          "optionValue": "l2vpn-evpn"
-        }
-      ]
+        "bgpRtCtrlP.rtMap"
+       ],
+      "SplitSearch": {
+        "SearchFrom": "bgpPeerAfEntry.type",
+        "SearchFor": "bgpPeerAf.type"
+      }
     },
     {
       "ChunkName": "bgpDomAf",
-      "KeySName": "bgpDom.name.ipv4-ucast",
+      "KeySName": "bgpDom.name",
       "KeySType": "string",
       "KeyDName": "bgpDom.name",
       "KeyDType": "string",
@@ -123,36 +89,13 @@
         "bgpDomAf.maxEcmp",
         "bgpDomAf.critNhTimeout",
         "bgpDomAf.nonCritNhTimeout"
-      ],
-      "Options": [
-        {
-          "optionKey": "bgpDomAf.type",
-          "optionValue": "ipv4-ucast"
-        }
-      ]
-    },
-    {
-      "ChunkName": "bgpDomAf",
-      "KeySName": "bgpDom.name.l2vpn-evpn",
-      "KeySType": "string",
-      "KeyDName": "bgpDom.name",
-      "KeyDType": "string",
-      "KeyLink": "indirect",
-      "MatchType": "full",
-      "KeyList": [
-        "bgpDomAf.advPip",
-        "bgpDomAf.advSysMac",
-        "bgpDomAf.advertL2vpnEvpn",
-        "bgpDomAf.maxEcmp",
-        "bgpDomAf.critNhTimeout",
-        "bgpDomAf.nonCritNhTimeout"
-      ],
-      "Options": [
-        {
-          "optionKey": "bgpDomAf.type",
-          "optionValue": "l2vpn-evpn"
-        }
-      ]
+       ],
+      "CombineBy": {
+        "OptionName": "bgpInterLeakP.proto",
+        "OptionKeys": [
+          "bgpInterLeakP.proto"
+        ]
+      }
     }
   ],
   "ServiceComponents": [

@@ -1,0 +1,14 @@
+{
+  "ChunkName": "bgpPeer",
+  "KeySName": "addr",
+  "KeySType": "string",
+  "KeyDName": "bgpPeer.addr",
+  "KeyDType": "string",
+  "KeyLink": "direct",
+  "MatchType": "full",
+  "KeyList": [
+    "bgpDom.name",
+    "bgpDom.bestPathIntvl",
+    "bgpDom.holdIntvl"
+  ]
+}

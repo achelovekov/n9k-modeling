@@ -12,7 +12,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 	"sync"
 
 	mo "github.com/achelovekov/n9k-modeling/mongo"
@@ -128,21 +127,28 @@ type ServiceDefinition struct {
 	ServiceComponents    ServiceComponents    `json:"ServiceComponents"`
 }
 
-type ServiceConstructPath []struct {
-	ChunkName string    `json:"ChunkName"`
-	KeySName  string    `json:"KeySName"`
-	KeySType  string    `json:"KeySType"`
-	KeyDName  string    `json:"KeyDName"`
-	KeyDType  string    `json:"KeyDType"`
-	KeyLink   string    `json:"KeyLink"`
-	MatchType string    `json:"MatchType"`
-	KeyList   []string  `json:"KeyList"`
-	CombineBy CombineBy `json:"CombineBy"`
+type ServiceConstructPath []ServiceConstructPathEntry
+type ServiceConstructPathEntry struct {
+	ChunkName   string      `json:"ChunkName"`
+	KeySName    string      `json:"KeySName"`
+	KeySType    string      `json:"KeySType"`
+	KeyDName    string      `json:"KeyDName"`
+	KeyDType    string      `json:"KeyDType"`
+	KeyLink     string      `json:"KeyLink"`
+	MatchType   string      `json:"MatchType"`
+	KeyList     []string    `json:"KeyList"`
+	CombineBy   CombineBy   `json:"CombineBy"`
+	SplitSearch SplitSearch `json:"SplitSearch"`
 }
 
 type CombineBy struct {
 	OptionName string   `json:"OptionName"`
 	OptionKeys []string `json:"OptionKeys"`
+}
+
+type SplitSearch struct {
+	SearchFrom string `json:"SearchFrom"`
+	SearchFor  string `json:"SearchFor"`
 }
 
 type ServiceComponents []ServiceComponent
@@ -269,59 +275,6 @@ func Processing(md *MetaData, hmd cu.HostMetaData, src interface{}) DeviceChunks
 	return deviceChunksDBEntry
 }
 
-func DeviceDataFill(DMEChunk DMEChunk, KeySName string, KeyDName string, KeyList []string, data Data, Options []Option, matchType string) {
-	if matchType == "full" {
-		if len(Options) == 0 {
-			for _, item := range DMEChunk {
-				if data[KeySName] == item[KeyDName] || (KeySName == "any" && KeyDName == "any") {
-					for _, v := range KeyList {
-						if _, ok := item[v]; ok {
-							data[v] = item[v]
-						}
-					}
-				}
-			}
-		} else {
-			for _, Option := range Options {
-				for _, item := range DMEChunk {
-					if (data[KeySName] == item[KeyDName] && item[Option.OptionKey] == Option.OptionValue) || (KeySName == "any" && KeyDName == "any") {
-						for _, v := range KeyList {
-							if _, ok := item[v]; ok {
-								data[v+"."+Option.OptionValue] = item[v]
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	if matchType == "partial" {
-		if len(Options) == 0 {
-			for _, item := range DMEChunk {
-				if strings.Contains(item[KeyDName].(string), data[KeySName].(string)) || (KeySName == "any" && KeyDName == "any") {
-					for _, v := range KeyList {
-						if _, ok := item[v]; ok {
-							data[v] = item[v]
-						}
-					}
-				}
-			}
-		} else {
-			for _, Option := range Options {
-				for _, item := range DMEChunk {
-					if (strings.Contains(item[KeyDName].(string), data[KeySName].(string)) && item[Option.OptionKey] == Option.OptionValue) || (KeySName == "any" && KeyDName == "any") {
-						for _, v := range KeyList {
-							if _, ok := item[v]; ok {
-								data[v+"."+Option.OptionValue] = item[v]
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
 func TypeConversion(srcType string, dstType string, srcVal interface{}, ConversionMap cu.ConversionMap) interface{} {
 	if srcType != dstType {
 		P := cu.Pair{SrcType: srcType, DstType: dstType}
@@ -351,31 +304,109 @@ type DeviceDataEntry struct {
 }
 type Data map[string]interface{}
 
+type CombineByDB []CombineByDBEntry
+type CombineByDBEntry struct {
+	OptionName   string
+	OptionValues []interface{}
+}
+
 func ConstructDeviceDataEntry(srcVal string, deviceChunksDBEntry DeviceChunksDBEntry, ServiceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceDataEntry {
 	var deviceDataEntry DeviceDataEntry
+	var combineByDB CombineByDB
 	data := make(Data)
 
 	deviceDataEntry.Key = srcVal
 	deviceDataEntry.Data = data
 
-	for _, v := range ServiceConstructPath {
-		if v.KeyLink == "direct" {
-			data[v.KeySName] = srcVal
-			data[v.KeySName] = TypeConversion(v.KeySType, v.KeyDType, data[v.KeySName], ConversionMap)
-			DeviceDataFill(deviceChunksDBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, data, v.Options, v.MatchType)
+	for _, entry := range ServiceConstructPath {
+		if entry.KeyLink == "direct" {
+			data[entry.KeySName] = srcVal
+			data[entry.KeySName] = TypeConversion(entry.KeySType, entry.KeyDType, data[entry.KeySName], ConversionMap)
 		}
-		if v.KeyLink == "indirect" {
-			if _, ok := data[v.KeySName]; ok {
-				data[v.KeySName] = TypeConversion(v.KeySType, v.KeyDType, data[v.KeySName], ConversionMap)
-				DeviceDataFill(deviceChunksDBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, data, v.Options, v.MatchType)
-			}
+		if len(entry.CombineBy.OptionName) > 0 {
+			combineByDBEntry := ConstructCombineByDBEntry(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data)
+			combineByDB = append(combineByDB, combineByDBEntry)
+			fmt.Println("go 1")
+			//fmt.Println(data)
+			fmt.Println(combineByDB)
+			DeviceDataFillCombine(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data, combineByDBEntry)
+			DeviceDataFillNoCombine(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data)
 		}
-		if v.KeyLink == "no-link" {
-			DeviceDataFill(deviceChunksDBEntry.DMEChunkMap[v.ChunkName], v.KeySName, v.KeyDName, v.KeyList, data, v.Options, v.MatchType)
+		if len(entry.CombineBy.OptionName) == 0 && entry.SplitSearch == (SplitSearch{}) {
+			//DeviceDataFillNoCombine(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data)
+			fmt.Println("go 2")
+			//fmt.Println(data)
+		}
+		if entry.SplitSearch != (SplitSearch{}) {
+			//DeviceDataFillSplitSearch(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data, combineByDB)
+			fmt.Println("go 3")
+			//fmt.Println(data)
 		}
 	}
 
 	return deviceDataEntry
+}
+
+func DeviceDataFillSplitSearch(dMEChunk DMEChunk, serviceConstructPathEntry ServiceConstructPathEntry, data Data, combineByDB CombineByDB) {
+	combineByDBEntry := FindCombineByDBEntry(serviceConstructPathEntry.SplitSearch.SearchFrom, combineByDB)
+
+	for _, optionValue := range combineByDBEntry.OptionValues {
+		for _, dMEChunkEntry := range dMEChunk {
+			if data[serviceConstructPathEntry.KeySName] == dMEChunkEntry[serviceConstructPathEntry.KeyDName] && dMEChunkEntry[serviceConstructPathEntry.SplitSearch.SearchFor] == optionValue {
+				for _, key := range serviceConstructPathEntry.KeyList {
+					if v, ok := dMEChunkEntry[key]; ok {
+						data[key+"."+dMEChunkEntry[serviceConstructPathEntry.SplitSearch.SearchFor].(string)] = v
+					}
+				}
+			}
+		}
+	}
+}
+
+func FindCombineByDBEntry(searchFor string, combineByDB CombineByDB) CombineByDBEntry {
+	var result CombineByDBEntry
+	for _, combineByDBEntry := range combineByDB {
+		if combineByDBEntry.OptionName == searchFor {
+			result = combineByDBEntry
+		}
+	}
+
+	return result
+}
+
+func DeviceDataFillCombine(dMEChunk DMEChunk, serviceConstructPathEntry ServiceConstructPathEntry, data Data, combineByDBEntry CombineByDBEntry) {
+	for _, dMEChunkEntry := range dMEChunk {
+		for _, optionValue := range combineByDBEntry.OptionValues {
+			if data[serviceConstructPathEntry.KeySName] == dMEChunkEntry[serviceConstructPathEntry.KeyDName] && dMEChunkEntry[combineByDBEntry.OptionName] == optionValue {
+				for _, key := range serviceConstructPathEntry.CombineBy.OptionKeys {
+					data[key+"."+dMEChunkEntry[combineByDBEntry.OptionName].(string)] = dMEChunkEntry[key]
+				}
+			}
+		}
+	}
+}
+
+func DeviceDataFillNoCombine(dMEChunk DMEChunk, serviceConstructPathEntry ServiceConstructPathEntry, data Data) {
+	for _, dMEChunkEntry := range dMEChunk {
+		if data[serviceConstructPathEntry.KeySName] == dMEChunkEntry[serviceConstructPathEntry.KeyDName] {
+			for _, key := range serviceConstructPathEntry.KeyList {
+				data[key] = dMEChunkEntry[key]
+			}
+		}
+	}
+}
+
+func ConstructCombineByDBEntry(dMEChunk DMEChunk, serviceConstructPathEntry ServiceConstructPathEntry, data Data) CombineByDBEntry {
+
+	var combineByDBEntry CombineByDBEntry
+	combineByDBEntry.OptionName = serviceConstructPathEntry.CombineBy.OptionName
+
+	for _, dMEChunkEntry := range dMEChunk {
+		if data[serviceConstructPathEntry.KeySName] == dMEChunkEntry[serviceConstructPathEntry.KeyDName] {
+			combineByDBEntry.OptionValues = append(combineByDBEntry.OptionValues, dMEChunkEntry[serviceConstructPathEntry.CombineBy.OptionName])
+		}
+	}
+	return combineByDBEntry
 }
 
 func ConstructDeviceFootprintDB(DeviceChunksDB DeviceChunksDB, srcValList []string, serviceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceFootprintDB {

@@ -69,10 +69,12 @@
         "bgpMaxPfxP.maxPfx",
         "bgpRtCtrlP.rtMap"
        ],
-      "SplitSearch": {
-        "SearchFrom": "bgpPeerAfEntry.type",
-        "SearchFor": "bgpPeerAf.type"
-      }
+      "SplitSearch": [
+        {
+          "SearchFrom": "bgpPeerAfEntry.type",
+          "SearchFor": "bgpPeerAf.type"
+        }
+      ]
     },
     {
       "ChunkName": "bgpDomAf",

@@ -129,16 +129,16 @@ type ServiceDefinition struct {
 
 type ServiceConstructPath []ServiceConstructPathEntry
 type ServiceConstructPathEntry struct {
-	ChunkName   string      `json:"ChunkName"`
-	KeySName    string      `json:"KeySName"`
-	KeySType    string      `json:"KeySType"`
-	KeyDName    string      `json:"KeyDName"`
-	KeyDType    string      `json:"KeyDType"`
-	KeyLink     string      `json:"KeyLink"`
-	MatchType   string      `json:"MatchType"`
-	KeyList     []string    `json:"KeyList"`
-	CombineBy   CombineBy   `json:"CombineBy"`
-	SplitSearch SplitSearch `json:"SplitSearch"`
+	ChunkName   string             `json:"ChunkName"`
+	KeySName    string             `json:"KeySName"`
+	KeySType    string             `json:"KeySType"`
+	KeyDName    string             `json:"KeyDName"`
+	KeyDType    string             `json:"KeyDType"`
+	KeyLink     string             `json:"KeyLink"`
+	MatchType   string             `json:"MatchType"`
+	KeyList     []string           `json:"KeyList"`
+	CombineBy   CombineBy          `json:"CombineBy"`
+	SplitSearch []SplitSearchEntry `json:"SplitSearch"`
 }
 
 type CombineBy struct {
@@ -146,7 +146,7 @@ type CombineBy struct {
 	OptionKeys []string `json:"OptionKeys"`
 }
 
-type SplitSearch struct {
+type SplitSearchEntry struct {
 	SearchFrom string `json:"SearchFrom"`
 	SearchFor  string `json:"SearchFor"`
 }
@@ -331,23 +331,79 @@ func ConstructDeviceDataEntry(srcVal string, deviceChunksDBEntry DeviceChunksDBE
 			fmt.Println(combineByDB)
 			DeviceDataFillCombine(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data, combineByDBEntry)
 			DeviceDataFillNoCombine(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data)
+			cu.PrettyPrint(data)
 		}
-		if len(entry.CombineBy.OptionName) == 0 && entry.SplitSearch == (SplitSearch{}) {
+		if len(entry.CombineBy.OptionName) == 0 && len(entry.SplitSearch) > 0 {
 			//DeviceDataFillNoCombine(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data)
 			fmt.Println("go 2")
-			//fmt.Println(data)
+			searchStruct := ConstructSplitSearchL1(entry, combineByDB)
+			fmt.Println(searchStruct)
+			CheckDMEChunkForKeys(entry, searchStruct, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
+			cu.PrettyPrint(data)
 		}
-		if entry.SplitSearch != (SplitSearch{}) {
+		/* 		if entry.SplitSearch != (SplitSearch{}) {
 			//DeviceDataFillSplitSearch(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data, combineByDB)
 			fmt.Println("go 3")
 			//fmt.Println(data)
-		}
+		} */
 	}
 
 	return deviceDataEntry
 }
 
-func DeviceDataFillSplitSearch(dMEChunk DMEChunk, serviceConstructPathEntry ServiceConstructPathEntry, data Data, combineByDB CombineByDB) {
+func CheckDMEChunkForKeys(serviceConstructPathEntry ServiceConstructPathEntry, searchStruct []SearchStructEntry, dMEChunk DMEChunk, data Data) {
+	for _, dMEChunkEntry := range dMEChunk {
+		for _, searchStructEntry := range searchStruct {
+			if CheckForKeys(dMEChunkEntry, searchStructEntry.KeysList) {
+				fmt.Println("go here")
+				for _, key := range serviceConstructPathEntry.KeyList {
+					if v, ok := dMEChunkEntry[key]; ok {
+						data[key+searchStructEntry.Prefix] = v
+					}
+				}
+			}
+		}
+	}
+}
+
+func CheckForKeys(dMEChunkEntry map[string]interface{}, keyList map[string]interface{}) bool {
+	var result bool
+	for key, val := range keyList {
+		fmt.Println(key, val)
+		if v, ok := dMEChunkEntry[key]; ok {
+			if v == val {
+				fmt.Println("yes")
+				result = true
+			}
+		}
+	}
+	fmt.Println(result)
+	return result
+}
+
+type SearchStructEntry struct {
+	KeysList map[string]interface{}
+	Prefix   string
+}
+
+func ConstructSplitSearchL1(entry ServiceConstructPathEntry, combineByDB CombineByDB) []SearchStructEntry {
+	combineByDBEntry := FindCombineByDBEntry(entry.SplitSearch[0].SearchFrom, combineByDB)
+	var searchStruct []SearchStructEntry
+
+	for _, v := range combineByDBEntry.OptionValues {
+		m := make(map[string]interface{})
+		m[entry.SplitSearch[0].SearchFor] = v
+		prefix := "." + v.(string)
+		var searchStructEntry SearchStructEntry
+		searchStructEntry.KeysList = m
+		searchStructEntry.Prefix = prefix
+		searchStruct = append(searchStruct, searchStructEntry)
+	}
+
+	return searchStruct
+}
+
+/* func DeviceDataFillSplitSearch(dMEChunk DMEChunk, serviceConstructPathEntry ServiceConstructPathEntry, data Data, combineByDB CombineByDB) {
 	combineByDBEntry := FindCombineByDBEntry(serviceConstructPathEntry.SplitSearch.SearchFrom, combineByDB)
 
 	for _, optionValue := range combineByDBEntry.OptionValues {
@@ -361,7 +417,7 @@ func DeviceDataFillSplitSearch(dMEChunk DMEChunk, serviceConstructPathEntry Serv
 			}
 		}
 	}
-}
+} */
 
 func FindCombineByDBEntry(searchFor string, combineByDB CombineByDB) CombineByDBEntry {
 	var result CombineByDBEntry

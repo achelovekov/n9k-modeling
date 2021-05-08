@@ -117,13 +117,13 @@
         },
         {
             "SplitSearchKeys": [
-                    "bgpMaxPfxP.maxPfx",
-                    "bgpRtCtrlP.rtMap"
+                    "bgpInterLeakP.scope",
+                    "bgpInterLeakP.rtMap"
                 ],
             "SplitSearchDirectives": [
                 {
                     "SearchFrom": "bgpPeerAfEntry.type",
-                    "SearchFor": "bgpPeerAfEntry.type"
+                    "SearchFor": "bgpDomAf.type"
                 },
                 {
                     "SearchFrom": "bgpInterLeakP.proto",

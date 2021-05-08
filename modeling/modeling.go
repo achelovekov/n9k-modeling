@@ -346,24 +346,11 @@ func ConstructDeviceDataEntry(srcVal string, deviceChunksDBEntry DeviceChunksDBE
 				}
 				if len(splitSearchEntry.SplitSearchDirectives) == 2 {
 					searchStruct := ConstructSplitSearchL2(splitSearchEntry.SplitSearchDirectives, filterDB)
-					fmt.Println(splitSearchEntry)
 					CheckDMEChunkForKVPairs(splitSearchEntry.SplitSearchKeys, searchStruct, dMEChunkFiltered, data)
 				}
 			}
 		}
 
-		cu.PrettyPrint(data)
-
-		/* 		if len(entry.CombineBy.OptionName) == 0 && len(entry.SplitSearch) == 1 {
-			searchStruct := ConstructSplitSearchL1(entry, combineByDB)
-			dMEChunkFiltered := FirstLevelFilter(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
-			CheckDMEChunkForKVPairs(entry, searchStruct, dMEChunkFiltered, data)
-		} */
-		/* 		if entry.SplitSearch != (SplitSearch{}) {
-			//DeviceDataFillSplitSearch(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data, combineByDB)
-			fmt.Println("go 3")
-			//fmt.Println(data)
-		} */
 	}
 	return deviceDataEntry
 }
@@ -484,46 +471,6 @@ func CheckForKVPairs(dMEChunkEntry map[string]interface{}, KVPairs map[string]in
 	return result
 }
 
-/* func DeviceDataFillSplitSearch(dMEChunk DMEChunk, serviceConstructPathEntry ServiceConstructPathEntry, data Data, combineByDB FilterDB) {
-	combineByDBEntry := FindFilterDBEntry(serviceConstructPathEntry.SplitSearch.SearchFrom, combineByDB)
-
-	for _, optionValue := range combineByDBEntry.OptionValues {
-		for _, dMEChunkEntry := range dMEChunk {
-			if data[serviceConstructPathEntry.KeySName] == dMEChunkEntry[serviceConstructPathEntry.KeyDName] && dMEChunkEntry[serviceConstructPathEntry.SplitSearch.SearchFor] == optionValue {
-				for _, key := range serviceConstructPathEntry.KeyList {
-					if v, ok := dMEChunkEntry[key]; ok {
-						data[key+"."+dMEChunkEntry[serviceConstructPathEntry.SplitSearch.SearchFor].(string)] = v
-					}
-				}
-			}
-		}
-	}
-} */
-
-/*
-
-func DeviceDataFillCombine(dMEChunk DMEChunk, serviceConstructPathEntry ServiceConstructPathEntry, data Data, combineByDBEntry FilterDBEntry) {
-	for _, dMEChunkEntry := range dMEChunk {
-		for _, optionValue := range combineByDBEntry.OptionValues {
-			if data[serviceConstructPathEntry.KeySName] == dMEChunkEntry[serviceConstructPathEntry.KeyDName] && dMEChunkEntry[combineByDBEntry.OptionName] == optionValue {
-				for _, key := range serviceConstructPathEntry.CombineBy.OptionKeys {
-					data[key+"."+dMEChunkEntry[combineByDBEntry.OptionName].(string)] = dMEChunkEntry[key]
-				}
-			}
-		}
-	}
-}
-
-func DeviceDataFillNoCombine(dMEChunk DMEChunk, serviceConstructPathEntry ServiceConstructPathEntry, data Data) {
-	for _, dMEChunkEntry := range dMEChunk {
-		if data[serviceConstructPathEntry.KeySName] == dMEChunkEntry[serviceConstructPathEntry.KeyDName] {
-			for _, key := range serviceConstructPathEntry.KeyList {
-				data[key] = dMEChunkEntry[key]
-			}
-		}
-	}
-}
-*/
 func ConstructDeviceFootprintDB(DeviceChunksDB DeviceChunksDB, srcValList []string, serviceConstructPath ServiceConstructPath, ConversionMap cu.ConversionMap) DeviceFootprintDB {
 
 	deviceFootprintDB := make(DeviceFootprintDB, 0)

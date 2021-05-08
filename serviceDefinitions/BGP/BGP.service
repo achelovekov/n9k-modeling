@@ -44,18 +44,27 @@
       "KeyDType": "string",
       "KeyLink": "direct",
       "MatchType": "full",
-      "KeyList": [
+      "CommonKeysList": [
         "bgpDom.name",
-        "bgpDom.bestPathIntvl",
-        "bgpDom.holdIntvl",
         "bgpPeer.peerImp"
        ],
-      "CombineBy": {
-        "OptionName": "bgpPeerAfEntry.type",
-        "OptionKeys": [
-          "bgpPeerAfEntry.type"
-        ]
-      }
+      "Filter": {
+        "Name": "bgpPeerAfEntry.type",
+        "Key": "bgpPeerAfEntry.type"
+      },
+      "SplitSearch": [
+        {
+          "SplitSearchKeys": [
+              "bgpPeerAfEntry.type"
+            ],
+          "SplitSearchDirectives": [
+            {
+              "SearchFrom": "bgpPeerAfEntry.type",
+              "SearchFor": "bgpPeerAfEntry.type"
+            }
+          ]
+        }
+      ]
     },
     {
       "ChunkName": "bgpPeerCont",
@@ -65,14 +74,18 @@
       "KeyDType": "string",
       "KeyLink": "indirect",
       "MatchType": "full",
-      "KeyList": [
-        "bgpMaxPfxP.maxPfx",
-        "bgpRtCtrlP.rtMap"
-       ],
+      "CommonKeysList": [],
       "SplitSearch": [
         {
-          "SearchFrom": "bgpPeerAfEntry.type",
-          "SearchFor": "bgpPeerAf.type"
+          "SplitSearchKeys": [
+              "bgpMaxPfxP.maxPfx"
+            ],
+          "SplitSearchDirectives": [
+            {
+              "SearchFrom": "bgpPeerAfEntry.type",
+              "SearchFor": "bgpPeerAf.type"
+            }
+          ]
         }
       ]
     },
@@ -84,20 +97,41 @@
       "KeyDType": "string",
       "KeyLink": "indirect",
       "MatchType": "full",
-      "KeyList": [
-        "bgpDomAf.advPip",
-        "bgpDomAf.advSysMac",
-        "bgpDomAf.advertL2vpnEvpn",
-        "bgpDomAf.maxEcmp",
-        "bgpDomAf.critNhTimeout",
-        "bgpDomAf.nonCritNhTimeout"
-       ],
-      "CombineBy": {
-        "OptionName": "bgpInterLeakP.proto",
-        "OptionKeys": [
-          "bgpInterLeakP.proto"
-        ]
-      }
+      "CommonKeysList": [],
+      "Filter": {
+        "Name": "bgpInterLeakP.proto",
+        "Key": "bgpInterLeakP.proto"
+      },
+      "SplitSearch": [
+        {
+            "SplitSearchKeys": [
+                    "bgpDomAf.critNhTimeout",
+                    "bgpDomAf.nonCritNhTimeout"
+            ],
+            "SplitSearchDirectives": [
+                {
+                    "SearchFrom": "bgpPeerAfEntry.type",
+                    "SearchFor": "bgpDomAf.type"
+                }
+            ]
+        },
+        {
+            "SplitSearchKeys": [
+                    "bgpMaxPfxP.maxPfx",
+                    "bgpRtCtrlP.rtMap"
+                ],
+            "SplitSearchDirectives": [
+                {
+                    "SearchFrom": "bgpPeerAfEntry.type",
+                    "SearchFor": "bgpPeerAfEntry.type"
+                },
+                {
+                    "SearchFrom": "bgpInterLeakP.proto",
+                    "SearchFor": "bgpInterLeakP.proto"
+                }
+            ]
+        }
+     ]
     }
   ],
   "ServiceComponents": [

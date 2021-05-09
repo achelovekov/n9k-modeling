@@ -27,17 +27,25 @@
       ]
     },
     {
-      "ChunkName": "bgpPeer",
+      "ChunkName": "bgpPeerEntry",
       "Paths": [
         {
-          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeer.json"
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeerEntry.json"
+        }
+      ]
+    },
+    {
+      "ChunkName": "bgpPeerAf",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeerAf.json"
         }
       ]
     }
   ],
   "ServiceConstructPath": [
     {
-      "ChunkName": "bgpPeer",
+      "ChunkName": "bgpPeerEntry",
       "KeySName": "addr",
       "KeySType": "string",
       "KeyDName": "bgpPeer.addr",
@@ -132,6 +140,30 @@
             ]
         }
      ]
+    },
+    {
+      "ChunkName": "bgpPeerAf",
+      "KeySName": "addr",
+      "KeySType": "string",
+      "KeyDName": "bgpPeer.addr",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "CommonKeysList": [],
+      "SplitSearch": [
+        {
+          "SplitSearchKeys": [
+              "bgpRtCtrlP.rtMap",
+              "bgpRtCtrlP.direction"
+            ],
+          "SplitSearchDirectives": [
+            {
+              "SearchFrom": "bgpPeerAfEntry.type",
+              "SearchFor": "bgpPeerAf.type"
+            }
+          ]
+        }
+      ]
     }
   ],
   "ServiceComponents": [

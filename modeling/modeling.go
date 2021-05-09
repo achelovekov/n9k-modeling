@@ -332,13 +332,15 @@ func ConstructDeviceDataEntry(srcVal string, deviceChunksDBEntry DeviceChunksDBE
 		}
 
 		dMEChunkFiltered := FirstLevelFilter(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
-		PopulateDataForKeys(entry.CommonKeysList, dMEChunkFiltered[0], data, "")
+		if len(dMEChunkFiltered) > 0 {
+			PopulateDataForKeys(entry.CommonKeysList, dMEChunkFiltered[0], data, "")
+		}
 
 		if entry.Filter != (Filter{}) {
 			filterDB = append(filterDB, ConstructFilterDBEntry(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data))
 		}
 
-		if len(entry.SplitSearch) > 0 {
+		if len(entry.SplitSearch) > 0 && len(dMEChunkFiltered) > 0 {
 			for _, splitSearchEntry := range entry.SplitSearch {
 				if len(splitSearchEntry.SplitSearchDirectives) == 1 {
 					searchStruct := ConstructSplitSearchL1(splitSearchEntry.SplitSearchDirectives[0], filterDB)

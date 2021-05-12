@@ -9,7 +9,6 @@ import (
 	"strconv"
 
 	m "github.com/achelovekov/n9k-modeling/modeling"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 type ServiceVariablesDB struct {
@@ -93,6 +92,8 @@ func TemplateConstruct(serviceName string, serviceFootprintDB m.ServiceFootprint
 
 	var deviceFootprintDB m.DeviceFootprintDB
 
+	fmt.Println(generalTemplateConstructor)
+
 	for _, serviceFootprintDBEntry := range serviceFootprintDB {
 
 		var deviceFootprintDBEntry m.DeviceFootprintDBEntry
@@ -121,7 +122,7 @@ func TemplateConstruct(serviceName string, serviceFootprintDB m.ServiceFootprint
 	return deviceFootprintDB
 }
 
-func Transform(mongoDeviceFootprintDB interface{}) m.DeviceFootprintDB {
+/* func Transform(mongoDeviceFootprintDB interface{}) m.DeviceFootprintDB {
 	var deviceFootprintDB m.DeviceFootprintDB
 
 	for _, mongoDeviceFootprintDBEntry := range mongoDeviceFootprintDB.(bson.A) {
@@ -147,7 +148,7 @@ func Transform(mongoDeviceFootprintDB interface{}) m.DeviceFootprintDB {
 	}
 
 	return deviceFootprintDB
-}
+} */
 
 type fn func(map[string]interface{}, string, ServiceVariablesDBProcessed, IndirectVariablesDB, string)
 type GeneralTemplateConstructor map[string]ServiceConstructor
@@ -174,6 +175,15 @@ func LoadGeneralTemplateConstructor() GeneralTemplateConstructor {
 	OSPFServiceConstructor["Default"] = OSPFMakeBFDTemplate
 
 	GeneralTemplateConstructor["OSPF"] = OSPFServiceConstructor
+
+	BGPServiceConstructor := make(ServiceConstructor)
+	BGPServiceConstructor["Default"] = BGPMakeDefaultTemplate
+	BGPServiceConstructor["L2VPN-EVPN"] = BGPMakeL2VPNEVPNTemplate
+	BGPServiceConstructor["IPv4"] = BGPMakeIPv4Template
+	BGPServiceConstructor["BFD"] = BGPMakeBFDTemplate
+	BGPServiceConstructor["Template"] = BGPMakeTemplateTemplate
+
+	GeneralTemplateConstructor["BGP"] = BGPServiceConstructor
 
 	return GeneralTemplateConstructor
 }
@@ -246,6 +256,63 @@ func OSPFMakeBFDTemplate(M map[string]interface{}, key string, serviceVariablesD
 
 func OSPFMakeDefaultTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["ifid"] = serviceVariablesDB[key]["Name"].(string)
+}
+
+func BGPMakeDefaultTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["addr"] = serviceVariablesDB[key]["addr"].(string)
+}
+
+func BGPMakeL2VPNEVPNTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["bgpDom.name"] = serviceVariablesDB[key]["bgpDom.name"].(string)
+	M["bgpDomAf.advPip.l2vpn-evpn"] = serviceVariablesDB[key]["advPip.l2vpn-evpn"].(string)
+
+	res, err := strconv.ParseInt(serviceVariablesDB[key]["critNhTimeout.l2vpn-evpn"].(string), 10, 64)
+	if err != nil {
+		M["bgpDomAf.critNhTimeout.l2vpn-evpn"] = serviceVariablesDB[key]["critNhTimeout.l2vpn-evpn"].(string)
+	} else {
+		M["bgpDomAf.critNhTimeout.l2vpn-evpn"] = res
+	}
+
+	res, err = strconv.ParseInt(serviceVariablesDB[key]["nonCritNhTimeout.l2vpn-evpn"].(string), 10, 64)
+	if err != nil {
+		M["bgpDomAf.nonCritNhTimeout.l2vpn-evpn"] = serviceVariablesDB[key]["nonCritNhTimeout.l2vpn-evpn"].(string)
+	} else {
+		M["bgpDomAf.nonCritNhTimeout.l2vpn-evpn"] = res
+	}
+
+	M["bgpMaxPfxP.maxPfx.l2vpn-evpn"], _ = strconv.ParseInt(serviceVariablesDB[key]["maxPfx.l2vpn-evpn"].(string), 10, 64)
+	M["bgpPeerAf.sendComExt.l2vpn-evpn"] = serviceVariablesDB[key]["sendComExt.l2vpn-evpn"].(string)
+	M["bgpPeerAf.sendComStd.l2vpn-evpn"] = serviceVariablesDB[key]["sendComStd.l2vpn-evpn"].(string)
+}
+
+func BGPMakeIPv4Template(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["bgpDom.name"] = serviceVariablesDB[key]["bgpDom.name"].(string)
+	M["bgpDomAf.advPip.ipv4-ucast"] = serviceVariablesDB[key]["advPip.ipv4-ucast"].(string)
+
+	res, err := strconv.ParseInt(serviceVariablesDB[key]["critNhTimeout.ipv4-ucast"].(string), 10, 64)
+	if err != nil {
+		M["bgpDomAf.critNhTimeout.ipv4-ucast"] = serviceVariablesDB[key]["critNhTimeout.ipv4-ucast"].(string)
+	} else {
+		M["bgpDomAf.critNhTimeout.ipv4-ucast"] = res
+	}
+
+	res, err = strconv.ParseInt(serviceVariablesDB[key]["nonCritNhTimeout.ipv4-ucast"].(string), 10, 64)
+	if err != nil {
+		M["bgpDomAf.nonCritNhTimeout.ipv4-ucast"] = serviceVariablesDB[key]["nonCritNhTimeout.ipv4-ucast"].(string)
+	} else {
+		M["bgpDomAf.nonCritNhTimeout.ipv4-ucast"] = res
+	}
+
+	M["bgpPeerAf.sendComExt.ipv4-ucast"] = serviceVariablesDB[key]["sendComExt.ipv4-ucast"].(string)
+	M["bgpPeerAf.sendComStd.ipv4-ucast"] = serviceVariablesDB[key]["sendComStd.ipv4-ucast"].(string)
+}
+
+func BGPMakeBFDTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["bgpPeerCont.ctrl"] = serviceVariablesDB[key]["bgpPeerCont.ctrl"].(string)
+}
+
+func BGPMakeTemplateTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["bgpPeer.peerImp"] = serviceVariablesDB[key]["bgpPeer.peerImp"].(string)
 }
 
 func PrettyPrint(src interface{}) {

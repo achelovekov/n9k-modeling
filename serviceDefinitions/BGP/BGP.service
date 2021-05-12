@@ -82,11 +82,15 @@
       "KeyDType": "string",
       "KeyLink": "indirect",
       "MatchType": "full",
-      "CommonKeysList": [],
+      "CommonKeysList": [
+        "bgpPeerCont.ctrl"
+      ],
       "SplitSearch": [
         {
           "SplitSearchKeys": [
-              "bgpMaxPfxP.maxPfx"
+              "bgpMaxPfxP.maxPfx",
+              "bgpPeerAf.sendComExt",
+              "bgpPeerAf.sendComStd"
             ],
           "SplitSearchDirectives": [
             {
@@ -114,7 +118,8 @@
         {
             "SplitSearchKeys": [
                     "bgpDomAf.critNhTimeout",
-                    "bgpDomAf.nonCritNhTimeout"
+                    "bgpDomAf.nonCritNhTimeout",
+                    "bgpDomAf.advPip"
             ],
             "SplitSearchDirectives": [
                 {
@@ -168,61 +173,21 @@
   ],
   "ServiceComponents": [
     {
-      "ComponentName": "Interface",
+      "ComponentName": "IPv4",
       "ComponentKeys": [
          {
-          "Name": "ospfDom.name",
-          "Value": "anyValue",
-          "MatchType": "equal"
-        },
-        {
-          "Name": "ospfIf.adminSt",
-          "Value": "anyValue",
-          "MatchType": "equal"
-        },
-        {
-          "Name": "ospfIf.area",
-          "Value": "anyValue",
-          "MatchType": "equal"
-        },
-        {
-          "Name": "ospfIf.helloIntvl",
-          "Value": "anyValue",
-          "MatchType": "equal"
-        },
-        {
-          "Name": "ospfIf.nwT",
-          "Value": "anyValue",
-          "MatchType": "equal"
-        },
-        {
-          "Name": "ospfIf.rexmitIntvl",
-          "Value": "anyValue",
+          "Name": "bgpPeerAfEntry.type.ipv4-ucast",
+          "Value": "ipv4-ucast",
           "MatchType": "equal"
         }
       ]
     },
     {
-      "ComponentName": "LSA-control",
+      "ComponentName": "L2VPN-EVPN",
       "ComponentKeys": [
         {
-          "Name": "ospfLsaCtrl.arrivalIntvl",
-          "Value": "anyValue",
-          "MatchType": "equal"
-        },
-        {
-          "Name": "ospfLsaCtrl.gpPacingIntvl",
-          "Value": "anyValue",
-          "MatchType": "equal"
-        },
-        {
-          "Name": "ospfLsaCtrl.holdIntvl",
-          "Value": "anyValue",
-          "MatchType": "equal"
-        },
-        {
-          "Name": "ospfLsaCtrl.maxIntvl",
-          "Value": "anyValue",
+          "Name": "bgpPeerAfEntry.type.l2vpn-evpn",
+          "Value": "l2vpn-evpn",
           "MatchType": "equal"
         }
       ]
@@ -231,13 +196,18 @@
       "ComponentName": "BFD",
       "ComponentKeys": [
         {
-          "Name": "ospfIf.bfdCtrl",
-          "Value": "anyValue",
+          "Name": "bgpPeerCont.ctrl",
+          "Value": "bfd,cap-neg-off",
           "MatchType": "equal"
-        },
+        }
+      ]
+    },
+    {
+      "ComponentName": "Template",
+      "ComponentKeys": [
         {
-          "Name": "ospfDom.ctrl",
-          "Value": "bfd",
+          "Name": "bgpPeer.peerImp",
+          "Value": "anyValue",
           "MatchType": "equal"
         }
       ]

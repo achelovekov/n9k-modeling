@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"sync"
 
 	mo "github.com/achelovekov/n9k-modeling/mongo"
@@ -328,10 +329,23 @@ func ConstructDeviceDataEntry(srcVal string, deviceChunksDBEntry DeviceChunksDBE
 	for _, entry := range ServiceConstructPath {
 		if entry.KeyLink == "direct" {
 			data[entry.KeySName] = srcVal
+		}
+
+		if entry.KeySName != "any" && entry.KeyDName != "any" {
 			data[entry.KeySName] = TypeConversion(entry.KeySType, entry.KeyDType, data[entry.KeySName], ConversionMap)
 		}
 
-		dMEChunkFiltered := FirstLevelFilter(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
+		dMEChunkFiltered := make([]map[string]interface{}, 0)
+
+		switch entry.MatchType {
+		case "full":
+			dMEChunkFiltered = FirstLevelFilterDirect(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
+		case "partial":
+			dMEChunkFiltered = FirstLevelFilterPartial(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
+		case "no-match":
+			dMEChunkFiltered = FirstLevelFilterNoMatch(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
+		}
+
 		if len(dMEChunkFiltered) > 0 {
 			PopulateDataForKeys(entry.CommonKeysList, dMEChunkFiltered[0], data, "")
 		}
@@ -374,12 +388,30 @@ func ConstructFilterDBEntry(dMEChunk DMEChunk, serviceConstructPathEntry Service
 	return filterDBEntry
 }
 
-func FirstLevelFilter(serviceConstructPathEntry ServiceConstructPathEntry, dMEChunk DMEChunk, data Data) []map[string]interface{} {
+func FirstLevelFilterDirect(serviceConstructPathEntry ServiceConstructPathEntry, dMEChunk DMEChunk, data Data) []map[string]interface{} {
 	var result []map[string]interface{}
 	for _, dMEChunkEntry := range dMEChunk {
 		if data[serviceConstructPathEntry.KeySName] == dMEChunkEntry[serviceConstructPathEntry.KeyDName] {
 			result = append(result, dMEChunkEntry)
 		}
+	}
+	return result
+}
+
+func FirstLevelFilterPartial(serviceConstructPathEntry ServiceConstructPathEntry, dMEChunk DMEChunk, data Data) []map[string]interface{} {
+	var result []map[string]interface{}
+	for _, dMEChunkEntry := range dMEChunk {
+		if strings.Contains(dMEChunkEntry[serviceConstructPathEntry.KeyDName].(string), data[serviceConstructPathEntry.KeySName].(string)) {
+			result = append(result, dMEChunkEntry)
+		}
+	}
+	return result
+}
+
+func FirstLevelFilterNoMatch(serviceConstructPathEntry ServiceConstructPathEntry, dMEChunk DMEChunk, data Data) []map[string]interface{} {
+	var result []map[string]interface{}
+	for _, dMEChunkEntry := range dMEChunk {
+		result = append(result, dMEChunkEntry)
 	}
 	return result
 }
@@ -441,6 +473,7 @@ func FindFilterDBEntry(searchFor string, filterDB FilterDB) FilterDBEntry {
 
 func PopulateDataForKeys(keysList []string, src map[string]interface{}, dst map[string]interface{}, prefix string) {
 	for _, key := range keysList {
+		fmt.Println(key)
 		if v, ok := src[key]; ok {
 			dst[key+prefix] = v
 		}

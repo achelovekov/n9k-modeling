@@ -78,12 +78,11 @@
       "KeyDType": "string",
       "KeyLink": "direct",
       "MatchType": "partial",
-      "KeyList": [
+      "CommonKeysList": [
         "l2BD.id",
         "l2BD.accEncap",
         "l2BD.name"
-      ],
-      "Options": []
+      ]
     },
     {
       "ChunkName": "sviIf",
@@ -93,10 +92,9 @@
       "KeyDType": "int64",
       "KeyLink": "indirect",
       "MatchType": "full",
-      "KeyList": [
+      "CommonKeysList": [
         "sviIf.id"
-      ],
-      "Options": []
+      ]
     },
     {
       "ChunkName": "rtctrlBDEvi",
@@ -106,17 +104,22 @@
       "KeyDType": "string",
       "KeyLink": "indirect",
       "MatchType": "full",
-      "KeyList": [
-        "rtctrlRttEntry.rtt"
-      ],
-      "Options": [
+      "CommonKeysList": [],
+      "Filter": {
+        "Name": "rtctrlRttP.type",
+        "Key": "rtctrlRttP.type"
+      },
+      "SplitSearch": [
         {
-          "optionKey": "rtctrlRttP.type",
-          "optionValue": "export"
-        },
-        {
-          "optionKey": "rtctrlRttP.type",
-          "optionValue": "import"
+          "SplitSearchKeys": [
+              "rtctrlRttEntry.rtt"
+            ],
+          "SplitSearchDirectives": [
+            {
+              "SearchFrom": "rtctrlRttP.type",
+              "SearchFor": "rtctrlRttP.type"
+            }
+          ]
         }
       ]
     },
@@ -128,12 +131,11 @@
       "KeyDType": "string",
       "KeyLink": "indirect",
       "MatchType": "full",
-      "KeyList": [
+      "CommonKeysList": [
         "ipv4Addr.addr",
         "ipv4Addr.tag",
         "ipv4Dom.name"
-      ],
-      "Options": []
+      ]
     },
     {
       "ChunkName": "hmmFwdIf",
@@ -143,10 +145,9 @@
       "KeyDType": "string",
       "KeyLink": "indirect",
       "MatchType": "full",
-      "KeyList": [
+      "CommonKeysList": [
         "hmmFwdIf.mode"
-      ],
-      "Options": []
+      ]
     },
     {
       "ChunkName": "nvoNw",
@@ -156,28 +157,26 @@
       "KeyDType": "int64",
       "KeyLink": "indirect",
       "MatchType": "full",
-      "KeyList": [
+      "CommonKeysList": [
         "nvoNw.vni",
         "nvoNw.multisiteIngRepl",
         "nvoNw.mcastGroup",
         "nvoIngRepl.proto",
         "nvoIngRepl.rn",
         "nvoNw.suppressARP"
-      ],
-      "Options": []
+      ]
     },
     {
       "ChunkName": "bgpInst",
       "KeySName": "any",
       "KeySType": "string",
       "KeyDName": "any",
-      "KeyDType": "int64",
+      "KeyDType": "string",
       "KeyLink": "no-link",
-      "MatchType": "full",
-      "KeyList": [
+      "MatchType": "no-match",
+      "CommonKeysList": [
         "bgpInst.asn"
-      ],
-      "Options": []
+      ]
     }
   ],
   "ServiceComponents": [

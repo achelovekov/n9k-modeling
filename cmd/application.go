@@ -309,6 +309,21 @@ func (md *MetaData) PushInventoryToMongo(w http.ResponseWriter, r *http.Request)
 	fmt.Fprintln(w, "Successfully loaded")
 }
 
+func (md *MetaData) DropInventory(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(md.Config.URL))
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	inventoryCollection := client.Database("Auxilary").Collection("Inventory")
+	inventoryCollection.Drop(ctx)
+	http.Redirect(w, r, "http://127.0.0.1:8080/index", 301)
+}
+
 func (md *MetaData) PushServiceNamesToMongo(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -522,6 +537,7 @@ func main() {
 	http.HandleFunc("/getRawData", metaData.GetRawData)
 
 	http.HandleFunc("/loadInventory", metaData.LoadInventory)
+	http.HandleFunc("/dropInventory", metaData.DropInventory)
 	http.HandleFunc("/pushInventoryToMongo", metaData.PushInventoryToMongo)
 	http.HandleFunc("/loadServiceNames", metaData.LoadServiceNames)
 	http.HandleFunc("/pushServiceNamesToMongo", metaData.PushServiceNamesToMongo)

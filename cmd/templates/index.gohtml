@@ -2,24 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Input Type Submit</title>
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <form action="getRawData" method="POST">
-    <input type="submit" value="getRawData" />
+    <label for="getRawData">Get raw DME from Inventory devices</label>
+    <input type="submit" id="getRawData" value="Execute" />
 </form>
+<hr>
 <form action="loadInventory">
-    <input type="submit" value="loadInventory" />
+    <label for="loadInventory">Load Inventory </label>
+    <input type="submit" id="loadInventory" value="Execute" />
 </form>
+<hr>
 <form action="dropInventory" method="POST">
-    <input type="submit" value="dropInventory" />
+    <label for="getRawData">Drop Inventory</label>
+    <input type="submit" id="dropInventory" value="Execute" />
 </form>
+<hr>
 <form action="loadServiceNames">
-    <input type="submit" value="loadServiceNames" />
+    <label for="getRawData">Load service names</label>
+    <input type="submit" id="loadServiceNames" value="Execute" />
 </form>
+<hr>
 <form action="getActualFootprint">
-    <input type="submit" value="getActualFootprint" />
+    <label for="getActualFootprint">Get actual footprint</label>
+    <input type="submit" id="getActualFootprint" value="Execute" />
 </form>
+<hr>
 <form action="getActualDeviceFootprint">
+    <label for="serviceName">Show actual device footprint</label>
     <select id="serviceName" name="serviceName">
         <option value="">--Please choose an option--</option>
         {{range $i, $v := .ServiceList}}
@@ -34,9 +46,11 @@
             <option value="{{$value}}">{{$value}}</option>
         {{end}}
     </select>
-    <input type="submit" value="getActualDeviceFootprint" />
+    <input type="submit" value="Execute" />
 </form>
+<hr>
 <form action="getActualServiceFootprint">
+    <label for="serviceName">Show actual service footprint</label>
     <select id="serviceName" name="serviceName">
         <option value="">--Please choose an option--</option>
         {{range $i, $v := .ServiceList}}
@@ -51,12 +65,16 @@
             <option value="{{$value}}">{{$value}}</option>
         {{end}}
     </select>
-    <input type="submit" value="getActualServiceFootprint" />
+    <input type="submit" value="Execute" />
 </form>
+<hr>
 <form action="getCompianceData">
-    <input type="submit" value="getCompianceData" />
+    <label for="getCompianceData">Construct templated footprint</label>
+    <input type="submit" id="getCompianceData" value="Enter vars" />
 </form>
+<hr>
 <form action="getHostnameForCompianceReport">
+    <label for="serviceName">Show complience report for service</label>
     <select id="serviceName" name="serviceName">
         <option value="">--Please choose an option--</option>
         {{range $i, $v := .ServiceList}}
@@ -64,7 +82,8 @@
             <option value="{{$value}}">{{$value}}</option>
         {{end}}
     </select>
-    <input type="submit" value="getHostnameForCompianceReport" />
+    <input type="submit" value="Execute" />
 </form>
+<hr>
 </body>
 </html>

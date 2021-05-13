@@ -54,7 +54,8 @@
       "MatchType": "full",
       "CommonKeysList": [
         "bgpDom.name",
-        "bgpPeer.peerImp"
+        "bgpPeer.peerImp",
+        "bgpInst.isolate"
        ],
       "Filter": {
         "Name": "bgpPeerAfEntry.type",
@@ -208,6 +209,16 @@
         {
           "Name": "bgpPeer.peerImp",
           "Value": "anyValue",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "Isolate",
+      "ComponentKeys": [
+        {
+          "Name": "bgpInst.isolate",
+          "Value": "enabled",
           "MatchType": "equal"
         }
       ]

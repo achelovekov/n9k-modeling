@@ -27,16 +27,16 @@
       "KeyDType": "string",
       "KeyLink": "direct",
       "MatchType": "full",
-      "KeyList": [
+      "CommonKeysList": [
        "ospfIf.adminSt",
        "ospfIf.area",
        "ospfIf.bfdCtrl",
        "ospfIf.helloIntvl",
        "ospfIf.nwT",
        "ospfIf.rexmitIntvl",
-       "ospfDom.name"
-      ],
-      "Options": []
+       "ospfDom.name",
+       "ospfInst.ctrl"
+      ]
     },
     {
       "ChunkName": "ospfLsaCtrl",
@@ -46,15 +46,14 @@
       "KeyDType": "string",
       "KeyLink": "indirect",
       "MatchType": "full",
-      "KeyList": [
+      "CommonKeysList": [
         "ospfLsaCtrl.arrivalIntvl",
         "ospfLsaCtrl.gpPacingIntvl",
         "ospfLsaCtrl.holdIntvl",
         "ospfLsaCtrl.maxIntvl",
         "ospfDom.ctrl",
         "ospfInst.name"
-      ],
-      "Options": []
+      ]
     }
   ],
   "ServiceComponents": [
@@ -129,6 +128,16 @@
         {
           "Name": "ospfDom.ctrl",
           "Value": "bfd",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "Isolate",
+      "ComponentKeys": [
+        {
+          "Name": "ospfInst.ctrl",
+          "Value": "isolate",
           "MatchType": "equal"
         }
       ]

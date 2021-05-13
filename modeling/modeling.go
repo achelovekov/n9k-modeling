@@ -327,42 +327,45 @@ func ConstructDeviceDataEntry(srcVal string, deviceChunksDBEntry DeviceChunksDBE
 	deviceDataEntry.Data = data
 
 	for _, entry := range ServiceConstructPath {
+
+		var tmpVal interface{}
+
 		if entry.KeyLink == "direct" {
-			data[entry.KeySName] = srcVal
+			tmpVal = TypeConversion(entry.KeySType, entry.KeyDType, srcVal, ConversionMap)
 		}
 
-		if entry.KeySName != "any" && entry.KeyDName != "any" {
-			data[entry.KeySName] = TypeConversion(entry.KeySType, entry.KeyDType, data[entry.KeySName], ConversionMap)
+		if entry.MatchType != "no-match" && entry.KeyLink == "indirect" {
+			tmpVal = TypeConversion(entry.KeySType, entry.KeyDType, data[entry.KeySName], ConversionMap)
 		}
 
 		dMEChunkFiltered := make([]map[string]interface{}, 0)
 
 		switch entry.MatchType {
 		case "full":
-			dMEChunkFiltered = FirstLevelFilterDirect(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
+			dMEChunkFiltered = FirstLevelFilterDirect(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data, tmpVal)
 		case "partial":
-			dMEChunkFiltered = FirstLevelFilterPartial(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
+			dMEChunkFiltered = FirstLevelFilterPartial(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data, tmpVal)
 		case "no-match":
 			dMEChunkFiltered = FirstLevelFilterNoMatch(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
 		}
 
 		if len(dMEChunkFiltered) > 0 {
-			PopulateDataForKeys(entry.CommonKeysList, dMEChunkFiltered[0], data, "")
-		}
-
-		if entry.Filter != (Filter{}) {
-			filterDB = append(filterDB, ConstructFilterDBEntry(deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], entry, data))
-		}
-
-		if len(entry.SplitSearch) > 0 && len(dMEChunkFiltered) > 0 {
-			for _, splitSearchEntry := range entry.SplitSearch {
-				if len(splitSearchEntry.SplitSearchDirectives) == 1 {
-					searchStruct := ConstructSplitSearchL1(splitSearchEntry.SplitSearchDirectives[0], filterDB)
-					CheckDMEChunkForKVPairs(splitSearchEntry.SplitSearchKeys, searchStruct, dMEChunkFiltered, data)
-				}
-				if len(splitSearchEntry.SplitSearchDirectives) == 2 {
-					searchStruct := ConstructSplitSearchL2(splitSearchEntry.SplitSearchDirectives, filterDB)
-					CheckDMEChunkForKVPairs(splitSearchEntry.SplitSearchKeys, searchStruct, dMEChunkFiltered, data)
+			if len(entry.CommonKeysList) > 0 {
+				PopulateDataForKeys(entry.CommonKeysList, dMEChunkFiltered[0], data, "")
+			}
+			if entry.Filter != (Filter{}) {
+				filterDB = append(filterDB, ConstructFilterDBEntry(dMEChunkFiltered, entry, data))
+			}
+			if len(entry.SplitSearch) > 0 {
+				for _, splitSearchEntry := range entry.SplitSearch {
+					if len(splitSearchEntry.SplitSearchDirectives) == 1 {
+						searchStruct := ConstructSplitSearchL1(splitSearchEntry.SplitSearchDirectives[0], filterDB)
+						CheckDMEChunkForKVPairs(splitSearchEntry.SplitSearchKeys, searchStruct, dMEChunkFiltered, data)
+					}
+					if len(splitSearchEntry.SplitSearchDirectives) == 2 {
+						searchStruct := ConstructSplitSearchL2(splitSearchEntry.SplitSearchDirectives, filterDB)
+						CheckDMEChunkForKVPairs(splitSearchEntry.SplitSearchKeys, searchStruct, dMEChunkFiltered, data)
+					}
 				}
 			}
 		}
@@ -377,31 +380,29 @@ func ConstructFilterDBEntry(dMEChunk DMEChunk, serviceConstructPathEntry Service
 	filterDBEntry.Name = serviceConstructPathEntry.Filter.Name
 
 	for _, dMEChunkEntry := range dMEChunk {
-		if data[serviceConstructPathEntry.KeySName] == dMEChunkEntry[serviceConstructPathEntry.KeyDName] {
-			if _, ok := dMEChunkEntry[serviceConstructPathEntry.Filter.Name]; ok {
-				filterDBEntry.Values = append(filterDBEntry.Values, dMEChunkEntry[serviceConstructPathEntry.Filter.Key])
-			} else {
-				filterDBEntry.Values = append(filterDBEntry.Values, "not-exists")
-			}
+		if _, ok := dMEChunkEntry[serviceConstructPathEntry.Filter.Name]; ok {
+			filterDBEntry.Values = append(filterDBEntry.Values, dMEChunkEntry[serviceConstructPathEntry.Filter.Key])
+		} else {
+			filterDBEntry.Values = append(filterDBEntry.Values, "not-exists")
 		}
 	}
 	return filterDBEntry
 }
 
-func FirstLevelFilterDirect(serviceConstructPathEntry ServiceConstructPathEntry, dMEChunk DMEChunk, data Data) []map[string]interface{} {
+func FirstLevelFilterDirect(serviceConstructPathEntry ServiceConstructPathEntry, dMEChunk DMEChunk, data Data, tmlVal interface{}) []map[string]interface{} {
 	var result []map[string]interface{}
 	for _, dMEChunkEntry := range dMEChunk {
-		if data[serviceConstructPathEntry.KeySName] == dMEChunkEntry[serviceConstructPathEntry.KeyDName] {
+		if tmlVal == dMEChunkEntry[serviceConstructPathEntry.KeyDName] {
 			result = append(result, dMEChunkEntry)
 		}
 	}
 	return result
 }
 
-func FirstLevelFilterPartial(serviceConstructPathEntry ServiceConstructPathEntry, dMEChunk DMEChunk, data Data) []map[string]interface{} {
+func FirstLevelFilterPartial(serviceConstructPathEntry ServiceConstructPathEntry, dMEChunk DMEChunk, data Data, tmlVal interface{}) []map[string]interface{} {
 	var result []map[string]interface{}
 	for _, dMEChunkEntry := range dMEChunk {
-		if strings.Contains(dMEChunkEntry[serviceConstructPathEntry.KeyDName].(string), data[serviceConstructPathEntry.KeySName].(string)) {
+		if strings.Contains(dMEChunkEntry[serviceConstructPathEntry.KeyDName].(string), tmlVal.(string)) {
 			result = append(result, dMEChunkEntry)
 		}
 	}
@@ -473,7 +474,6 @@ func FindFilterDBEntry(searchFor string, filterDB FilterDB) FilterDBEntry {
 
 func PopulateDataForKeys(keysList []string, src map[string]interface{}, dst map[string]interface{}, prefix string) {
 	for _, key := range keysList {
-		fmt.Println(key)
 		if v, ok := src[key]; ok {
 			dst[key+prefix] = v
 		}

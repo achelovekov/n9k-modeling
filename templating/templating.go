@@ -92,8 +92,6 @@ func TemplateConstruct(serviceName string, serviceFootprintDB m.ServiceFootprint
 
 	var deviceFootprintDB m.DeviceFootprintDB
 
-	fmt.Println(generalTemplateConstructor)
-
 	for _, serviceFootprintDBEntry := range serviceFootprintDB {
 
 		var deviceFootprintDBEntry m.DeviceFootprintDBEntry
@@ -105,8 +103,8 @@ func TemplateConstruct(serviceName string, serviceFootprintDB m.ServiceFootprint
 			deviceDataEntry.Key = serviceLayoutEntry.Key
 			m := make(map[string]interface{})
 			deviceDataEntry.Data = m
-			generalTemplateConstructor[serviceName]["Default"](m, serviceLayoutEntry.Key, serviceVariablesDBProcessed, indirectVariablesDB, serviceFootprintDBEntry.DeviceName)
 			for _, dataEntry := range serviceLayoutEntry.Data {
+				fmt.Println(dataEntry)
 				if dataEntry.Value {
 					generalTemplateConstructor[serviceName][dataEntry.Name](m, serviceLayoutEntry.Key, serviceVariablesDBProcessed, indirectVariablesDB, serviceFootprintDBEntry.DeviceName)
 				}
@@ -122,34 +120,6 @@ func TemplateConstruct(serviceName string, serviceFootprintDB m.ServiceFootprint
 	return deviceFootprintDB
 }
 
-/* func Transform(mongoDeviceFootprintDB interface{}) m.DeviceFootprintDB {
-	var deviceFootprintDB m.DeviceFootprintDB
-
-	for _, mongoDeviceFootprintDBEntry := range mongoDeviceFootprintDB.(bson.A) {
-
-		var deviceFootprintDBEntry m.DeviceFootprintDBEntry
-		deviceFootprintDBEntry.DeviceName = mongoDeviceFootprintDBEntry.(bson.M)["DeviceName"].(string)
-
-		for _, mongoDeviceDataEntry := range mongoDeviceFootprintDBEntry.(bson.M)["DeviceData"].(bson.A) {
-
-			var deviceDataEntry m.DeviceDataEntry
-			deviceDataEntry.Key = mongoDeviceDataEntry.(bson.M)["Key"].(string)
-			m := make(map[string]interface{})
-			deviceDataEntry.Data = m
-
-			for k, v := range mongoDeviceDataEntry.(bson.M)["Data"].(bson.M) {
-				m[k] = v
-			}
-			deviceFootprintDBEntry.DeviceData = append(deviceFootprintDBEntry.DeviceData, deviceDataEntry)
-		}
-
-		deviceFootprintDB = append(deviceFootprintDB, deviceFootprintDBEntry)
-
-	}
-
-	return deviceFootprintDB
-} */
-
 type fn func(map[string]interface{}, string, ServiceVariablesDBProcessed, IndirectVariablesDB, string)
 type GeneralTemplateConstructor map[string]ServiceConstructor
 type ServiceConstructor map[string]fn
@@ -164,7 +134,6 @@ func LoadGeneralTemplateConstructor() GeneralTemplateConstructor {
 	VNIServiceConstructor["IR"] = VNIMakeIRTemplate
 	VNIServiceConstructor["MS-IR"] = VNIMakeMSIRTemplate
 	VNIServiceConstructor["ARP-Suppress"] = VNIMakeARPSuppressTemplate
-	VNIServiceConstructor["Default"] = VNIMakeDefaultTemplate
 
 	GeneralTemplateConstructor["VNI"] = VNIServiceConstructor
 
@@ -172,16 +141,16 @@ func LoadGeneralTemplateConstructor() GeneralTemplateConstructor {
 	OSPFServiceConstructor["Interface"] = OSPFMakeInterfaceTemplate
 	OSPFServiceConstructor["LSA-control"] = OSPFMakeLSAControlTemplate
 	OSPFServiceConstructor["BFD"] = OSPFMakeBFDTemplate
-	OSPFServiceConstructor["Default"] = OSPFMakeBFDTemplate
+	OSPFServiceConstructor["Isolate"] = OSPFMakeIsolateTemplate
 
 	GeneralTemplateConstructor["OSPF"] = OSPFServiceConstructor
 
 	BGPServiceConstructor := make(ServiceConstructor)
-	BGPServiceConstructor["Default"] = BGPMakeDefaultTemplate
 	BGPServiceConstructor["L2VPN-EVPN"] = BGPMakeL2VPNEVPNTemplate
 	BGPServiceConstructor["IPv4"] = BGPMakeIPv4Template
 	BGPServiceConstructor["BFD"] = BGPMakeBFDTemplate
 	BGPServiceConstructor["Template"] = BGPMakeTemplateTemplate
+	BGPServiceConstructor["Isolate"] = BGPMakeIsolateTemplate
 
 	GeneralTemplateConstructor["BGP"] = BGPServiceConstructor
 
@@ -229,17 +198,13 @@ func VNIMakeARPSuppressTemplate(M map[string]interface{}, key string, serviceVar
 	M["nvoNw.suppressARP"] = "enabled"
 }
 
-func VNIMakeDefaultTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
-	M["bgpInst.asn"] = IndirectVariablesDB[deviceName][key]["bgpInst.asn"]
-	M["vnid"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
-}
-
 func OSPFMakeInterfaceTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["ospfIf.adminSt"] = "enabled"
 	M["ospfIf.area"] = serviceVariablesDB[key]["Area"].(string)
 	M["ospfIf.helloIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["HelloIntvl"].(string), 10, 64)
 	M["ospfIf.nwT"] = serviceVariablesDB[key]["nwT"].(string)
 	M["ospfIf.rexmitIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["RexmitIntvl"].(string), 10, 64)
+	M["ospfInst.ctrl"] = ""
 }
 
 func OSPFMakeLSAControlTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
@@ -254,12 +219,8 @@ func OSPFMakeBFDTemplate(M map[string]interface{}, key string, serviceVariablesD
 	M["ospfDom.ctrl"] = "bfd"
 }
 
-func OSPFMakeDefaultTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
-	M["ifid"] = serviceVariablesDB[key]["Name"].(string)
-}
-
-func BGPMakeDefaultTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
-	M["addr"] = serviceVariablesDB[key]["addr"].(string)
+func OSPFMakeIsolateTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["ospfInst.ctrl"] = "isolate"
 }
 
 func BGPMakeL2VPNEVPNTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
@@ -283,6 +244,7 @@ func BGPMakeL2VPNEVPNTemplate(M map[string]interface{}, key string, serviceVaria
 	M["bgpMaxPfxP.maxPfx.l2vpn-evpn"], _ = strconv.ParseInt(serviceVariablesDB[key]["maxPfx.l2vpn-evpn"].(string), 10, 64)
 	M["bgpPeerAf.sendComExt.l2vpn-evpn"] = serviceVariablesDB[key]["sendComExt.l2vpn-evpn"].(string)
 	M["bgpPeerAf.sendComStd.l2vpn-evpn"] = serviceVariablesDB[key]["sendComStd.l2vpn-evpn"].(string)
+	M["bgpInst.isolate"] = "disabled"
 }
 
 func BGPMakeIPv4Template(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
@@ -305,6 +267,7 @@ func BGPMakeIPv4Template(M map[string]interface{}, key string, serviceVariablesD
 
 	M["bgpPeerAf.sendComExt.ipv4-ucast"] = serviceVariablesDB[key]["sendComExt.ipv4-ucast"].(string)
 	M["bgpPeerAf.sendComStd.ipv4-ucast"] = serviceVariablesDB[key]["sendComStd.ipv4-ucast"].(string)
+	M["bgpInst.isolate"] = "disabled"
 }
 
 func BGPMakeBFDTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
@@ -313,6 +276,10 @@ func BGPMakeBFDTemplate(M map[string]interface{}, key string, serviceVariablesDB
 
 func BGPMakeTemplateTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
 	M["bgpPeer.peerImp"] = serviceVariablesDB[key]["bgpPeer.peerImp"].(string)
+}
+
+func BGPMakeIsolateTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["bgpInst.isolate"] = "enabled"
 }
 
 func PrettyPrint(src interface{}) {

@@ -419,17 +419,12 @@ func (md *MetaData) GetTemplatedFootprint(w http.ResponseWriter, r *http.Request
 
 	deviceDiffDB := t.ConstrustDeficeDiffDB(templatedDeviceFootprintDB, processedData.DeviceFootprintDB)
 
-	var devices []string
-
 	diffDataCollection.Drop(ctx)
 	for _, deviceDiffDBEntry := range deviceDiffDB {
 		_, err := mo.InsertOne(ctx, diffDataCollection, deviceDiffDBEntry)
 		if err != nil {
 			log.Println(err)
 		}
-
-		devices = append(devices, deviceDiffDBEntry.DeviceName)
-
 	}
 
 	http.Redirect(w, r, "http://127.0.0.1:8080/index", 301)

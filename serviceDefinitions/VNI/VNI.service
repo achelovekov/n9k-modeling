@@ -155,7 +155,7 @@
       "KeySType": "string",
       "KeyDName": "nvoNw.vni",
       "KeyDType": "int64",
-      "KeyLink": "indirect",
+      "KeyLink": "direct",
       "MatchType": "full",
       "CommonKeysList": [
         "nvoNw.vni",
@@ -164,18 +164,6 @@
         "nvoIngRepl.proto",
         "nvoIngRepl.rn",
         "nvoNw.suppressARP"
-      ]
-    },
-    {
-      "ChunkName": "bgpInst",
-      "KeySName": "any",
-      "KeySType": "string",
-      "KeyDName": "any",
-      "KeyDType": "string",
-      "KeyLink": "no-link",
-      "MatchType": "no-match",
-      "CommonKeysList": [
-        "bgpInst.asn"
       ]
     }
   ],

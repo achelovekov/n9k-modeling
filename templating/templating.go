@@ -96,7 +96,6 @@ func TemplateConstruct(serviceName string, serviceFootprintDB m.ServiceFootprint
 
 		var deviceFootprintDBEntry m.DeviceFootprintDBEntry
 		deviceFootprintDBEntry.DeviceName = serviceFootprintDBEntry.DeviceName
-
 		for _, serviceLayoutEntry := range serviceFootprintDBEntry.ServiceLayouts {
 
 			var deviceDataEntry m.DeviceDataEntry
@@ -104,7 +103,6 @@ func TemplateConstruct(serviceName string, serviceFootprintDB m.ServiceFootprint
 			m := make(map[string]interface{})
 			deviceDataEntry.Data = m
 			for _, dataEntry := range serviceLayoutEntry.Data {
-				fmt.Println(dataEntry)
 				if dataEntry.Value {
 					generalTemplateConstructor[serviceName][dataEntry.Name](m, serviceLayoutEntry.Key, serviceVariablesDBProcessed, indirectVariablesDB, serviceFootprintDBEntry.DeviceName)
 				}
@@ -158,13 +156,11 @@ func LoadGeneralTemplateConstructor() GeneralTemplateConstructor {
 }
 
 func VNIMakeL2VNITemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
-	M["vnid"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
 	M["l2BD.accEncap"] = "vxlan-" + serviceVariablesDB[key]["VNID"].(string)
 	M["l2BD.id"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string)[3:], 10, 64)
 	M["l2BD.name"] = serviceVariablesDB[key]["Segment"].(string) + serviceVariablesDB[key]["ZoneID"].(string) + "Z_" + serviceVariablesDB[key]["Subnet"].(string) + "/" + serviceVariablesDB[key]["Mask"].(string)
 	M["rtctrlRttEntry.rtt.export"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["VNID"].(string)
 	M["rtctrlRttEntry.rtt.import"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["VNID"].(string)
-	M["bgpInst.asn"] = IndirectVariablesDB[deviceName][key]["bgpInst.asn"]
 	M["nvoNw.suppressARP"] = "off"
 }
 

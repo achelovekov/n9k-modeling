@@ -18,10 +18,13 @@
       ]
     },
     {
-      "ChunkName": "ipv4Addr",
+      "ChunkName": "ipv4",
       "Paths": [
         {
           "Path": "../serviceDefinitions/VNI/PathFiles/ipv4Addr.json"
+        },       
+        {
+          "Path": "../serviceDefinitions/VNI/PathFiles/ipv4If.json"
         }
       ]
     },
@@ -67,6 +70,14 @@
           "Path": "../serviceDefinitions/VNI/PathFiles/bgpInst.json"
         }
       ]
+    },
+    {
+      "ChunkName": "l3Inst",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/VNI/PathFiles/l3Inst.json"
+        }
+      ]
     }
   ],
   "ServiceConstructPath": [
@@ -87,9 +98,9 @@
     {
       "ChunkName": "sviIf",
       "KeySName": "l2BD.id",
-      "KeySType": "int64",
+      "KeySType": "string",
       "KeyDName": "sviIf.vlanId",
-      "KeyDType": "int64",
+      "KeyDType": "string",
       "KeyLink": "indirect",
       "MatchType": "full",
       "CommonKeysList": [
@@ -124,7 +135,7 @@
       ]
     },
     {
-      "ChunkName": "ipv4Addr",
+      "ChunkName": "ipv4",
       "KeySName": "sviIf.id",
       "KeySType": "string",
       "KeyDName": "ipv4If.id",
@@ -154,7 +165,7 @@
       "KeySName": "vnid",
       "KeySType": "string",
       "KeyDName": "nvoNw.vni",
-      "KeyDType": "int64",
+      "KeyDType": "string",
       "KeyLink": "direct",
       "MatchType": "full",
       "CommonKeysList": [
@@ -165,6 +176,71 @@
         "nvoIngRepl.rn",
         "nvoNw.suppressARP"
       ]
+    },
+    {
+      "ChunkName": "l3Inst",
+      "KeySName": "ipv4Dom.name",
+      "KeySType": "string",
+      "KeyDName": "l3Inst.name",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "CommonKeysList": [
+        "l3Inst.encap"
+      ],
+      "CommonKeysListPrefix": "L3VNI"
+    },
+    {
+      "ChunkName": "l2BD",
+      "KeySName": "L3VNI.l3Inst.encap",
+      "KeySType": "string",
+      "KeyDName": "l2BD.accEncap",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "CommonKeysList": [
+        "l2BD.id"
+      ],
+      "CommonKeysListPrefix": "L3VNI"
+    },
+    {
+      "ChunkName": "sviIf",
+      "KeySName": "L3VNI.l2BD.id",
+      "KeySType": "string",
+      "KeyDName": "sviIf.vlanId",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "CommonKeysList": [
+        "sviIf.id"
+      ],
+      "CommonKeysListPrefix": "L3VNI"
+    },
+    {
+      "ChunkName": "ipv4",
+      "KeySName": "L3VNI.sviIf.id",
+      "KeySType": "string",
+      "KeyDName": "ipv4If.id",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "CommonKeysList": [
+        "ipv4If.forward"
+      ],
+      "CommonKeysListPrefix": "L3VNI"
+    },
+    {
+      "ChunkName": "nvoNw",
+      "KeySName": "L3VNI.l3Inst.encap",
+      "KeySType": "string",
+      "KeyDName": "nvoNw.vni",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "partial",
+      "CommonKeysList": [
+        "nvoNw.associateVrfFlag"
+      ],
+      "CommonKeysListPrefix": "L3VNI"
     }
   ],
   "ServiceComponents": [
@@ -183,6 +259,31 @@
         },
         {
           "Name": "rtctrlRttEntry.rtt.import",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "L3VNI",
+      "ComponentKeys": [
+        {
+          "Name": "L3VNI.ipv4If.forward",
+          "Value": "enabled",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.l2BD.id",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.l3Inst.encap",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.sviIf.id",
           "Value": "anyValue",
           "MatchType": "equal"
         }

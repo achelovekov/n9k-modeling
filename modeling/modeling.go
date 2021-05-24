@@ -130,17 +130,17 @@ type ServiceDefinition struct {
 
 type ServiceConstructPath []ServiceConstructPathEntry
 type ServiceConstructPathEntry struct {
-	ChunkName        string             `json:"ChunkName"`
-	KeySName         string             `json:"KeySName"`
-	KeySType         string             `json:"KeySType"`
-	KeyDName         string             `json:"KeyDName"`
-	KeyDType         string             `json:"KeyDType"`
-	KeyLink          string             `json:"KeyLink"`
-	MatchType        string             `json:"MatchType"`
-	CommonKeysList   []string           `json:"CommonKeysList"`
-	SpecificKeysList []string           `json:"SpecificKeysList"`
-	Filter           Filter             `json:"Filter"`
-	SplitSearch      []SplitSearchEntry `json:"SplitSearch"`
+	ChunkName            string             `json:"ChunkName"`
+	KeySName             string             `json:"KeySName"`
+	KeySType             string             `json:"KeySType"`
+	KeyDName             string             `json:"KeyDName"`
+	KeyDType             string             `json:"KeyDType"`
+	KeyLink              string             `json:"KeyLink"`
+	MatchType            string             `json:"MatchType"`
+	CommonKeysList       []string           `json:"CommonKeysList"`
+	Filter               Filter             `json:"Filter"`
+	SplitSearch          []SplitSearchEntry `json:"SplitSearch"`
+	CommonKeysListPrefix string             `json:"CommonKeysListPrefix"`
 }
 
 type Filter struct {
@@ -151,6 +151,7 @@ type Filter struct {
 type SplitSearchEntry struct {
 	SplitSearchKeys       SplitSearchKeys       `json:"SplitSearchKeys"`
 	SplitSearchDirectives SplitSearchDirectives `json:"SplitSearchDirectives"`
+	SplitSearchKeysPrefix string                `json:"SplitSearchKeysPrefix"`
 }
 type SplitSearchKeys []string
 type SplitSearchDirectives []SplitSearchDirective
@@ -351,7 +352,7 @@ func ConstructDeviceDataEntry(srcVal string, deviceChunksDBEntry DeviceChunksDBE
 
 		if len(dMEChunkFiltered) > 0 {
 			if len(entry.CommonKeysList) > 0 {
-				PopulateDataForKeys(entry.CommonKeysList, dMEChunkFiltered[0], data, "")
+				PopulateDataForKeys(entry.CommonKeysList, dMEChunkFiltered[0], data, entry.CommonKeysListPrefix, "")
 			}
 			if entry.Filter != (Filter{}) {
 				filterDB = append(filterDB, ConstructFilterDBEntry(dMEChunkFiltered, entry, data))
@@ -360,11 +361,11 @@ func ConstructDeviceDataEntry(srcVal string, deviceChunksDBEntry DeviceChunksDBE
 				for _, splitSearchEntry := range entry.SplitSearch {
 					if len(splitSearchEntry.SplitSearchDirectives) == 1 {
 						searchStruct := ConstructSplitSearchL1(splitSearchEntry.SplitSearchDirectives[0], filterDB)
-						CheckDMEChunkForKVPairs(splitSearchEntry.SplitSearchKeys, searchStruct, dMEChunkFiltered, data)
+						CheckDMEChunkForKVPairs(splitSearchEntry.SplitSearchKeys, splitSearchEntry.SplitSearchKeysPrefix, searchStruct, dMEChunkFiltered, data)
 					}
 					if len(splitSearchEntry.SplitSearchDirectives) == 2 {
 						searchStruct := ConstructSplitSearchL2(splitSearchEntry.SplitSearchDirectives, filterDB)
-						CheckDMEChunkForKVPairs(splitSearchEntry.SplitSearchKeys, searchStruct, dMEChunkFiltered, data)
+						CheckDMEChunkForKVPairs(splitSearchEntry.SplitSearchKeys, splitSearchEntry.SplitSearchKeysPrefix, searchStruct, dMEChunkFiltered, data)
 					}
 				}
 			}
@@ -402,7 +403,7 @@ func FirstLevelFilterDirect(serviceConstructPathEntry ServiceConstructPathEntry,
 func FirstLevelFilterPartial(serviceConstructPathEntry ServiceConstructPathEntry, dMEChunk DMEChunk, data Data, tmlVal interface{}) []map[string]interface{} {
 	var result []map[string]interface{}
 	for _, dMEChunkEntry := range dMEChunk {
-		if strings.Contains(dMEChunkEntry[serviceConstructPathEntry.KeyDName].(string), tmlVal.(string)) {
+		if strings.Contains(dMEChunkEntry[serviceConstructPathEntry.KeyDName].(string), tmlVal.(string)) || strings.Contains(tmlVal.(string), dMEChunkEntry[serviceConstructPathEntry.KeyDName].(string)) {
 			result = append(result, dMEChunkEntry)
 		}
 	}
@@ -419,7 +420,7 @@ func FirstLevelFilterNoMatch(serviceConstructPathEntry ServiceConstructPathEntry
 
 type SearchStructEntry struct {
 	KVPairs map[string]interface{}
-	Prefix  string
+	Postfix string
 }
 
 func ConstructSplitSearchL1(entry SplitSearchDirective, filterDB FilterDB) []SearchStructEntry {
@@ -429,10 +430,10 @@ func ConstructSplitSearchL1(entry SplitSearchDirective, filterDB FilterDB) []Sea
 	for _, v := range filterDBEntry.Values {
 		m := make(map[string]interface{})
 		m[entry.SearchFor] = v
-		prefix := "." + v.(string)
+		postfix := "." + v.(string)
 		var searchStructEntry SearchStructEntry
 		searchStructEntry.KVPairs = m
-		searchStructEntry.Prefix = prefix
+		searchStructEntry.Postfix = postfix
 		searchStruct = append(searchStruct, searchStructEntry)
 	}
 
@@ -451,10 +452,10 @@ func ConstructSplitSearchL2(entry SplitSearchDirectives, filterDB FilterDB) []Se
 			m[entry[0].SearchFor] = filterDBEntry1Value
 			m[entry[1].SearchFor] = filterDBEntry2Value
 
-			prefix := "." + filterDBEntry1Value.(string) + "." + filterDBEntry2Value.(string)
+			postfix := "." + filterDBEntry1Value.(string) + "." + filterDBEntry2Value.(string)
 			var searchStructEntry SearchStructEntry
 			searchStructEntry.KVPairs = m
-			searchStructEntry.Prefix = prefix
+			searchStructEntry.Postfix = postfix
 			searchStruct = append(searchStruct, searchStructEntry)
 		}
 	}
@@ -472,19 +473,23 @@ func FindFilterDBEntry(searchFor string, filterDB FilterDB) FilterDBEntry {
 	return result
 }
 
-func PopulateDataForKeys(keysList []string, src map[string]interface{}, dst map[string]interface{}, prefix string) {
+func PopulateDataForKeys(keysList []string, src map[string]interface{}, dst map[string]interface{}, prefix string, postfix string) {
 	for _, key := range keysList {
 		if v, ok := src[key]; ok {
-			dst[key+prefix] = v
+			if len(prefix) > 0 {
+				dst[prefix+"."+key+postfix] = v
+			} else {
+				dst[key+postfix] = v
+			}
 		}
 	}
 }
 
-func CheckDMEChunkForKVPairs(keyList []string, searchStruct []SearchStructEntry, dMEChunk DMEChunk, data Data) {
+func CheckDMEChunkForKVPairs(keyList []string, prefix string, searchStruct []SearchStructEntry, dMEChunk DMEChunk, data Data) {
 	for _, dMEChunkEntry := range dMEChunk {
 		for _, searchStructEntry := range searchStruct {
 			if CheckForKVPairs(dMEChunkEntry, searchStructEntry.KVPairs) {
-				PopulateDataForKeys(keyList, dMEChunkEntry, data, searchStructEntry.Prefix)
+				PopulateDataForKeys(keyList, dMEChunkEntry, data, prefix, searchStructEntry.Postfix)
 			}
 		}
 	}

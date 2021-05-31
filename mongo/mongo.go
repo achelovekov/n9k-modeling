@@ -50,7 +50,7 @@ func InsertOne(ctx context.Context, collection *mongo.Collection, document inter
 	return id, nil
 }
 
-func FindOne(ctx context.Context, collection *mongo.Collection, filterFieldName string, filterFieldValue interface{}) bson.M {
+func FindOne(ctx context.Context, collection *mongo.Collection, filterFieldName string, filterFieldValue interface{}) (bson.M, error) {
 	var result bson.M
 
 	filter := bson.D{{filterFieldName, filterFieldValue}}
@@ -58,10 +58,10 @@ func FindOne(ctx context.Context, collection *mongo.Collection, filterFieldName 
 	err := collection.FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil
+			return nil, err
 		}
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return result
+	return result, nil
 }

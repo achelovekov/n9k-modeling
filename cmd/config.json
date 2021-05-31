@@ -3,7 +3,6 @@
     "EnrichFile" : "../serviceDefinitions/enrich.json",
     "DBName":         "RawDME",
     "CollectionName": "DevicesRawDME",
-    "URL":            "mongodb://localhost:27017",
-    "ServiceName": "VNI"
+    "URL":            "mongodb://localhost:27017"
 }
   

@@ -281,6 +281,11 @@
           "Name": "L3VNI.l3Inst.encap",
           "Value": "anyValue",
           "MatchType": "equal"
+        }, 
+        {
+          "Name": "L3VNI.nvoNw.associateVrfFlag",
+          "Value": "yes",
+          "MatchType": "equal"
         },
         {
           "Name": "L3VNI.sviIf.id",

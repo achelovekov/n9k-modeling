@@ -14,6 +14,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"time"
 
 	mo "github.com/achelovekov/n9k-modeling/mongo"
 
@@ -52,14 +53,14 @@ type NXAPILoginResponse struct {
 	}
 }
 
-func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, error) {
+func NXAPICall(ctx context.Context, hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, error) {
 	src := make(map[string]interface{})
 
 	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
-	client := &http.Client{Transport: transport}
+	client := &http.Client{Transport: transport, Timeout: 3 * time.Second}
 
 	NXAPILoginBody := &NXAPILoginBody{
 		AaaUser: AaaUser{
@@ -76,13 +77,11 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, err
 	}
 
 	url := hmd.HostData.URL + "/api/mo/aaaLogin.json"
-
 	res, err := client.Post(url, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Println(err)
 		return src, errors.New("Can't reach device API")
 	}
-
 	if res.StatusCode != 200 {
 		log.Println("Unauthorized acces or something goes wrong while receiving access cookie")
 		return src, fmt.Errorf("Can't get access cookie from device: %v", hmd.HostName)
@@ -95,11 +94,9 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, err
 	res.Body.Close()
 
 	var NXAPILoginResponse NXAPILoginResponse
-
 	err = json.Unmarshal([]byte(body), &NXAPILoginResponse)
 
 	token := "APIC-cookie=" + NXAPILoginResponse.Imdata[0].AaaLogin.Attributes.Token
-
 	url = hmd.HostData.URL + "/api/mo/" + DMEPath + ".json?rsp-subtree=full&rsp-prop-include=config-only"
 
 	req, err := http.NewRequest("GET", url, io.Reader(nil))
@@ -107,18 +104,16 @@ func NXAPICall(hmd cu.HostMetaData, DMEPath string) (map[string]interface{}, err
 
 	resp, err := client.Do(req)
 	data, err := ioutil.ReadAll(resp.Body)
-
 	if err != nil {
-		fmt.Printf("error = %s \n", err)
+		log.Println(err)
 	}
 
 	err = json.Unmarshal(data, &src)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return src, nil
-
 }
 
 type ServiceDefinition struct {
@@ -206,7 +201,6 @@ func LoadChunksProcessingPaths(chunksDefinition []cu.ChunkDefinition) cu.ChunksP
 			pathFileBytes, _ := ioutil.ReadAll(pathFile)
 			var Path cu.Path
 			err = json.Unmarshal(pathFileBytes, &Path)
-			fmt.Println(Path)
 			if err != nil {
 				log.Println(err)
 			}
@@ -253,10 +247,11 @@ func worker(src interface{}, path cu.Path, mode int, filter cu.Filter, enrich cu
 
 func GetRawData(ctx context.Context, collection *mongo.Collection, hmd cu.HostMetaData, DMEPath string, wg *sync.WaitGroup) {
 
-	src, err := NXAPICall(hmd, DMEPath)
+	src, err := NXAPICall(ctx, hmd, DMEPath)
 	if err != nil {
 		log.Println("Can't get data from device:", hmd.HostName)
 		wg.Done()
+		return
 	}
 	fmt.Println("got data from:", hmd.HostName)
 
@@ -343,9 +338,13 @@ func ConstructDeviceDataEntry(srcVal string, deviceChunksDBEntry DeviceChunksDBE
 
 		switch entry.MatchType {
 		case "full":
-			dMEChunkFiltered = FirstLevelFilterDirect(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data, tmpVal)
+			if tmpVal != nil {
+				dMEChunkFiltered = FirstLevelFilterDirect(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data, tmpVal)
+			}
 		case "partial":
-			dMEChunkFiltered = FirstLevelFilterPartial(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data, tmpVal)
+			if tmpVal != nil {
+				dMEChunkFiltered = FirstLevelFilterPartial(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data, tmpVal)
+			}
 		case "no-match":
 			dMEChunkFiltered = FirstLevelFilterNoMatch(entry, deviceChunksDBEntry.DMEChunkMap[entry.ChunkName], data)
 		}

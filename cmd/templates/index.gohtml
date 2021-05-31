@@ -3,87 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="main.css?v=6">
 </head>
-<form action="getRawData" method="POST">
-    <label for="getRawData">Get raw DME from Inventory devices</label>
-    <input type="submit" id="getRawData" value="Execute" />
-</form>
+<div class="menuItem">
+    <div class="itemInfo">       
+        <p class="itemInfoLabel">Get raw DME</p>
+        <p class="itemInfoDescr">Get raw DME from Inventory devices. Check console log for 
+            execution verification
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="getRawData" method="POST">
+            <input type="submit" id="getRawData" value="Execute" />
+        </form>
+    </div>
+</div>
 <hr>
-<form action="loadInventory">
-    <label for="loadInventory">Load Inventory </label>
-    <input type="submit" id="loadInventory" value="Execute" />
-</form>
+<div class="menuItem">
+    <div class="itemInfo">       
+        <p class="itemInfoLabel">Load Inventory</p>
+        <p class="itemInfoDescr">Load devices configuration data in the database
+             from JSON file 
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="loadInventory">
+            <input type="submit" id="loadInventory" value="Execute" />
+        </form>
+    </div>
+</div>
 <hr>
-<form action="dropInventory" method="POST">
-    <label for="getRawData">Drop Inventory</label>
-    <input type="submit" id="dropInventory" value="Execute" />
-</form>
+<div class="menuItem">
+    <div class="itemInfo">       
+        <p class="itemInfoLabel">Drop Inventory</p>
+        <p class="itemInfoDescr">Drop devices configuration data from the database 
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="dropInventory" method="POST">
+            <input type="submit" id="dropInventory" value="Execute" />
+        </form>
+    </div>
+</div>
 <hr>
-<form action="loadServiceNames">
-    <label for="getRawData">Load service names</label>
-    <input type="submit" id="loadServiceNames" value="Execute" />
-</form>
+<div class="menuItem">
+    <div class="itemInfo">       
+        <p class="itemInfoLabel">Load service names</p>
+        <p class="itemInfoDescr">Load service names 
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="loadServiceNames">
+            <input type="submit" id="loadServiceNames" value="Execute" />
+        </form>
+    </div>
+</div>
 <hr>
-<form action="getActualFootprint">
-    <label for="getActualFootprint">Get actual footprint</label>
-    <input type="submit" id="getActualFootprint" value="Execute" />
-</form>
+<div class="menuItem">
+    <div class="itemInfo">       
+        <p class="itemInfoLabel">Get actual footprint</p>
+        <p class="itemInfoDescr">Get actual footprint 
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="getActualFootprint">
+            <input type="submit" id="getActualFootprint" value="Execute" />
+        </form>
+    </div>
+</div>
 <hr>
-<form action="getActualDeviceFootprint">
-    <label for="serviceName">Show actual device footprint</label>
-    <select id="serviceName" name="serviceName">
-        <option value="">--Please choose an option--</option>
-        {{range $i, $v := .ServiceList}}
-            {{$value := index $v "ServiceName"}}
-            <option value="{{$value}}">{{$value}}</option>
-        {{end}}
-    </select>
-    <select id="hostName" name="hostName">
-        <option value="">--Please choose an option--</option>
-        {{range $i, $v := .Inventory}}
-            {{$value := index $v "HostName"}}
-            <option value="{{$value}}">{{$value}}</option>
-        {{end}}
-    </select>
-    <input type="submit" value="Execute" />
-</form>
+<div class="menuItem">
+    <div class="itemInfo">       
+        <p class="itemInfoLabel">Show actual device footprint</p>
+        <p class="itemInfoDescr">Show actual device footprint 
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="getActualDeviceFootprint">
+            <select id="serviceName" name="serviceName">
+                <option value="">--Please choose an option--</option>
+                {{range $i, $v := .ServiceList}}
+                    {{$value := index $v "ServiceName"}}
+                    <option value="{{$value}}">{{$value}}</option>
+                {{end}}
+            </select><br>
+            <select id="hostName" name="hostName">
+                <option value="">--Please choose an option--</option>
+                {{range $i, $v := .Inventory}}
+                    {{$value := index $v "HostName"}}
+                    <option value="{{$value}}">{{$value}}</option>
+                {{end}}
+            </select><br>
+            <input type="submit" value="Execute" />
+        </form>
+    </div>
+</div>
 <hr>
-<form action="getActualServiceFootprint">
-    <label for="serviceName">Show actual service footprint</label>
-    <select id="serviceName" name="serviceName">
-        <option value="">--Please choose an option--</option>
-        {{range $i, $v := .ServiceList}}
-            {{$value := index $v "ServiceName"}}
-            <option value="{{$value}}">{{$value}}</option>
-        {{end}}
-    </select>
-    <select id="hostName" name="hostName">
-        <option value="">--Please choose an option--</option>
-        {{range $i, $v := .Inventory}}
-            {{$value := index $v "HostName"}}
-            <option value="{{$value}}">{{$value}}</option>
-        {{end}}
-    </select>
-    <input type="submit" value="Execute" />
-</form>
+<div class="menuItem">
+    <div class="itemInfo">       
+        <p class="itemInfoLabel">Show actual service footprint</p>
+        <p class="itemInfoDescr">Show actual service footprint 
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="getActualServiceFootprint">
+            <select id="serviceName" name="serviceName">
+                <option value="">--Please choose an option--</option>
+                {{range $i, $v := .ServiceList}}
+                    {{$value := index $v "ServiceName"}}
+                    <option value="{{$value}}">{{$value}}</option>
+                {{end}}
+            </select><br>
+            <select id="hostName" name="hostName">
+                <option value="">--Please choose an option--</option>
+                {{range $i, $v := .Inventory}}
+                    {{$value := index $v "HostName"}}
+                    <option value="{{$value}}">{{$value}}</option>
+                {{end}}
+            </select><br>
+            <input type="submit" value="Execute" />
+        </form>
+    </div>
+</div>
+<div class="menuItem">
+    <div class="itemInfo">       
+        <p class="itemInfoLabel">Show actual service footprint report</p>
+        <p class="itemInfoDescr">Show actual service footprint report 
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="getActualServiceFootprintForAll">
+            <select id="serviceName" name="serviceName">
+                <option value="">--Please choose an option--</option>
+                {{range $i, $v := .ServiceList}}
+                    {{$value := index $v "ServiceName"}}
+                    <option value="{{$value}}">{{$value}}</option>
+                {{end}}
+            </select><br>
+            <input type="submit" value="Execute" />
+        </form>
+    </div>
+</div>
 <hr>
-<form action="getCompianceData">
-    <label for="getCompianceData">Construct templated footprint</label>
-    <input type="submit" id="getCompianceData" value="Enter vars" />
-</form>
+<div class="menuItem">
+    <div class="itemInfo">       
+        <p class="itemInfoLabel">Construct templated footprint</p>
+        <p class="itemInfoDescr">Construct templated footprint 
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="getCompianceData">
+            <input type="submit" id="getCompianceData" value="Enter vars" />
+        </form>
+    </div>
+</div>
 <hr>
-<form action="getHostnameForCompianceReport">
-    <label for="serviceName">Show complience report for service</label>
-    <select id="serviceName" name="serviceName">
-        <option value="">--Please choose an option--</option>
-        {{range $i, $v := .ServiceList}}
-            {{$value := index $v "ServiceName"}}
-            <option value="{{$value}}">{{$value}}</option>
-        {{end}}
-    </select>
-    <input type="submit" value="Execute" />
-</form>
+<div class="menuItem">
+    <div class="itemInfo">       
+        <p class="itemInfoLabel">Show complience report for service</p>
+        <p class="itemInfoDescr">Show complience report for service 
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="getHostnameForCompianceReport">
+            <select id="serviceName" name="serviceName">
+                <option value="">--Please choose an option--</option>
+                {{range $i, $v := .ServiceList}}
+                    {{$value := index $v "ServiceName"}}
+                    <option value="{{$value}}">{{$value}}</option>
+                {{end}}
+            </select><br>
+            <input type="submit" value="Execute" />
+        </form>
+    </div>
+</div>
 <hr>
 </body>
 </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Type Submit</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    {{range $i, $v := .}}
+    <h4>{{$v.ServiceFootprintDBEntry.DeviceName}}</h4>
+    <table>
+        <tr>
+            <th>Key</th>
+            {{range $i, $v := $v.ServiceComponents}}
+            <th>{{$v}}</th>
+            {{end}}
+        </tr>
+        {{range $i, $v := $v.ServiceFootprintDBEntry.ServiceLayouts}}
+        <tr>
+            <th>{{$v.Key}}</th>
+            {{range $i, $v := $v.Data}}
+                {{ if $v.Value }}
+                <td bgcolor="#008000">True</td>
+                {{else}}
+                <td bgcolor="#FF0000">False</td>
+                {{end}}
+            {{end}}
+        </tr>
+        {{end}}
+    </table>
+    {{end}}
+</body>
+</html>

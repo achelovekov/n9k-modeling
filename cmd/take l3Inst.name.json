@@ -1,0 +1,7 @@
+take l3Inst.name
+get l3Inst.encap = vxlan-2010000
+
+take l2BD.accEncap vxlan-2010000
+l2BD.fabEncap = vlan-3901
+
+sviIf.vlanId = 

@@ -1,0 +1,66 @@
+[
+  {
+    "HostName": "SKO-DATA-AC-053-N27-01-LAB",
+    "HostData": {
+      "Url": "https://10.56.204.15",
+      "Username": "cspc",
+      "Password": "C0llect0r!pass7"
+    }
+  },
+  {
+    "HostName": "SKO-DATA-AC-053-N27-02-LAB",
+    "HostData": {
+      "Url": "https://10.56.204.16",
+      "Username": "cspc",
+      "Password": "C0llect0r!pass7"
+    }
+  },
+  {
+    "HostName": "SKO-DATA-AG-053-N27-01-LAB",
+    "HostData": {
+      "Url": "https://10.56.204.13",
+      "Username": "cspc",
+      "Password": "C0llect0r!pass7"
+    }
+  },
+  {
+    "HostName": "SKO-DATA-AG-053-N27-02-LAB",
+    "HostData": {
+      "Url": "https://10.56.204.14",
+      "Username": "cspc",
+      "Password": "C0llect0r!pass7"
+    }
+  },  
+  {
+    "HostName": "SKO-DATA-AC-053-M27-01-LAB",
+    "HostData": {
+      "Url": "https://10.56.204.9",
+      "Username": "cspc",
+      "Password": "C0llect0r!pass7"
+    }
+  },
+  {
+    "HostName": "SKO-DATA-AC-053-M27-02-LAB",
+    "HostData": {
+      "Url": "https://10.56.204.10",
+      "Username": "cspc",
+      "Password": "C0llect0r!pass7"
+    }
+  },  
+  {
+    "HostName": "SKO-DATA-BGW-053-I27-01-LAB",
+    "HostData": {
+      "Url": "https://10.56.204.56",
+      "Username": "cspc",
+      "Password": "C0llect0r!pass7"
+    }
+  },
+  {
+    "HostName": "SKO-DATA-BGW-053-I27-02-LAB",
+    "HostData": {
+      "Url": "https://10.56.204.57",
+      "Username": "cspc",
+      "Password": "C0llect0r!pass7"
+    }
+  }
+]

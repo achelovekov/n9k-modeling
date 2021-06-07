@@ -147,6 +147,26 @@
 <hr>
 <div class="menuItem">
     <div class="itemInfo">       
+        <p class="itemInfoLabel">Show actual service type report</p>
+        <p class="itemInfoDescr">Show actual service type report 
+        </p>
+    </div>
+    <div class="itemAction">
+        <form action="getActualServiceTypeForAll">
+            <select id="serviceName" name="serviceName">
+                <option value="">--Please choose an option--</option>
+                {{range $i, $v := .ServiceList}}
+                    {{$value := index $v "ServiceName"}}
+                    <option value="{{$value}}">{{$value}}</option>
+                {{end}}
+            </select><br>
+            <input type="submit" value="Execute" />
+        </form>
+    </div>
+</div>
+<hr>
+<div class="menuItem">
+    <div class="itemInfo">       
         <p class="itemInfoLabel">Construct templated footprint</p>
         <p class="itemInfoDescr">Construct templated footprint 
         </p>

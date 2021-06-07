@@ -127,6 +127,7 @@ func LoadGeneralTemplateConstructor() GeneralTemplateConstructor {
 
 	VNIServiceConstructor := make(ServiceConstructor)
 	VNIServiceConstructor["L2VNI"] = VNIMakeL2VNITemplate
+	VNIServiceConstructor["L3VNI"] = VNIMakeL3VNITemplate
 	VNIServiceConstructor["AGW"] = VNIMakeAGWTemplate
 	VNIServiceConstructor["PIM"] = VNIMakePIMTemplate
 	VNIServiceConstructor["IR"] = VNIMakeIRTemplate
@@ -162,6 +163,14 @@ func VNIMakeL2VNITemplate(M map[string]interface{}, key string, serviceVariables
 	M["rtctrlRttEntry.rtt.export"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["VNID"].(string)
 	M["rtctrlRttEntry.rtt.import"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["VNID"].(string)
 	M["nvoNw.suppressARP"] = "off"
+}
+
+func VNIMakeL3VNITemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+	M["L3VNI.ipv4If.forward"] = "enabled"
+	M["L3VNI.l2BD.id"] = serviceVariablesDB[key]["L3VNI.l2BD.id"].(string)
+	M["L3VNI.l3Inst.encap"] = "vxlan-" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.nvoNw.associateVrfFlag"] = "yes"
+	M["L3VNI.sviIf.id"] = serviceVariablesDB[key]["L3VNI.sviIf.id"].(string)
 }
 
 func VNIMakeAGWTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
@@ -406,6 +415,25 @@ func CheckForChanges(deviceDiffDB DeviceDiffDB) []string {
 		if marker {
 			result = append(result, deviceDiffDBEntry.DeviceName)
 		}
+	}
+	return result
+}
+
+func VNICheckServiceType(m map[string]bool) string {
+	var result string
+	if m["L2VNI"] && m["L3VNI"] && m["AGW"] && m["ARP-Suppress"] {
+		result = "type-1"
+		return result
+	} else {
+		result = "type-undefined"
+		return result
+	}
+}
+
+func ServiceComponentBitMapConstruct(serviceComponentBitMaps m.ServiceComponentBitMaps) map[string]bool {
+	result := make(map[string]bool)
+	for _, serviceComponentBitMap := range serviceComponentBitMaps {
+		result[serviceComponentBitMap.Name] = serviceComponentBitMap.Value
 	}
 	return result
 }

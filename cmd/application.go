@@ -296,6 +296,59 @@ func (md *MetaData) GetActualServiceFootprintForAll(w http.ResponseWriter, r *ht
 
 }
 
+func (md *MetaData) GetActualServiceTypeForAll(w http.ResponseWriter, r *http.Request) {
+	var processedData m.ProcessedData
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(md.Config.URL))
+	if err != nil {
+		log.Println(err)
+	}
+
+	processedDataCollection := client.Database(r.FormValue("serviceName")).Collection("ProcessedData")
+	bsonProcessedData, err := mo.FindOne(ctx, processedDataCollection, "ServiceName", r.FormValue("serviceName"))
+	if err != nil {
+		log.Println("Can't find processedData for:", r.FormValue("serviceName"))
+	}
+
+	bsonProcessedDataBytes, _ := bson.Marshal(bsonProcessedData)
+	bson.Unmarshal(bsonProcessedDataBytes, &processedData)
+
+	type ServiceTypeLayout struct {
+		Key  string
+		Type string
+	}
+	type ServiceTypeDBEntry struct {
+		DeviceName         string
+		ServiceTypeLayouts []ServiceTypeLayout
+	}
+
+	serviceTypeDB := make([]ServiceTypeDBEntry, 0)
+
+	for _, serviceFootprintDBEntry := range processedData.ServiceFootprintDB {
+		var serviceTypeDBEntry ServiceTypeDBEntry
+		serviceTypeDBEntry.DeviceName = serviceFootprintDBEntry.DeviceName
+		serviceTypeDBEntry.ServiceTypeLayouts = make([]ServiceTypeLayout, 0)
+		for _, serviceLayout := range serviceFootprintDBEntry.ServiceLayouts {
+			var serviceTypeLayout ServiceTypeLayout
+			serviceTypeLayout.Key = serviceLayout.Key
+			m := t.ServiceComponentBitMapConstruct(serviceLayout.Data)
+			r := t.VNICheckServiceType(m)
+			serviceTypeLayout.Type = r
+			serviceTypeDBEntry.ServiceTypeLayouts = append(serviceTypeDBEntry.ServiceTypeLayouts, serviceTypeLayout)
+		}
+		serviceTypeDB = append(serviceTypeDB, serviceTypeDBEntry)
+	}
+
+	tpl.ExecuteTemplate(w, "PrintActualServiceTypeForAll.gohtml", serviceTypeDB)
+}
+
 func (md *MetaData) PushInventoryToMongo(w http.ResponseWriter, r *http.Request) {
 	var inventory cu.Inventory
 	err := r.ParseForm()
@@ -543,6 +596,7 @@ func main() {
 	http.HandleFunc("/getActualDeviceFootprint", metaData.GetActualDeviceFootprint)
 	http.HandleFunc("/getActualServiceFootprint", metaData.GetActualServiceFootprint)
 	http.HandleFunc("/getActualServiceFootprintForAll", metaData.GetActualServiceFootprintForAll)
+	http.HandleFunc("/getActualServiceTypeForAll", metaData.GetActualServiceTypeForAll)
 
 	http.HandleFunc("/getCompianceData", metaData.GetCompianceData)
 	http.HandleFunc("/getTemplatedFootprint", metaData.GetTemplatedFootprint)

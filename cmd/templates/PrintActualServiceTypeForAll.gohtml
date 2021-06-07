@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Input Type Submit</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    {{range $i, $v := .}}
+    <h4>{{$v.DeviceName}}</h4>
+    <table>
+        <tr>
+            <th>Key</th>
+            <th>ServiceType</th>
+        </tr>
+        {{range $i, $v := $v.ServiceTypeLayouts}}
+        <tr>
+            <th>{{$v.Key}}</th>
+            <th>{{$v.Type}}</th>
+        </tr>
+        {{end}}
+    </table>
+    {{end}}
+</body>
+</html>

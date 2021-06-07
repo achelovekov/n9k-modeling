@@ -3,7 +3,12 @@ label, .execute, .label {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: .8rem;
    }
-
+body {
+    height: 100vh;
+    display: flex;
+    flex-flow: column nowrap;
+    background: linear-gradient(to top left, #28b487, #7dd56f);
+}
 input[type=submit] {
     background-color: #778577;
     border: none;

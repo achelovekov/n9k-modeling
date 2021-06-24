@@ -5,80 +5,76 @@
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="main.css?v=6">
 </head>
-<div class="menuItem">
-    <div class="itemInfo">       
+<body class="mainBody">
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Get raw DME</p>
         <p class="itemInfoDescr">Get raw DME from Inventory devices. Check console log for 
             execution verification
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="getRawData" method="POST">
             <input type="submit" id="getRawData" value="Execute" />
         </form>
     </div>
-</div>
-<hr>
-<div class="menuItem">
-    <div class="itemInfo">       
+</section>
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Load Inventory</p>
         <p class="itemInfoDescr">Load devices configuration data in the database
              from JSON file 
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="loadInventory">
             <input type="submit" id="loadInventory" value="Execute" />
         </form>
     </div>
-</div>
-<hr>
-<div class="menuItem">
-    <div class="itemInfo">       
+</section>
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Drop Inventory</p>
         <p class="itemInfoDescr">Drop devices configuration data from the database 
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="dropInventory" method="POST">
             <input type="submit" id="dropInventory" value="Execute" />
         </form>
     </div>
-</div>
-<hr>
-<div class="menuItem">
-    <div class="itemInfo">       
+</section>
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Load service names</p>
         <p class="itemInfoDescr">Load service names 
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="loadServiceNames">
             <input type="submit" id="loadServiceNames" value="Execute" />
         </form>
     </div>
-</div>
-<hr>
-<div class="menuItem">
-    <div class="itemInfo">       
+</section>
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Get actual footprint</p>
         <p class="itemInfoDescr">Get actual footprint 
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="getActualFootprint">
             <input type="submit" id="getActualFootprint" value="Execute" />
         </form>
     </div>
-</div>
-<hr>
-<div class="menuItem">
-    <div class="itemInfo">       
+</section>
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Show actual device footprint</p>
         <p class="itemInfoDescr">Show actual device footprint 
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="getActualDeviceFootprint">
             <select id="serviceName" name="serviceName">
                 <option value="">--Please choose an option--</option>
@@ -97,15 +93,14 @@
             <input type="submit" value="Execute" />
         </form>
     </div>
-</div>
-<hr>
-<div class="menuItem">
-    <div class="itemInfo">       
+</section>
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Show actual service footprint</p>
         <p class="itemInfoDescr">Show actual service footprint 
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="getActualServiceFootprint">
             <select id="serviceName" name="serviceName">
                 <option value="">--Please choose an option--</option>
@@ -124,14 +119,14 @@
             <input type="submit" value="Execute" />
         </form>
     </div>
-</div>
-<div class="menuItem">
-    <div class="itemInfo">       
+</section>
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Show actual service footprint report</p>
         <p class="itemInfoDescr">Show actual service footprint report 
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="getActualServiceFootprintForAll">
             <select id="serviceName" name="serviceName">
                 <option value="">--Please choose an option--</option>
@@ -143,15 +138,14 @@
             <input type="submit" value="Execute" />
         </form>
     </div>
-</div>
-<hr>
-<div class="menuItem">
-    <div class="itemInfo">       
+</section>
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Show actual service type report</p>
         <p class="itemInfoDescr">Show actual service type report 
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="getActualServiceTypeForAll">
             <select id="serviceName" name="serviceName">
                 <option value="">--Please choose an option--</option>
@@ -163,28 +157,26 @@
             <input type="submit" value="Execute" />
         </form>
     </div>
-</div>
-<hr>
-<div class="menuItem">
-    <div class="itemInfo">       
+</section>
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Construct templated footprint</p>
         <p class="itemInfoDescr">Construct templated footprint 
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="getCompianceData">
             <input type="submit" id="getCompianceData" value="Enter vars" />
         </form>
     </div>
-</div>
-<hr>
-<div class="menuItem">
-    <div class="itemInfo">       
+</section>
+<section class="menuItem">
+    <div>       
         <p class="itemInfoLabel">Show complience report for service</p>
         <p class="itemInfoDescr">Show complience report for service 
         </p>
     </div>
-    <div class="itemAction">
+    <div>
         <form action="getHostnameForCompianceReport">
             <select id="serviceName" name="serviceName">
                 <option value="">--Please choose an option--</option>
@@ -196,7 +188,7 @@
             <input type="submit" value="Execute" />
         </form>
     </div>
-</div>
-<hr>
+</section>
+<script src="script.js" type="text/javascript"></script>
 </body>
 </html>

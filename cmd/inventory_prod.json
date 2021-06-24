@@ -1,0 +1,19 @@
+[
+    {
+      "HostName": "SKO-DATA-AC-041-E04-01-EXT",
+      "HostData": {
+        "Url": "https://10.56.204.15",
+        "Username": "cspc",
+        "Password": "C0llect0r!pass7"
+      }
+    },
+    {
+      "HostName": "SKO-DATA-AC-041-E04-02-EXT",
+      "HostData": {
+        "Url": "https://10.56.204.16",
+        "Username": "cspc",
+        "Password": "C0llect0r!pass7"
+      }
+    }
+  ]
+  

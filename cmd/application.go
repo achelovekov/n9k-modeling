@@ -143,6 +143,7 @@ func (md *MetaData) DoGetActualFootprint(w http.ResponseWriter, r *http.Request)
 
 	json.Unmarshal([]byte(r.FormValue("keys")), &srcValList)
 	inventoryCollection := client.Database("Auxilary").Collection("Inventory")
+
 	cursor, err := inventoryCollection.Find(ctx, bson.M{})
 
 	for cursor.Next(ctx) {

@@ -2,18 +2,39 @@
     {
       "HostName": "SKO-DATA-AC-041-E04-01-EXT",
       "HostData": {
-        "Url": "https://10.56.204.15",
+        "Url": "https://10.43.131.43",
         "Username": "cspc",
-        "Password": "C0llect0r!pass7"
+        "Password": "R2D2!c3po-bb8"
       }
     },
     {
       "HostName": "SKO-DATA-AC-041-E04-02-EXT",
       "HostData": {
-        "Url": "https://10.56.204.16",
+        "Url": "https://10.43.131.44",
         "Username": "cspc",
-        "Password": "C0llect0r!pass7"
+        "Password": "R2D2!c3po-bb8"
+      }
+    },    
+    {
+      "HostName": "SKO-DATA-AC-041-F04-01-EXT",
+      "HostData": {
+        "Url": "https://10.43.131.45",
+        "Username": "cspc",
+        "Password": "R2D2!c3po-bb8"
+      }
+    },
+    {
+      "HostName": "SKO-DATA-AC-041-F04-02-EXT",
+      "HostData": {
+        "Url": "https://10.43.131.46",
+        "Username": "cspc",
+        "Password": "R2D2!c3po-bb8"
       }
     }
-  ]
+]
   
+
+
+SKO-DATA-AC-041-L18-01-EXT
+SKO-DATA-AC-041-L18-02-EXT
+

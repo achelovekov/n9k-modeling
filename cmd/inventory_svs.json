@@ -36,7 +36,8 @@
     "HostData": {
       "Url": "https://10.2.17.1",
       "Username": "admin",
-      "Password": "C1sco123"
+      "Password": "C1sco123",
+      "Type": "AG"
     }
   },
   {
@@ -44,7 +45,8 @@
     "HostData": {
       "Url": "https://10.2.17.8",
       "Username": "admin",
-      "Password": "C1sco123"
+      "Password": "C1sco123",
+      "Type": "AG"
     }
   },
   {
@@ -68,7 +70,8 @@
     "HostData": {
       "Url": "https://10.2.17.29",
       "Username": "admin",
-      "Password": "C1sco123"
+      "Password": "C1sco123",
+      "Type": "AC"
     }
   },
   {
@@ -76,7 +79,8 @@
     "HostData": {
       "Url": "https://10.2.17.30",
       "Username": "admin",
-      "Password": "C1sco123"
+      "Password": "C1sco123",
+      "Type": "AC"
     }
   },
   {

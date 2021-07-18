@@ -1,6 +1,6 @@
 {
   "ServiceName": "VNI",
-  "DMEProcessing": [
+  "DMEProcessing": [    
     {
       "ChunkName": "hmmFwdIf",
       "Paths": [
@@ -78,6 +78,14 @@
           "Path": "../serviceDefinitions/VNI/PathFiles/l3Inst.json"
         }
       ]
+    },
+    {
+      "ChunkName": "bgpDomAf",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/VNI/PathFiles/bgpDomAf.json"
+        }
+      ]
     }
   ],
   "ServiceConstructPath": [
@@ -93,11 +101,12 @@
         "l2BD.id",
         "l2BD.accEncap",
         "l2BD.name"
-      ]
+      ],
+      "CommonKeysListPrefix": "L2VNI"
     },
     {
       "ChunkName": "sviIf",
-      "KeySName": "l2BD.id",
+      "KeySName": "L2VNI.l2BD.id",
       "KeySType": "string",
       "KeyDName": "sviIf.vlanId",
       "KeyDType": "string",
@@ -105,11 +114,12 @@
       "MatchType": "full",
       "CommonKeysList": [
         "sviIf.id"
-      ]
+      ],
+      "CommonKeysListPrefix": "L2VNI"
     },
     {
       "ChunkName": "rtctrlBDEvi",
-      "KeySName": "l2BD.accEncap",
+      "KeySName": "L2VNI.l2BD.accEncap",
       "KeySType": "string",
       "KeyDName": "rtctrlBDEvi.encap",
       "KeyDType": "string",
@@ -130,13 +140,14 @@
               "SearchFrom": "rtctrlRttP.type",
               "SearchFor": "rtctrlRttP.type"
             }
-          ]
+          ],
+          "SplitSearchKeysPrefix": "L2VNI"
         }
       ]
     },
     {
       "ChunkName": "ipv4",
-      "KeySName": "sviIf.id",
+      "KeySName": "L2VNI.sviIf.id",
       "KeySType": "string",
       "KeyDName": "ipv4If.id",
       "KeyDType": "string",
@@ -146,11 +157,12 @@
         "ipv4Addr.addr",
         "ipv4Addr.tag",
         "ipv4Dom.name"
-      ]
+      ],
+      "CommonKeysListPrefix": "L2VNI"
     },
     {
       "ChunkName": "hmmFwdIf",
-      "KeySName": "sviIf.id",
+      "KeySName": "L2VNI.sviIf.id",
       "KeySType": "string",
       "KeyDName": "hmmFwdIf.id",
       "KeyDType": "string",
@@ -158,7 +170,8 @@
       "MatchType": "full",
       "CommonKeysList": [
         "hmmFwdIf.mode"
-      ]
+      ],
+      "CommonKeysListPrefix": "L2VNI"
     },
     {
       "ChunkName": "nvoNw",
@@ -175,15 +188,16 @@
         "nvoIngRepl.proto",
         "nvoIngRepl.rn",
         "nvoNw.suppressARP"
-      ]
+      ],
+      "CommonKeysListPrefix": "L2VNI"
     },
     {
       "ChunkName": "l3Inst",
-      "KeySName": "ipv4Dom.name",
+      "KeySName": "vrf",
       "KeySType": "string",
       "KeyDName": "l3Inst.name",
       "KeyDType": "string",
-      "KeyLink": "indirect",
+      "KeyLink": "direct",
       "MatchType": "full",
       "CommonKeysList": [
         "l3Inst.encap"
@@ -241,6 +255,66 @@
         "nvoNw.associateVrfFlag"
       ],
       "CommonKeysListPrefix": "L3VNI"
+    },
+    {
+      "ChunkName": "bgpDomAf",
+      "KeySName": "vrf",
+      "KeySType": "string",
+      "KeyDName": "bgpDom.name",
+      "KeyDType": "string",
+      "KeyLink": "direct",
+      "MatchType": "full",
+      "CommonKeysList": [
+        "bgpDomAf.maxEcmp"
+        ],
+      "CommonKeysListPrefix": "L3VNI",
+      "Filter": {
+        "Name": "bgpInterLeakP.proto",
+        "Key": "bgpInterLeakP.proto"
+      },
+      "SplitSearch": [
+        {
+          "SplitSearchKeys": [
+              "bgpInterLeakP.rtMap"
+            ],
+          "SplitSearchDirectives": [
+            {
+              "SearchFrom": "bgpInterLeakP.proto",
+              "SearchFor": "bgpInterLeakP.proto"
+            }
+          ],
+          "SplitSearchKeysPrefix": "L3VNI"
+        }
+      ]
+    },
+    {
+      "ChunkName": "ipv4",
+      "KeySName": "vrf",
+      "KeySType": "string",
+      "KeyDName": "ipv4Dom.name",
+      "KeyDType": "string",
+      "KeyLink": "direct",
+      "MatchType": "full",
+      "CommonKeysList": [],
+      "CommonKeysListPrefix": "",
+      "Filter": {
+        "Name": "ipv4If.id",
+        "Key": "ipv4If.id"
+      },
+      "SplitSearch": [
+        {
+          "SplitSearchKeys": [
+              "ipv4Addr.addr"
+            ],
+          "SplitSearchDirectives": [
+            {
+              "SearchFrom": "ipv4If.id",
+              "SearchFor": "ipv4If.id"
+            }
+          ],
+          "SplitSearchKeysPrefix": "L3VNI"
+        }
+      ]
     }
   ],
   "ServiceComponents": [
@@ -248,24 +322,69 @@
       "ComponentName": "L2VNI",
       "ComponentKeys": [
         {
-          "Name": "l2BD.accEncap",
+          "Name": "L2VNI.l2BD.accEncap",
           "Value": "anyValue",
           "MatchType": "equal"
         },
         {
-          "Name": "rtctrlRttEntry.rtt.export",
+          "Name": "L2VNI.rtctrlRttEntry.rtt.export",
           "Value": "anyValue",
           "MatchType": "equal"
         },
         {
-          "Name": "rtctrlRttEntry.rtt.import",
+          "Name": "L2VNI.rtctrlRttEntry.rtt.import",
           "Value": "anyValue",
           "MatchType": "equal"
         }
       ]
     },
     {
-      "ComponentName": "L3VNI",
+      "ComponentName": "L3VNI-AC",
+      "ComponentKeys": [
+        {
+          "Name": "L2VNI.sviIf.id",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L2VNI.ipv4Addr.addr",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L2VNI.hmmFwdIf.mode",
+          "Value": "anycastGW",
+          "MatchType": "equal"
+        }, 
+        {
+          "Name": "L3VNI.ipv4If.forward",
+          "Value": "enabled",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.l2BD.id",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.l3Inst.encap",
+          "Value": "anyValue",
+          "MatchType": "subkey"
+        },
+        {
+          "Name": "L3VNI.sviIf.id",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.bgpInterLeakP.rtMap.direct",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "L3VNI-AG",
       "ComponentKeys": [
         {
           "Name": "L3VNI.ipv4If.forward",
@@ -291,6 +410,21 @@
           "Name": "L3VNI.sviIf.id",
           "Value": "anyValue",
           "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.ipv4Addr.addr.lo",
+          "Value": "anyValue",
+          "MatchType": "subkey"
+        },
+        {
+          "Name": "L3VNI.bgpDomAf.maxEcmp",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.bgpInterLeakP.rtMap.direct",
+          "Value": "anyValue",
+          "MatchType": "equal"
         }
       ]
     },
@@ -298,12 +432,12 @@
       "ComponentName": "AGW",
       "ComponentKeys": [
         {
-          "Name": "ipv4Addr.addr",
+          "Name": "L2VNI.ipv4Addr.addr",
           "Value": "anyValue",
           "MatchType": "equal"
         },
         {
-          "Name": "hmmFwdIf.mode",
+          "Name": "L2VNI.hmmFwdIf.mode",
           "Value": "anycastGW",
           "MatchType": "equal"
         }
@@ -313,7 +447,7 @@
       "ComponentName": "ARP-Suppress",
       "ComponentKeys": [
         {
-          "Name": "nvoNw.suppressARP",
+          "Name": "L2VNI.nvoNw.suppressARP",
           "Value": "enabled",
           "MatchType": "equal"
         }
@@ -323,7 +457,7 @@
       "ComponentName": "IR",
       "ComponentKeys": [
         {
-          "Name": "nvoIngRepl.rn",
+          "Name": "L2VNI.nvoIngRepl.rn",
           "Value": "anyValue",
           "MatchType": "equal"
         }
@@ -333,7 +467,7 @@
       "ComponentName": "PIM",
       "ComponentKeys": [
         {
-          "Name": "nvoNw.mcastGroup",
+          "Name": "L2VNI.nvoNw.mcastGroup",
           "Value": "0.0.0.0",
           "MatchType": "not-equal"
         }
@@ -343,7 +477,7 @@
       "ComponentName": "MS-IR",
       "ComponentKeys": [
         {
-          "Name": "nvoNw.multisiteIngRepl",
+          "Name": "L2VNI.nvoNw.multisiteIngRepl",
           "Value": "enable",
           "MatchType": "equal"
         }

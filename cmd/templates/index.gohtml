@@ -189,6 +189,25 @@
         </form>
     </div>
 </section>
+<section class="menuItem">
+    <div>       
+        <p class="itemInfoLabel">Get Inventory</p>
+        <p class="itemInfoDescr">Get Inventory 
+        </p>
+    </div>
+    <div>
+        <form action="getGlobalServiceTypeReport">
+            <select id="serviceName" name="serviceName">
+                <option value="">--Please choose an option--</option>
+                {{range $i, $v := .ServiceList}}
+                    {{$value := index $v "ServiceName"}}
+                    <option value="{{$value}}">{{$value}}</option>
+                {{end}}
+            </select><br>
+            <input type="submit" value="Execute" />
+        </form>
+    </div>
+</section>
 <script src="script.js" type="text/javascript"></script>
 </body>
 </html>

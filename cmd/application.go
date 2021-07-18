@@ -61,7 +61,7 @@ func (md *MetaData) GetRawData(w http.ResponseWriter, r *http.Request) {
 		wg        sync.WaitGroup
 	)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 35*time.Second)
 	defer cancel()
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(md.Config.URL))
@@ -122,7 +122,7 @@ func (md *MetaData) GetActualFootprint(w http.ResponseWriter, r *http.Request) {
 
 func (md *MetaData) DoGetActualFootprint(w http.ResponseWriter, r *http.Request) {
 	var (
-		srcValList     m.SrcValList
+		keysList       m.KeysList
 		inventory      cu.Inventory
 		deviceChunksDB m.DeviceChunksDB
 		processedData  m.ProcessedData
@@ -141,7 +141,7 @@ func (md *MetaData) DoGetActualFootprint(w http.ResponseWriter, r *http.Request)
 		log.Println(err)
 	}
 
-	json.Unmarshal([]byte(r.FormValue("keys")), &srcValList)
+	json.Unmarshal([]byte(r.FormValue("keys")), &keysList)
 	inventoryCollection := client.Database("Auxilary").Collection("Inventory")
 
 	cursor, err := inventoryCollection.Find(ctx, bson.M{})
@@ -172,14 +172,16 @@ func (md *MetaData) DoGetActualFootprint(w http.ResponseWriter, r *http.Request)
 		deviceChunksDB = append(deviceChunksDB, m.Processing(MetaData, inventoryEntry, devicesRawDMECollectionEntry["DeviceDMEData"]))
 	}
 
-	deviceFootprintDB := m.ConstructDeviceFootprintDB(deviceChunksDB, srcValList, serviceDefinition.ServiceConstructPath, MetaData.ConversionMap)
+	deviceFootprintDB := m.ConstructDeviceFootprintDB(deviceChunksDB, keysList, serviceDefinition.ServiceConstructPath, MetaData.ConversionMap)
 	serviceFootprintDB := m.ConstructServiceFootprintDB(serviceDefinition.ServiceComponents, deviceFootprintDB)
+	serviceTypeDB := m.ConstructServiceTypeDB(serviceDefinition.ServiceName, serviceFootprintDB, inventory)
 
 	processedData.ServiceName = serviceDefinition.ServiceName
-	processedData.Keys = srcValList
+	processedData.Keys = keysList
 	processedData.ServiceComponents = m.GetServiceComponentsList(serviceDefinition)
 	processedData.DeviceFootprintDB = deviceFootprintDB
 	processedData.ServiceFootprintDB = serviceFootprintDB
+	processedData.ServiceTypeDB = serviceTypeDB
 
 	processedDataCollection.Drop(ctx)
 	mo.InsertOne(ctx, processedDataCollection, processedData)
@@ -321,31 +323,7 @@ func (md *MetaData) GetActualServiceTypeForAll(w http.ResponseWriter, r *http.Re
 	bsonProcessedDataBytes, _ := bson.Marshal(bsonProcessedData)
 	bson.Unmarshal(bsonProcessedDataBytes, &processedData)
 
-	type ServiceTypeLayout struct {
-		Key  string
-		Type string
-	}
-	type ServiceTypeDBEntry struct {
-		DeviceName         string
-		ServiceTypeLayouts []ServiceTypeLayout
-	}
-
-	serviceTypeDB := make([]ServiceTypeDBEntry, 0)
-
-	for _, serviceFootprintDBEntry := range processedData.ServiceFootprintDB {
-		var serviceTypeDBEntry ServiceTypeDBEntry
-		serviceTypeDBEntry.DeviceName = serviceFootprintDBEntry.DeviceName
-		serviceTypeDBEntry.ServiceTypeLayouts = make([]ServiceTypeLayout, 0)
-		for _, serviceLayout := range serviceFootprintDBEntry.ServiceLayouts {
-			var serviceTypeLayout ServiceTypeLayout
-			serviceTypeLayout.Key = serviceLayout.Key
-			m := t.ServiceComponentBitMapConstruct(serviceLayout.Data)
-			r := t.VNICheckServiceType(m)
-			serviceTypeLayout.Type = r
-			serviceTypeDBEntry.ServiceTypeLayouts = append(serviceTypeDBEntry.ServiceTypeLayouts, serviceTypeLayout)
-		}
-		serviceTypeDB = append(serviceTypeDB, serviceTypeDBEntry)
-	}
+	serviceTypeDB := processedData.ServiceTypeDB
 
 	tpl.ExecuteTemplate(w, "PrintActualServiceTypeForAll.gohtml", serviceTypeDB)
 }
@@ -358,7 +336,10 @@ func (md *MetaData) PushInventoryToMongo(w http.ResponseWriter, r *http.Request)
 	}
 
 	jsonData := []byte(r.FormValue("inventory"))
-	json.Unmarshal(jsonData, &inventory)
+	err = json.Unmarshal(jsonData, &inventory)
+	if err != nil {
+		log.Println(err)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
@@ -556,6 +537,50 @@ func (md *MetaData) GetComplianceReport(w http.ResponseWriter, r *http.Request) 
 
 }
 
+/* func (md *MetaData) GetGlobalServiceTypeReport(w http.ResponseWriter, r *http.Request) {
+	var processedData m.ProcessedData
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(md.Config.URL))
+	if err != nil {
+		log.Println(err)
+	}
+
+	processedDataCollection := client.Database(r.FormValue("serviceName")).Collection("ProcessedData")
+	inventoryCollection := client.Database("Auxilary").Collection("Inventory")
+
+	bsonProcessedData, err := mo.FindOne(ctx, processedDataCollection, "ServiceName", r.FormValue("serviceName"))
+	if err != nil {
+		log.Println("Can't find processedData for:", r.FormValue("serviceName"))
+	}
+
+	bsonProcessedDataBytes, _ := bson.Marshal(bsonProcessedData)
+	bson.Unmarshal(bsonProcessedDataBytes, &processedData)
+
+	cursor, err := inventoryCollection.Find(ctx, bson.D{})
+
+	var inventory cu.Inventory
+
+	for cursor.Next(ctx) {
+		hostMetaData := cu.HostMetaData{}
+		err := cursor.Decode(&hostMetaData)
+		if err != nil {
+			log.Println(err)
+		}
+
+		inventory = append(inventory, hostMetaData)
+	}
+
+	m.CheckServiceTypeDB(processedData.Keys, processedData.ServiceTypeDB, "9012440", "gtype-1")
+	m.CheckServiceTypeDB(processedData.Keys, processedData.ServiceTypeDB, "9012441", "gtype-1")
+} */
+
 var tpl *template.Template
 
 func init() {
@@ -604,5 +629,8 @@ func main() {
 
 	http.HandleFunc("/getHostnameForCompianceReport", metaData.GetHostnameForCompianceReport)
 	http.HandleFunc("/getComplianceReport", metaData.GetComplianceReport)
+
+	/* 	http.HandleFunc("/getGlobalServiceTypeReport", metaData.GetGlobalServiceTypeReport)
+	 */
 	http.ListenAndServe(":8080", nil)
 }

@@ -537,7 +537,7 @@ func (md *MetaData) GetComplianceReport(w http.ResponseWriter, r *http.Request) 
 
 }
 
-/* func (md *MetaData) GetGlobalServiceTypeReport(w http.ResponseWriter, r *http.Request) {
+func (md *MetaData) GetGlobalServiceTypeReport(w http.ResponseWriter, r *http.Request) {
 	var processedData m.ProcessedData
 	err := r.ParseForm()
 	if err != nil {
@@ -577,9 +577,9 @@ func (md *MetaData) GetComplianceReport(w http.ResponseWriter, r *http.Request) 
 		inventory = append(inventory, hostMetaData)
 	}
 
-	m.CheckServiceTypeDB(processedData.Keys, processedData.ServiceTypeDB, "9012440", "gtype-1")
-	m.CheckServiceTypeDB(processedData.Keys, processedData.ServiceTypeDB, "9012441", "gtype-1")
-} */
+	m.CheckServiceTypeDB(processedData.ServiceTypeDB, "2012452", "gtype-1")
+	m.CheckServiceTypeDB(processedData.ServiceTypeDB, "2012453", "gtype-1")
+}
 
 var tpl *template.Template
 
@@ -630,7 +630,7 @@ func main() {
 	http.HandleFunc("/getHostnameForCompianceReport", metaData.GetHostnameForCompianceReport)
 	http.HandleFunc("/getComplianceReport", metaData.GetComplianceReport)
 
-	/* 	http.HandleFunc("/getGlobalServiceTypeReport", metaData.GetGlobalServiceTypeReport)
-	 */
+	http.HandleFunc("/getGlobalServiceTypeReport", metaData.GetGlobalServiceTypeReport)
+
 	http.ListenAndServe(":8080", nil)
 }

@@ -1,0 +1,126 @@
+{
+    "PathOptions": {
+      "IgnoreTail": true
+    },
+    "PathData": [
+      {
+        "Node": [
+          {
+            "NodeName": "imdata",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "topSystem",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "rpmEntity",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "rtmapRule",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "rtmapEntry",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "rtmapMatchRtTag",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          }
+        ]
+      }
+  ]
+  }

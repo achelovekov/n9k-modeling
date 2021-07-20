@@ -1,7 +1,7 @@
 {
   "ServiceName": "VNI",
-  "DMEProcessing": [    
-    {
+  "DMEProcessing": [  
+        {
       "ChunkName": "hmmFwdIf",
       "Paths": [
         {
@@ -86,6 +86,38 @@
           "Path": "../serviceDefinitions/VNI/PathFiles/bgpDomAf.json"
         }
       ]
+    },
+    {
+      "ChunkName": "rtmapRule",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/VNI/PathFiles/rtmapRule.json"
+        }
+      ]
+    },  
+    {
+      "ChunkName": "rtctrlRttEntry",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/VNI/PathFiles/rtctrlRttEntry.json"
+        }
+      ]
+    },
+    {
+      "ChunkName": "bgpGr",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/VNI/PathFiles/bgpGr.json"
+        }
+      ]
+    },
+    {
+      "ChunkName": "bgpPathCtrl",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/VNI/PathFiles/bgpPathCtrl.json"
+        }
+      ]
     }
   ],
   "ServiceConstructPath": [
@@ -126,10 +158,10 @@
       "KeyLink": "indirect",
       "MatchType": "full",
       "CommonKeysList": [],
-      "Filter": {
+      "Filter": [{
         "Name": "rtctrlRttP.type",
         "Key": "rtctrlRttP.type"
-      },
+      }],
       "SplitSearch": [
         {
           "SplitSearchKeys": [
@@ -268,10 +300,10 @@
         "bgpDomAf.maxEcmp"
         ],
       "CommonKeysListPrefix": "L3VNI",
-      "Filter": {
+      "Filter": [{
         "Name": "bgpInterLeakP.proto",
         "Key": "bgpInterLeakP.proto"
-      },
+      }],
       "SplitSearch": [
         {
           "SplitSearchKeys": [
@@ -297,10 +329,10 @@
       "MatchType": "full",
       "CommonKeysList": [],
       "CommonKeysListPrefix": "",
-      "Filter": {
+      "Filter": [{
         "Name": "ipv4If.id",
         "Key": "ipv4If.id"
-      },
+      }],
       "SplitSearch": [
         {
           "SplitSearchKeys": [
@@ -315,6 +347,96 @@
           "SplitSearchKeysPrefix": "L3VNI"
         }
       ]
+    }, 
+    {
+      "ChunkName": "rtmapRule",
+      "KeySName": "L3VNI.bgpInterLeakP.rtMap.direct",
+      "KeySType": "string",
+      "KeyDName": "rtmapRule.name",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "partial",
+      "CommonKeysList": [
+        "rtmapMatchRtTag.tag"
+      ],
+      "CommonKeysListPrefix": "L3VNI"
+    },
+    {
+      "ChunkName": "rtctrlRttEntry",
+      "KeySName": "vrf",
+      "KeySType": "string",
+      "KeyDName": "l3Inst.name",
+      "KeyDType": "string",
+      "KeyLink": "direct",
+      "MatchType": "full",
+      "CommonKeysList": [],
+      "Filter": [
+          {
+            "Name": "rtctrlRttP.type",
+            "Key": "rtctrlRttP.type"
+          },
+          {
+            "Name": "rtctrlAfCtrl.type",
+            "Key": "rtctrlAfCtrl.type"
+          }
+        ],
+      "SplitSearch": [
+        {
+            "SplitSearchKeys": [
+                    "rtctrlRttEntry.rtt"
+                ],
+            "SplitSearchDirectives": [
+                {
+                    "SearchFrom": "rtctrlRttP.type",
+                    "SearchFor": "rtctrlRttP.type"
+                },
+                {
+                    "SearchFrom": "rtctrlAfCtrl.type",
+                    "SearchFor": "rtctrlAfCtrl.type"
+                }
+            ],
+            "SplitSearchKeysPrefix": "L3VNI"
+        }
+     ]
+    },
+    {
+      "ChunkName": "bgpGr",
+      "KeySName": "vrf",
+      "KeySType": "string",
+      "KeyDName": "bgpDom.name",
+      "KeyDType": "string",
+      "KeyLink": "direct",
+      "MatchType": "full",
+      "CommonKeysList": [
+        "bgpGr.staleIntvl"
+      ],
+      "CommonKeysListPrefix": "L3VNI"
+    },
+    {
+      "ChunkName": "bgpPathCtrl",
+      "KeySName": "vrf",
+      "KeySType": "string",
+      "KeyDName": "bgpDom.name",
+      "KeyDType": "string",
+      "KeyLink": "direct",
+      "MatchType": "full",
+      "CommonKeysList": [
+        "bgpPathCtrl.asPathMultipathRelax"
+      ],
+      "CommonKeysListPrefix": "L3VNI"
+    },
+    {
+      "ChunkName": "bgpInst",
+      "KeySName": "no-match",
+      "KeySType": "string",
+      "KeyDName": "no-match",
+      "KeyDType": "string",
+      "KeyLink": "no-match",
+      "MatchType": "no-match",
+      "CommonKeysList": [
+        "bgpInst.asn"
+      ],
+      "CommonKeysListPrefix": "L3VNI"
     }
   ],
   "ServiceComponents": [
@@ -380,6 +502,11 @@
           "Name": "L3VNI.bgpInterLeakP.rtMap.direct",
           "Value": "anyValue",
           "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.rtmapMatchRtTag.tag",
+          "Value": "anyValue",
+          "MatchType": "equal"
         }
       ]
     },
@@ -423,6 +550,11 @@
         },
         {
           "Name": "L3VNI.bgpInterLeakP.rtMap.direct",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.rtmapMatchRtTag.tag",
           "Value": "anyValue",
           "MatchType": "equal"
         }

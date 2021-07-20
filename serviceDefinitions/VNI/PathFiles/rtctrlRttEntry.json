@@ -1,0 +1,172 @@
+{
+    "PathOptions": {
+      "IgnoreTail": true
+    },
+    "PathData": [
+      {
+        "Node": [
+          {
+            "NodeName": "imdata",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "topSystem",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "l3Inst",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "rtctrlDom",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "rtctrlDomAf",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "rtctrlAfCtrl",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "rtctrlRttP",
+            "ToDive": true,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          },
+          {
+            "NodeName": "children",
+            "ToDive": false,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "rtctrlRttEntry",
+            "ToDive": true,
+            "ToCombine": false
+          }
+        ]
+      },
+      {
+        "Node": [
+          {
+            "NodeName": "attributes",
+            "ToDive": true,
+            "ToCombine": false
+          }
+        ]
+      }
+  ]
+  }

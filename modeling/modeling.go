@@ -138,7 +138,8 @@ type ServiceConstructPathEntry struct {
 	CommonKeysListPrefix string             `json:"CommonKeysListPrefix"`
 }
 
-type Filter struct {
+type Filter []FilterEntry
+type FilterEntry struct {
 	Name string `json:"Name"`
 	Key  string `json:"Key"`
 }
@@ -346,7 +347,6 @@ func ConstructDeviceDataEntry(Key Key, deviceChunksDBEntry DeviceChunksDBEntry, 
 
 		if entry.KeyLink == "direct" {
 			v := GetSubKeyValueBySubKeyName(Key.KeyDefinition, entry.KeySName)
-			fmt.Println(v)
 			tmpVal = TypeConversion(entry.KeySType, entry.KeyDType, v, ConversionMap)
 		}
 
@@ -373,8 +373,10 @@ func ConstructDeviceDataEntry(Key Key, deviceChunksDBEntry DeviceChunksDBEntry, 
 			if len(entry.CommonKeysList) > 0 {
 				PopulateDataForKeys(entry.CommonKeysList, dMEChunkFiltered[0], data, entry.CommonKeysListPrefix, "")
 			}
-			if entry.Filter != (Filter{}) {
-				filterDB = append(filterDB, ConstructFilterDBEntry(dMEChunkFiltered, entry, data))
+			if len(entry.Filter) > 0 {
+				for _, filterEntry := range entry.Filter {
+					filterDB = append(filterDB, ConstructFilterDBEntry(dMEChunkFiltered, filterEntry, data))
+				}
 			}
 			if len(entry.SplitSearch) > 0 {
 				for _, splitSearchEntry := range entry.SplitSearch {
@@ -394,14 +396,25 @@ func ConstructDeviceDataEntry(Key Key, deviceChunksDBEntry DeviceChunksDBEntry, 
 	return deviceDataEntry
 }
 
-func ConstructFilterDBEntry(dMEChunk DMEChunk, serviceConstructPathEntry ServiceConstructPathEntry, data Data) FilterDBEntry {
+func Contains(s []interface{}, e interface{}) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+func ConstructFilterDBEntry(dMEChunk DMEChunk, filterEntry FilterEntry, data Data) FilterDBEntry {
 
 	var filterDBEntry FilterDBEntry
-	filterDBEntry.Name = serviceConstructPathEntry.Filter.Name
+	filterDBEntry.Name = filterEntry.Name
 
 	for _, dMEChunkEntry := range dMEChunk {
-		if _, ok := dMEChunkEntry[serviceConstructPathEntry.Filter.Name]; ok {
-			filterDBEntry.Values = append(filterDBEntry.Values, dMEChunkEntry[serviceConstructPathEntry.Filter.Key])
+		if _, ok := dMEChunkEntry[filterEntry.Name]; ok {
+			if !Contains(filterDBEntry.Values, dMEChunkEntry[filterEntry.Key]) {
+				filterDBEntry.Values = append(filterDBEntry.Values, dMEChunkEntry[filterEntry.Key])
+			}
 		} else {
 			filterDBEntry.Values = append(filterDBEntry.Values, "not-exists")
 		}
@@ -642,7 +655,6 @@ func CheckComponentKeys(ComponentKeys []ComponentKey, DeviceData map[string]inte
 				var subflag bool
 				for k := range DeviceData {
 					if strings.Contains(k, ComponentKey.Name) {
-						fmt.Println("Match:", k, ComponentKey.Name)
 						subflag = subflag || true
 					}
 				}
@@ -702,9 +714,6 @@ func ConstructServiceTypeDB(serviceName string, serviceFootprintDB ServiceFootpr
 		for _, serviceLayout := range serviceFootprintDBEntry.ServiceLayouts {
 
 			var serviceType ServiceType
-
-			fmt.Println("go for device: ", serviceTypeDBEntry.DeviceName)
-
 			serviceType.Key = serviceLayout.Key
 			serviceType.Type = GetTypeFromComponentList(serviceName, serviceLayout.Data)
 
@@ -734,10 +743,14 @@ type ServiceTypeDefinition map[string]bool
 func GetLocalVNIType(serviceComponentBitMaps ServiceComponentBitMaps) string {
 
 	serviceTypeDefinitions := make(ServiceTypeDefinitions)
+	/* 	L2VNI + L3VNI - AC + L3VNI - AG + AGW + ARP - Suppress + PIM = type1
+	   	L2VNI + L3VNI - AC + L3VNI - AG + AGW + ARP - Suppress + IR = type2
+	   	L2VNI + L3VNI - AG + IR + MS - IR = type3 */
 
 	var type1ServiceTypeDefinition = map[string]bool{
 		"L2VNI":        true,
-		"L3VNI":        false,
+		"L3VNI-AC":     true,
+		"L3VNI-AG":     true,
 		"AGW":          true,
 		"ARP-Suppress": true,
 		"IR":           false,
@@ -748,36 +761,27 @@ func GetLocalVNIType(serviceComponentBitMaps ServiceComponentBitMaps) string {
 
 	var type2ServiceTypeDefinition = map[string]bool{
 		"L2VNI":        true,
-		"L3VNI":        false,
-		"AGW":          false,
-		"ARP-Suppress": false,
-		"IR":           false,
-		"PIM":          true,
-		"MS-IR":        false,
-	}
-	serviceTypeDefinitions["type-2"] = type2ServiceTypeDefinition
-
-	var type3ServiceTypeDefinition = map[string]bool{
-		"L2VNI":        true,
-		"L3VNI":        false,
-		"AGW":          false,
-		"ARP-Suppress": false,
-		"IR":           false,
-		"PIM":          true,
-		"MS-IR":        true,
-	}
-	serviceTypeDefinitions["type-3"] = type3ServiceTypeDefinition
-
-	var type4ServiceTypeDefinition = map[string]bool{
-		"L2VNI":        true,
-		"L3VNI":        false,
+		"L3VNI-AC":     false,
+		"L3VNI-AG":     true,
 		"AGW":          false,
 		"ARP-Suppress": false,
 		"IR":           true,
 		"PIM":          false,
+		"MS-IR":        true,
+	}
+	serviceTypeDefinitions["type-3"] = type2ServiceTypeDefinition
+
+	var type3ServiceTypeDefinition = map[string]bool{
+		"L2VNI":        true,
+		"L3VNI-AC":     true,
+		"L3VNI-AG":     true,
+		"AGW":          true,
+		"ARP-Suppress": true,
+		"IR":           true,
+		"PIM":          false,
 		"MS-IR":        false,
 	}
-	serviceTypeDefinitions["type-4"] = type4ServiceTypeDefinition
+	serviceTypeDefinitions["type-2"] = type3ServiceTypeDefinition
 
 	result_map := make(map[string]int)
 
@@ -888,9 +892,9 @@ func GenerateGlobalServiceTypes() GlobalServiceTypeDefinition {
 
 	globalServiceTypeDefinition_1.Name = "gtype-1"
 
-	globalServiceTypeDefinition_1.Data = append(globalServiceTypeDefinition_1.Data, GlobalServiceTypeDefinitionData{DeviceType: "BL", ServiceType: "type-4"})
+	globalServiceTypeDefinition_1.Data = append(globalServiceTypeDefinition_1.Data, GlobalServiceTypeDefinitionData{DeviceType: "BL", ServiceType: "not-exist"})
 	globalServiceTypeDefinition_1.Data = append(globalServiceTypeDefinition_1.Data, GlobalServiceTypeDefinitionData{DeviceType: "AG", ServiceType: "type-3"})
-	globalServiceTypeDefinition_1.Data = append(globalServiceTypeDefinition_1.Data, GlobalServiceTypeDefinitionData{DeviceType: "AC", ServiceType: "type-1"})
+	globalServiceTypeDefinition_1.Data = append(globalServiceTypeDefinition_1.Data, GlobalServiceTypeDefinitionData{DeviceType: "AC", ServiceType: "type-2"})
 	globalServiceTypeDefinition = append(globalServiceTypeDefinition, globalServiceTypeDefinition_1)
 
 	return globalServiceTypeDefinition
@@ -914,14 +918,18 @@ func GetGlobalServiceTypeData(globalServiceTypeDefinition GlobalServiceTypeDefin
 	return nil
 }
 
-/* func CheckServiceTypeDB(keys KeysDefinition, serviceTypeDB ServiceTypeDB, key string, globalServiceTypeName string) {
+func CheckServiceTypeDB(serviceTypeDB ServiceTypeDB, keyID string, globalServiceTypeName string) {
 	globalServiceTypeDefinition := GenerateGlobalServiceTypes()
 	globalServiceTypeDefinitionData := GetGlobalServiceTypeData(globalServiceTypeDefinition, globalServiceTypeName)
 
+	fmt.Println("go for key:", keyID)
+
 	for _, serviceTypeDBEntry := range serviceTypeDB {
 		for _, serviceType := range serviceTypeDBEntry.ServiceTypes {
-			if serviceType.Key == key {
-				if serviceType.Type == GetServiceTypeFromGlobalServiceTypes(globalServiceTypeDefinitionData, serviceTypeDBEntry.DeviceType, globalServiceTypeName) {
+			if serviceType.Key == keyID {
+				if serviceType.Type == "not-exist" {
+					fmt.Println("service not exist on:", serviceTypeDBEntry.DeviceName)
+				} else if serviceType.Type == GetServiceTypeFromGlobalServiceTypes(globalServiceTypeDefinitionData, serviceTypeDBEntry.DeviceType, globalServiceTypeName) {
 					fmt.Println(serviceTypeDBEntry.DeviceName, ":", "is compliant with", globalServiceTypeName)
 				} else {
 					fmt.Println(serviceTypeDBEntry.DeviceName, ":", "is not compliant with", globalServiceTypeName)
@@ -930,4 +938,4 @@ func GetGlobalServiceTypeData(globalServiceTypeDefinition GlobalServiceTypeDefin
 		}
 	}
 
-} */
+}

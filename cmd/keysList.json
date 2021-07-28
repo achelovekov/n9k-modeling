@@ -92,7 +92,24 @@
   }
 ] 
 
-]
+[
+  {
+    "KeyID": "2032515",
+    "KeyDefinition": [
+      {
+        "SubKeyName": "vnid",
+        "SubKeyValue": "2032515"
+      },
+      {
+        "SubKeyName": "vrf",
+        "SubKeyValue": "eMZ"
+      }
+    ]
+  }
+] 
+
+2010025
+eAZ
 
 [
   "9012440",

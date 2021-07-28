@@ -117,10 +117,11 @@ func NXAPICall(ctx context.Context, hmd cu.HostMetaData, DMEPath string) (map[st
 }
 
 type ServiceDefinition struct {
-	DMEProcessing        []cu.ChunkDefinition `json:"DMEProcessing"`
-	ServiceName          string               `json:"ServiceName"`
-	ServiceConstructPath ServiceConstructPath `json:"ServiceConstructPath"`
-	ServiceComponents    ServiceComponents    `json:"ServiceComponents"`
+	DMEProcessing           []cu.ChunkDefinition    `json:"DMEProcessing"`
+	ServiceName             string                  `json:"ServiceName"`
+	ServiceConstructPath    ServiceConstructPath    `json:"ServiceConstructPath"`
+	ServiceComponents       ServiceComponents       `json:"ServiceComponents"`
+	LocalServiceDefinitions LocalServiceDefinitions `json:"LocalServiceDefinitions"`
 }
 
 type ServiceConstructPath []ServiceConstructPathEntry
@@ -165,6 +166,18 @@ type ComponentKey struct {
 	Name      string `json:"Name"`
 	Value     string `json:"Value"`
 	MatchType string `json:"MatchType"`
+}
+
+type LocalServiceDefinitions []LocalServiceDefinition
+type LocalServiceDefinition struct {
+	LocalServiceName       string                 `json:"LocalServiceName"`
+	LocalServiceComponents LocalServiceComponents `json:"LocalServiceComponents"`
+}
+
+type LocalServiceComponents []LocalServiceComponent
+type LocalServiceComponent struct {
+	ComponentName  string `json:"ComponentName"`
+	ComponentExist bool   `json:"ComponentExist"`
 }
 
 func LoadServiceDefinition(fineName string) ServiceDefinition {
@@ -703,7 +716,33 @@ type ServiceType struct {
 	Type string `bson:"Type"`
 }
 
-func ConstructServiceTypeDB(serviceName string, serviceFootprintDB ServiceFootprintDB, inventory cu.Inventory) ServiceTypeDB {
+func GetServiceTypeDBEntryByDeviceName(serviceTypeDB ServiceTypeDB, deviceName string) ServiceTypeDBEntry {
+	for _, serviceTypeDBEntry := range serviceTypeDB {
+		if serviceTypeDBEntry.DeviceName == deviceName {
+			return serviceTypeDBEntry
+		}
+	}
+
+	return ServiceTypeDBEntry{
+		DeviceName:   deviceName,
+		DeviceType:   "",
+		ServiceTypes: []ServiceType{},
+	}
+}
+
+func CheckNotExistServices(serviceTypeDBEntry ServiceTypeDBEntry) bool {
+	var result bool = true
+	for _, serviceType := range serviceTypeDBEntry.ServiceTypes {
+		if serviceType.Type == "not-exist" {
+			result = result && true
+		} else {
+			result = result && false
+		}
+	}
+	return result
+}
+
+func ConstructServiceTypeDB(serviceName string, serviceFootprintDB ServiceFootprintDB, inventory cu.Inventory, localServiceDefinitions LocalServiceDefinitions) ServiceTypeDB {
 
 	serviceTypeDB := make(ServiceTypeDB, 0)
 
@@ -715,7 +754,7 @@ func ConstructServiceTypeDB(serviceName string, serviceFootprintDB ServiceFootpr
 
 			var serviceType ServiceType
 			serviceType.Key = serviceLayout.Key
-			serviceType.Type = GetTypeFromComponentList(serviceName, serviceLayout.Data)
+			serviceType.Type = GetTypeFromComponentList(serviceName, serviceLayout.Data, localServiceDefinitions)
 
 			serviceTypeDBEntry.ServiceTypes = append(serviceTypeDBEntry.ServiceTypes, serviceType)
 		}
@@ -726,62 +765,44 @@ func ConstructServiceTypeDB(serviceName string, serviceFootprintDB ServiceFootpr
 	return serviceTypeDB
 }
 
-func GetTypeFromComponentList(serviceName string, serviceComponentBitMaps ServiceComponentBitMaps) string {
+func GetTypeFromComponentList(serviceName string, serviceComponentBitMaps ServiceComponentBitMaps, localServiceDefinitions LocalServiceDefinitions) string {
 
 	var serviceType string
 
 	switch serviceName {
 	case "VNI":
-		serviceType = GetLocalVNIType(serviceComponentBitMaps)
+		serviceType = GetLocalVNIType(serviceComponentBitMaps, localServiceDefinitions)
 	}
 	return serviceType
+}
+
+func GetLocalServiceMapFromDefinitions(localServiceDefinitions LocalServiceDefinitions) map[string]map[string]bool {
+
+	localServiceMap := make(map[string]map[string]bool)
+
+	for _, localServiceDefinitionEntry := range localServiceDefinitions {
+
+		localServiceComponentsMap := make(map[string]bool)
+
+		localServiceMap[localServiceDefinitionEntry.LocalServiceName] = localServiceComponentsMap
+
+		for _, component := range localServiceDefinitionEntry.LocalServiceComponents {
+			if component.ComponentExist {
+				localServiceComponentsMap[component.ComponentName] = true
+			} else {
+				localServiceComponentsMap[component.ComponentName] = false
+			}
+		}
+
+	}
+
+	return localServiceMap
 }
 
 type ServiceTypeDefinitions map[string]ServiceTypeDefinition
 type ServiceTypeDefinition map[string]bool
 
-func GetLocalVNIType(serviceComponentBitMaps ServiceComponentBitMaps) string {
-
-	serviceTypeDefinitions := make(ServiceTypeDefinitions)
-	/* 	L2VNI + L3VNI - AC + L3VNI - AG + AGW + ARP - Suppress + PIM = type1
-	   	L2VNI + L3VNI - AC + L3VNI - AG + AGW + ARP - Suppress + IR = type2
-	   	L2VNI + L3VNI - AG + IR + MS - IR = type3 */
-
-	var type1ServiceTypeDefinition = map[string]bool{
-		"L2VNI":        true,
-		"L3VNI-AC":     true,
-		"L3VNI-AG":     true,
-		"AGW":          true,
-		"ARP-Suppress": true,
-		"IR":           false,
-		"PIM":          true,
-		"MS-IR":        false,
-	}
-	serviceTypeDefinitions["type-1"] = type1ServiceTypeDefinition
-
-	var type2ServiceTypeDefinition = map[string]bool{
-		"L2VNI":        true,
-		"L3VNI-AC":     false,
-		"L3VNI-AG":     true,
-		"AGW":          false,
-		"ARP-Suppress": false,
-		"IR":           true,
-		"PIM":          false,
-		"MS-IR":        true,
-	}
-	serviceTypeDefinitions["type-3"] = type2ServiceTypeDefinition
-
-	var type3ServiceTypeDefinition = map[string]bool{
-		"L2VNI":        true,
-		"L3VNI-AC":     true,
-		"L3VNI-AG":     true,
-		"AGW":          true,
-		"ARP-Suppress": true,
-		"IR":           true,
-		"PIM":          false,
-		"MS-IR":        false,
-	}
-	serviceTypeDefinitions["type-2"] = type3ServiceTypeDefinition
+func GetLocalVNIType(serviceComponentBitMaps ServiceComponentBitMaps, localServiceDefinitions LocalServiceDefinitions) string {
 
 	result_map := make(map[string]int)
 
@@ -789,18 +810,20 @@ func GetLocalVNIType(serviceComponentBitMaps ServiceComponentBitMaps) string {
 		return "not-exist"
 	}
 
-	for typeName, componentMap := range serviceTypeDefinitions {
+	localServiceMap := GetLocalServiceMapFromDefinitions(localServiceDefinitions)
+
+	for localServiceName, localServiceComponents := range localServiceMap {
 
 		var result = true
 		var counter int
 
-		for componentName, componentValue := range componentMap {
+		for ComponentName, ComponentExist := range localServiceComponents {
 			for _, serviceComponentBitMap := range serviceComponentBitMaps {
-				if serviceComponentBitMap.Name == componentName {
-					if serviceComponentBitMap.Value && componentValue {
+				if serviceComponentBitMap.Name == ComponentName {
+					if serviceComponentBitMap.Value && ComponentExist {
 						result = result && true
 						counter += 1
-					} else if serviceComponentBitMap.Value == false && componentValue == false {
+					} else if serviceComponentBitMap.Value == false && ComponentExist == false {
 						result = result && true
 					} else {
 						result = result && false
@@ -810,12 +833,13 @@ func GetLocalVNIType(serviceComponentBitMaps ServiceComponentBitMaps) string {
 		}
 
 		if result {
-			result_map[typeName] = counter
+			result_map[localServiceName] = counter
 		} else {
-			result_map[typeName] = 0
+			result_map[localServiceName] = 0
 		}
 
 	}
+
 	return GetLongestMatchType(result_map)
 }
 
@@ -918,24 +942,77 @@ func GetGlobalServiceTypeData(globalServiceTypeDefinition GlobalServiceTypeDefin
 	return nil
 }
 
-func CheckServiceTypeDB(serviceTypeDB ServiceTypeDB, keyID string, globalServiceTypeName string) {
-	globalServiceTypeDefinition := GenerateGlobalServiceTypes()
-	globalServiceTypeDefinitionData := GetGlobalServiceTypeData(globalServiceTypeDefinition, globalServiceTypeName)
-
-	fmt.Println("go for key:", keyID)
-
+func CheckServiceTypeDB(serviceTypeDB ServiceTypeDB, sOTDB SOTDB) {
 	for _, serviceTypeDBEntry := range serviceTypeDB {
+		fmt.Println("go for: ", serviceTypeDBEntry.DeviceName)
 		for _, serviceType := range serviceTypeDBEntry.ServiceTypes {
-			if serviceType.Key == keyID {
-				if serviceType.Type == "not-exist" {
-					fmt.Println("service not exist on:", serviceTypeDBEntry.DeviceName)
-				} else if serviceType.Type == GetServiceTypeFromGlobalServiceTypes(globalServiceTypeDefinitionData, serviceTypeDBEntry.DeviceType, globalServiceTypeName) {
-					fmt.Println(serviceTypeDBEntry.DeviceName, ":", "is compliant with", globalServiceTypeName)
-				} else {
-					fmt.Println(serviceTypeDBEntry.DeviceName, ":", "is not compliant with", globalServiceTypeName)
-				}
+			fmt.Println("	go for: ", serviceType.Key)
+			if CheckServiceTypeWithSOT(sOTDB, serviceTypeDBEntry.DeviceType, serviceType.Key, serviceType.Type) {
+				fmt.Println("yes")
+			} else {
+				fmt.Println("no")
 			}
 		}
 	}
+}
 
+func CheckServiceTypeWithSOT(sOTDB SOTDB, deviceType string, key string, serviceType string) bool {
+
+	keyData := GetKeyDataFromSOT(sOTDB, key)
+	serviceTypeFromSOT := GetServiceTypeForDeviceTypeFromSOT(keyData, deviceType)
+
+	if serviceTypeFromSOT == serviceType {
+		return true
+	} else {
+		return false
+	}
+}
+
+func GetKeyDataFromSOT(sOTDB SOTDB, key string) KeyData {
+
+	for _, dBEntry := range sOTDB.DB {
+		if dBEntry.KeyID == key {
+			return dBEntry.KeyData
+		}
+	}
+
+	return KeyData{
+		Types:           []Type{},
+		GlobalVariables: []GlobalVariable{},
+	}
+}
+
+func GetServiceTypeForDeviceTypeFromSOT(keyData KeyData, deviceType string) string {
+	for _, typesEntry := range keyData.Types {
+		if typesEntry.DeviceType == deviceType {
+			return typesEntry.LocalServiceType
+		}
+	}
+
+	return "none"
+}
+
+type SOTDB struct {
+	Name string    `json:"Name" bson:"Name"`
+	DB   []DBEntry `json:"DB" bson:"DB"`
+}
+
+type DBEntry struct {
+	KeyID   string  `json:"KeyID" bson:"KeyID"`
+	KeyData KeyData `json:"KeyData" bson:"KeyData"`
+}
+
+type KeyData struct {
+	Types           []Type           `json:"Types" bson:"Types"`
+	GlobalVariables []GlobalVariable `json:"GlobalVariables" bson:"GlobalVariables"`
+}
+
+type Type struct {
+	DeviceType       string `json:"DeviceType" bson:"DeviceType"`
+	LocalServiceType string `json:"LocalServiceType" bson:"LocalServiceType"`
+}
+
+type GlobalVariable struct {
+	Name  string `json:"Name" bson:"Name"`
+	Value string `json:"Value" bson:"Value"`
 }

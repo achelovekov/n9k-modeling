@@ -507,6 +507,36 @@
           "Name": "L3VNI.rtmapMatchRtTag.tag",
           "Value": "anyValue",
           "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.bgpPathCtrl.asPathMultipathRelax",
+          "Value": "enabled",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.bgpGr.staleIntvl",
+          "Value": "1800",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.rtctrlRttEntry.rtt.export.ipv4-ucast",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.rtctrlRttEntry.rtt.export.l2vpn-evpn",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.rtctrlRttEntry.rtt.import.ipv4-ucast",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.rtctrlRttEntry.rtt.import.l2vpn-evpn",
+          "Value": "anyValue",
+          "MatchType": "equal"
         }
       ]
     },
@@ -555,6 +585,36 @@
         },
         {
           "Name": "L3VNI.rtmapMatchRtTag.tag",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.bgpPathCtrl.asPathMultipathRelax",
+          "Value": "enabled",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.bgpGr.staleIntvl",
+          "Value": "1800",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.rtctrlRttEntry.rtt.export.ipv4-ucast",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.rtctrlRttEntry.rtt.export.l2vpn-evpn",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.rtctrlRttEntry.rtt.import.ipv4-ucast",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "L3VNI.rtctrlRttEntry.rtt.import.l2vpn-evpn",
           "Value": "anyValue",
           "MatchType": "equal"
         }
@@ -612,6 +672,82 @@
           "Name": "L2VNI.nvoNw.multisiteIngRepl",
           "Value": "enable",
           "MatchType": "equal"
+        }
+      ]
+    }
+  ],
+  "LocalServiceDefinitions": [
+    {
+      "LocalServiceName": "type-1",
+      "LocalServiceComponents": [
+        {
+          "ComponentName": "L2VNI",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "L3VNI-AC",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "L3VNI-AG",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "AGW",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "ARP-Suppress",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "IR",
+          "ComponentExist": false 
+        },
+        {
+          "ComponentName": "PIM",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "MS-IR",
+          "ComponentExist": false 
+        }
+      ]
+    },
+    {
+      "LocalServiceName": "type-2",
+      "LocalServiceComponents": [
+        {
+          "ComponentName": "L2VNI",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "L3VNI-AC",
+          "ComponentExist": false 
+        },
+        {
+          "ComponentName": "L3VNI-AG",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "AGW",
+          "ComponentExist": false 
+        },
+        {
+          "ComponentName": "ARP-Suppress",
+          "ComponentExist": false 
+        },
+        {
+          "ComponentName": "IR",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "PIM",
+          "ComponentExist": false 
+        },
+        {
+          "ComponentName": "MS-IR",
+          "ComponentExist": true 
         }
       ]
     }

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"sync"
@@ -97,6 +98,10 @@ func (md *MetaData) LoadInventory(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "LoadInventory.gohtml", nil)
 }
 
+func (md *MetaData) LoadSOT(w http.ResponseWriter, r *http.Request) {
+	tpl.ExecuteTemplate(w, "LoadSOT.gohtml", nil)
+}
+
 func (md *MetaData) LoadServiceNames(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "LoadServiceNames.gohtml", nil)
 }
@@ -157,6 +162,7 @@ func (md *MetaData) DoGetActualFootprint(w http.ResponseWriter, r *http.Request)
 
 	serviceDefinitionFile := "../serviceDefinitions/" + r.FormValue("serviceName") + "/" + r.FormValue("serviceName") + ".service"
 	serviceDefinition := m.LoadServiceDefinition(serviceDefinitionFile)
+
 	chunksProcessingPaths := m.LoadChunksProcessingPaths(serviceDefinition.DMEProcessing)
 	conversionMap := cu.CreateConversionMap()
 	MetaData := &m.MetaData{Config: md.Config, Filter: md.Filter, Enrich: md.Enrich, ChunksProcessingPaths: chunksProcessingPaths, ConversionMap: conversionMap}
@@ -174,7 +180,7 @@ func (md *MetaData) DoGetActualFootprint(w http.ResponseWriter, r *http.Request)
 
 	deviceFootprintDB := m.ConstructDeviceFootprintDB(deviceChunksDB, keysList, serviceDefinition.ServiceConstructPath, MetaData.ConversionMap)
 	serviceFootprintDB := m.ConstructServiceFootprintDB(serviceDefinition.ServiceComponents, deviceFootprintDB)
-	serviceTypeDB := m.ConstructServiceTypeDB(serviceDefinition.ServiceName, serviceFootprintDB, inventory)
+	serviceTypeDB := m.ConstructServiceTypeDB(serviceDefinition.ServiceName, serviceFootprintDB, inventory, serviceDefinition.LocalServiceDefinitions)
 
 	processedData.ServiceName = serviceDefinition.ServiceName
 	processedData.Keys = keysList
@@ -185,6 +191,8 @@ func (md *MetaData) DoGetActualFootprint(w http.ResponseWriter, r *http.Request)
 
 	processedDataCollection.Drop(ctx)
 	mo.InsertOne(ctx, processedDataCollection, processedData)
+
+	fmt.Println(serviceTypeDB)
 
 	http.Redirect(w, r, "http://127.0.0.1:8080/index", 301)
 
@@ -291,8 +299,11 @@ func (md *MetaData) GetActualServiceFootprintForAll(w http.ResponseWriter, r *ht
 	result := make([]ResultEntry, 0)
 
 	for _, serviceFootprintDBEntry := range processedData.ServiceFootprintDB {
-		resultEntry := ResultEntry{ServiceFootprintDBEntry: serviceFootprintDBEntry, ServiceComponents: processedData.ServiceComponents}
-		result = append(result, resultEntry)
+		serviceTypeDBEntry := m.GetServiceTypeDBEntryByDeviceName(processedData.ServiceTypeDB, serviceFootprintDBEntry.DeviceName)
+		if !m.CheckNotExistServices(serviceTypeDBEntry) {
+			resultEntry := ResultEntry{ServiceFootprintDBEntry: serviceFootprintDBEntry, ServiceComponents: processedData.ServiceComponents}
+			result = append(result, resultEntry)
+		}
 	}
 
 	tpl.ExecuteTemplate(w, "PrintActualServiceFootprintForAll.gohtml", result)
@@ -325,6 +336,8 @@ func (md *MetaData) GetActualServiceTypeForAll(w http.ResponseWriter, r *http.Re
 
 	serviceTypeDB := processedData.ServiceTypeDB
 
+	fmt.Println(serviceTypeDB)
+
 	tpl.ExecuteTemplate(w, "PrintActualServiceTypeForAll.gohtml", serviceTypeDB)
 }
 
@@ -356,6 +369,34 @@ func (md *MetaData) PushInventoryToMongo(w http.ResponseWriter, r *http.Request)
 	}
 
 	http.Redirect(w, r, "http://127.0.0.1:8080/index", 301)
+}
+
+func (md *MetaData) PushSOTToMongo(w http.ResponseWriter, r *http.Request) {
+	var SOTDB m.SOTDB
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	jsonData := []byte(r.FormValue("SOT-DB"))
+	err = json.Unmarshal(jsonData, &SOTDB)
+	if err != nil {
+		log.Println(err)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(md.Config.URL))
+	if err != nil {
+		log.Println(err)
+	}
+
+	SOTDBCollection := client.Database("SOT").Collection("SOTDB")
+
+	mo.UpdateOne(ctx, SOTDBCollection, "Service", SOTDB.Name, "DB", SOTDB.DB)
+
+	http.Redirect(w, r, "http://127.0.0.1:8080/index", 301)
+
 }
 
 func (md *MetaData) DropInventory(w http.ResponseWriter, r *http.Request) {
@@ -539,6 +580,8 @@ func (md *MetaData) GetComplianceReport(w http.ResponseWriter, r *http.Request) 
 
 func (md *MetaData) GetGlobalServiceTypeReport(w http.ResponseWriter, r *http.Request) {
 	var processedData m.ProcessedData
+	var sOTDB m.SOTDB
+
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatalln(err)
@@ -554,6 +597,7 @@ func (md *MetaData) GetGlobalServiceTypeReport(w http.ResponseWriter, r *http.Re
 
 	processedDataCollection := client.Database(r.FormValue("serviceName")).Collection("ProcessedData")
 	inventoryCollection := client.Database("Auxilary").Collection("Inventory")
+	SOTDBCollection := client.Database("SOT").Collection("SOTDB")
 
 	bsonProcessedData, err := mo.FindOne(ctx, processedDataCollection, "ServiceName", r.FormValue("serviceName"))
 	if err != nil {
@@ -577,8 +621,15 @@ func (md *MetaData) GetGlobalServiceTypeReport(w http.ResponseWriter, r *http.Re
 		inventory = append(inventory, hostMetaData)
 	}
 
-	m.CheckServiceTypeDB(processedData.ServiceTypeDB, "2012452", "gtype-1")
-	m.CheckServiceTypeDB(processedData.ServiceTypeDB, "2012453", "gtype-1")
+	bsonProcessedData, err = mo.FindOne(ctx, SOTDBCollection, "Service", r.FormValue("serviceName"))
+	if err != nil {
+		log.Println("Can't find processedData for:", r.FormValue("serviceName"))
+	}
+
+	bsonProcessedDataBytes, _ = bson.Marshal(bsonProcessedData)
+	bson.Unmarshal(bsonProcessedDataBytes, &sOTDB)
+
+	m.CheckServiceTypeDB(processedData.ServiceTypeDB, sOTDB)
 }
 
 var tpl *template.Template
@@ -611,8 +662,10 @@ func main() {
 	http.HandleFunc("/getRawData", metaData.GetRawData)
 
 	http.HandleFunc("/loadInventory", metaData.LoadInventory)
+	http.HandleFunc("/loadSOT", metaData.LoadSOT)
 	http.HandleFunc("/dropInventory", metaData.DropInventory)
 	http.HandleFunc("/pushInventoryToMongo", metaData.PushInventoryToMongo)
+	http.HandleFunc("/pushSOTToMongo", metaData.PushSOTToMongo)
 	http.HandleFunc("/loadServiceNames", metaData.LoadServiceNames)
 	http.HandleFunc("/pushServiceNamesToMongo", metaData.PushServiceNamesToMongo)
 

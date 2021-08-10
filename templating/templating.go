@@ -27,37 +27,19 @@ type VariableData struct {
 	Value interface{} `json:"Value"`
 }
 
-func LoadServiceVariablesDB(fileName string) ServiceVariablesDB {
-	var serviceVariablesDB ServiceVariablesDB
-	serviceVariablesDBFile, err := os.Open(fileName)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer serviceVariablesDBFile.Close()
-
-	VariablesDBFileBytes, _ := ioutil.ReadAll(serviceVariablesDBFile)
-
-	err = json.Unmarshal(VariablesDBFileBytes, &serviceVariablesDB)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	return serviceVariablesDB
-}
-
 type ServiceVariablesDBProcessed map[string]map[string]interface{}
 
-func LoadServiceVariablesDBProcessed(serviceVariablesDB ServiceVariablesDB) ServiceVariablesDBProcessed {
+func LoadServiceVariablesDBProcessed(sOTDB m.SOTDB) ServiceVariablesDBProcessed {
 	serviceVariablesDBProcessed := make(ServiceVariablesDBProcessed)
 
-	for _, serviceVariablesEntry := range serviceVariablesDB.Variables {
+	for _, dBEntry := range sOTDB.DB {
 
 		data := make(map[string]interface{})
 
-		for _, dataEntry := range serviceVariablesEntry.Data {
-			data[dataEntry.Name] = dataEntry.Value
+		for _, globalVariablesEntry := range dBEntry.KeyData.GlobalVariables {
+			data[globalVariablesEntry.Name] = globalVariablesEntry.Value
 		}
-		serviceVariablesDBProcessed[serviceVariablesEntry.Key] = data
+		serviceVariablesDBProcessed[dBEntry.KeyID] = data
 	}
 
 	return serviceVariablesDBProcessed
@@ -104,7 +86,7 @@ func TemplateConstruct(serviceName string, serviceFootprintDB m.ServiceFootprint
 			deviceDataEntry.Data = m
 			for _, dataEntry := range serviceLayoutEntry.Data {
 				if dataEntry.Value {
-					generalTemplateConstructor[serviceName][dataEntry.Name](m, serviceLayoutEntry.Key, serviceVariablesDBProcessed, indirectVariablesDB, serviceFootprintDBEntry.DeviceName)
+					generalTemplateConstructor[serviceName][dataEntry.Name](m, serviceLayoutEntry.Key, serviceVariablesDBProcessed)
 				}
 			}
 
@@ -118,7 +100,7 @@ func TemplateConstruct(serviceName string, serviceFootprintDB m.ServiceFootprint
 	return deviceFootprintDB
 }
 
-type fn func(map[string]interface{}, string, ServiceVariablesDBProcessed, IndirectVariablesDB, string)
+type fn func(map[string]interface{}, string, ServiceVariablesDBProcessed)
 type GeneralTemplateConstructor map[string]ServiceConstructor
 type ServiceConstructor map[string]fn
 
@@ -127,7 +109,8 @@ func LoadGeneralTemplateConstructor() GeneralTemplateConstructor {
 
 	VNIServiceConstructor := make(ServiceConstructor)
 	VNIServiceConstructor["L2VNI"] = VNIMakeL2VNITemplate
-	VNIServiceConstructor["L3VNI"] = VNIMakeL3VNITemplate
+	VNIServiceConstructor["L3VNI-AC"] = VNIMakeL3VNIACTemplate
+	VNIServiceConstructor["L3VNI-AG"] = VNIMakeL3VNIAGTemplate
 	VNIServiceConstructor["AGW"] = VNIMakeAGWTemplate
 	VNIServiceConstructor["PIM"] = VNIMakePIMTemplate
 	VNIServiceConstructor["IR"] = VNIMakeIRTemplate
@@ -156,54 +139,82 @@ func LoadGeneralTemplateConstructor() GeneralTemplateConstructor {
 	return GeneralTemplateConstructor
 }
 
-func VNIMakeL2VNITemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
-	M["l2BD.accEncap"] = "vxlan-" + serviceVariablesDB[key]["VNID"].(string)
-	M["l2BD.id"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string)[3:], 10, 64)
-	M["l2BD.name"] = serviceVariablesDB[key]["Segment"].(string) + serviceVariablesDB[key]["ZoneID"].(string) + "Z_" + serviceVariablesDB[key]["Subnet"].(string) + "/" + serviceVariablesDB[key]["Mask"].(string)
-	M["rtctrlRttEntry.rtt.export"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["VNID"].(string)
-	M["rtctrlRttEntry.rtt.import"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["VNID"].(string)
-	M["nvoNw.suppressARP"] = "off"
+func VNIMakeL2VNITemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
+	M["L2VNI.l2BD.accEncap"] = "vxlan-" + serviceVariablesDB[key]["VNID"].(string)
+	M["L2VNI.l2BD.id"] = serviceVariablesDB[key]["VNID"].(string)[3:]
+	M["L2VNI.l2BD.name"] = serviceVariablesDB[key]["ZoneName"].(string) + "_" + serviceVariablesDB[key]["Subnet"].(string) + "/" + serviceVariablesDB[key]["Mask"].(string)
+	M["L2VNI.rtctrlRttEntry.rtt.export"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["VNID"].(string)
+	M["L2VNI.rtctrlRttEntry.rtt.import"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["VNID"].(string)
+	M["L2VNI.nvoNw.suppressARP"] = "off"
 }
 
-func VNIMakeL3VNITemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func VNIMakeL3VNIACTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
+	M["L3VNI.bgpDomAf.maxEcmp"] = serviceVariablesDB[key]["maxEcmp"].(string)
+	M["L3VNI.bgpGr.staleIntvl"] = "1800"
+	M["L3VNI.bgpInst.asn"] = serviceVariablesDB[key]["bgpAsn"].(string)
+	M["L3VNI.bgpInterLeakP.rtMap.direct"] = serviceVariablesDB[key]["rtMap.direct"].(string)
+	M["L3VNI.bgpPathCtrl.asPathMultipathRelax"] = "enabled"
 	M["L3VNI.ipv4If.forward"] = "enabled"
 	M["L3VNI.l2BD.id"] = serviceVariablesDB[key]["L3VNI.l2BD.id"].(string)
 	M["L3VNI.l3Inst.encap"] = "vxlan-" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.rtctrlRttEntry.rtt.import.ipv4-ucast"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.rtctrlRttEntry.rtt.export.l2vpn-evpn"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.rtctrlRttEntry.rtt.import.ipv4-ucast"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.rtctrlRttEntry.rtt.export.l2vpn-evpn"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.rtmapMatchRtTag.tag"] = serviceVariablesDB[key]["L3VNI.l2BD.id"].(string)
+	M["L3VNI.sviIf.id"] = "vlan" + serviceVariablesDB[key]["L3VNI.l2BD.id"].(string)
 	M["L3VNI.nvoNw.associateVrfFlag"] = "yes"
-	M["L3VNI.sviIf.id"] = serviceVariablesDB[key]["L3VNI.sviIf.id"].(string)
 }
 
-func VNIMakeAGWTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
-	M["hmmFwdIf.mode"] = "anycastGW"
-	M["ipv4Addr.addr"] = serviceVariablesDB[key]["IPAddress"].(string) + "/" + serviceVariablesDB[key]["Mask"].(string)
-	M["ipv4Addr.tag"], _ = strconv.ParseInt("39"+serviceVariablesDB[key]["ZoneID"].(string), 10, 64)
-	M["ipv4Dom.name"] = serviceVariablesDB[key]["ZoneName"].(string)
-	M["sviIf.id"] = "vlan" + serviceVariablesDB[key]["VNID"].(string)[3:]
+func VNIMakeL3VNIAGTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
+	M["L3VNI.bgpDomAf.maxEcmp"] = serviceVariablesDB[key]["maxEcmp"].(string)
+	M["L3VNI.bgpGr.staleIntvl"] = "1800"
+	M["L3VNI.bgpInst.asn"] = serviceVariablesDB[key]["bgpAsn"].(string)
+	M["L3VNI.bgpInterLeakP.rtMap.direct"] = serviceVariablesDB[key]["rtMap.direct"].(string)
+	M["L3VNI.bgpPathCtrl.asPathMultipathRelax"] = "enabled"
+	M["L3VNI.ipv4If.forward"] = "enabled"
+	M["L3VNI.l2BD.id"] = serviceVariablesDB[key]["L3VNI.l2BD.id"].(string)
+	M["L3VNI.l3Inst.encap"] = "vxlan-" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.rtctrlRttEntry.rtt.import.ipv4-ucast"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.rtctrlRttEntry.rtt.export.l2vpn-evpn"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.rtctrlRttEntry.rtt.import.ipv4-ucast"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.rtctrlRttEntry.rtt.export.l2vpn-evpn"] = "route-target:as2-nn4:" + serviceVariablesDB[key]["evpnAS"].(string) + ":" + serviceVariablesDB[key]["L3VNI.l3Inst.encap"].(string)
+	M["L3VNI.rtmapMatchRtTag.tag"] = serviceVariablesDB[key]["L3VNI.l2BD.id"].(string)
+	M["L3VNI.sviIf.id"] = "vlan" + serviceVariablesDB[key]["L3VNI.l2BD.id"].(string)
+	M["L3VNI.nvoNw.associateVrfFlag"] = "yes"
 }
 
-func VNIMakeIRTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
-	M["nvoNw.mcastGroup"] = "0.0.0.0"
-	M["nvoNw.multisiteIngRepl"] = "disable"
-	M["nvoNw.vni"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
-	M["nvoIngRepl.proto"] = "bgp"
-	M["nvoIngRepl.rn"] = "IngRepl"
+func VNIMakeAGWTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
+	M["L2VNI.hmmFwdIf.mode"] = "anycastGW"
+	M["L2VNI.ipv4Addr.addr"] = serviceVariablesDB[key]["IPAddress"].(string) + "/" + serviceVariablesDB[key]["Mask"].(string)
+	M["L2VNI.ipv4Addr.tag"] = "39" + serviceVariablesDB[key]["ZoneID"].(string)
+	M["L2VNI.ipv4Dom.name"] = serviceVariablesDB[key]["ZoneName"].(string)
+	M["L2VNI.sviIf.id"] = "vlan" + serviceVariablesDB[key]["VNID"].(string)[3:]
 }
 
-func VNIMakePIMTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
-	M["nvoNw.mcastGroup"] = "225.1.0." + serviceVariablesDB[key]["ZoneIDForMcast"].(string)
-	M["nvoNw.multisiteIngRepl"] = "disable"
-	M["nvoNw.vni"], _ = strconv.ParseInt(serviceVariablesDB[key]["VNID"].(string), 10, 64)
+func VNIMakeIRTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
+	M["L2VNI.nvoNw.mcastGroup"] = "0.0.0.0"
+	M["L2VNI.nvoNw.multisiteIngRepl"] = "disable"
+	M["L2VNI.nvoNw.vni"] = serviceVariablesDB[key]["VNID"].(string)
+	M["L2VNI.nvoIngRepl.proto"] = "bgp"
+	M["L2VNI.nvoIngRepl.rn"] = "IngRepl"
 }
 
-func VNIMakeMSIRTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
-	M["nvoNw.multisiteIngRepl"] = "enable"
+func VNIMakePIMTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
+	M["L2VNI.nvoNw.mcastGroup"] = "225.1.0." + serviceVariablesDB[key]["ZoneIDForMcast"].(string)
+	M["L2VNI.nvoNw.multisiteIngRepl"] = "disable"
+	M["L2VNI.nvoNw.vni"] = serviceVariablesDB[key]["VNID"].(string)
 }
 
-func VNIMakeARPSuppressTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
-	M["nvoNw.suppressARP"] = "enabled"
+func VNIMakeMSIRTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
+	M["L2VNI.nvoNw.multisiteIngRepl"] = "enable"
 }
 
-func OSPFMakeInterfaceTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func VNIMakeARPSuppressTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
+	M["L2VNI.nvoNw.suppressARP"] = "enabled"
+}
+
+func OSPFMakeInterfaceTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
 	M["ospfIf.adminSt"] = "enabled"
 	M["ospfIf.area"] = serviceVariablesDB[key]["Area"].(string)
 	M["ospfIf.helloIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["HelloIntvl"].(string), 10, 64)
@@ -212,23 +223,23 @@ func OSPFMakeInterfaceTemplate(M map[string]interface{}, key string, serviceVari
 	M["ospfInst.ctrl"] = ""
 }
 
-func OSPFMakeLSAControlTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func OSPFMakeLSAControlTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
 	M["ospfLsaCtrl.arrivalIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["ArrivalIntvl"].(string), 10, 64)
 	M["ospfLsaCtrl.gpPacingIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["GpPacingIntvl"].(string), 10, 64)
 	M["ospfLsaCtrl.holdIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["HoldIntvl"].(string), 10, 64)
 	M["ospfLsaCtrl.maxIntvl"], _ = strconv.ParseInt(serviceVariablesDB[key]["MaxIntvl"].(string), 10, 64)
 }
 
-func OSPFMakeBFDTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func OSPFMakeBFDTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
 	M["ospfIf.bfdCtrl"] = "enabled"
 	M["ospfDom.ctrl"] = "bfd"
 }
 
-func OSPFMakeIsolateTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func OSPFMakeIsolateTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
 	M["ospfInst.ctrl"] = "isolate"
 }
 
-func BGPMakeL2VPNEVPNTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func BGPMakeL2VPNEVPNTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
 	M["bgpDom.name"] = serviceVariablesDB[key]["bgpDom.name"].(string)
 	M["bgpDomAf.advPip.l2vpn-evpn"] = serviceVariablesDB[key]["advPip.l2vpn-evpn"].(string)
 
@@ -252,7 +263,7 @@ func BGPMakeL2VPNEVPNTemplate(M map[string]interface{}, key string, serviceVaria
 	M["bgpInst.isolate"] = "disabled"
 }
 
-func BGPMakeIPv4Template(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func BGPMakeIPv4Template(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
 	M["bgpDom.name"] = serviceVariablesDB[key]["bgpDom.name"].(string)
 	M["bgpDomAf.advPip.ipv4-ucast"] = serviceVariablesDB[key]["advPip.ipv4-ucast"].(string)
 
@@ -275,15 +286,15 @@ func BGPMakeIPv4Template(M map[string]interface{}, key string, serviceVariablesD
 	M["bgpInst.isolate"] = "disabled"
 }
 
-func BGPMakeBFDTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func BGPMakeBFDTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
 	M["bgpPeerCont.ctrl"] = serviceVariablesDB[key]["bgpPeerCont.ctrl"].(string)
 }
 
-func BGPMakeTemplateTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func BGPMakeTemplateTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
 	M["bgpPeer.peerImp"] = serviceVariablesDB[key]["bgpPeer.peerImp"].(string)
 }
 
-func BGPMakeIsolateTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed, IndirectVariablesDB IndirectVariablesDB, deviceName string) {
+func BGPMakeIsolateTemplate(M map[string]interface{}, key string, serviceVariablesDB ServiceVariablesDBProcessed) {
 	M["bgpInst.isolate"] = "enabled"
 }
 
@@ -342,58 +353,45 @@ type DiffDataEntry struct {
 	Key      string                 `bson:"Key"`
 	ToChange map[string]interface{} `bson:"ToChange"`
 	ToAdd    map[string]interface{} `bson:"ToAdd"`
-	ToDelete map[string]interface{} `bson:"ToDelete"`
+	//ToDelete map[string]interface{} `bson:"ToDelete"`
 }
 
-func ConstrustDeficeDiffDB(t m.DeviceFootprintDB, o m.DeviceFootprintDB) DeviceDiffDB {
+func ConstrustDiffDataEntry(t map[string]interface{}, o map[string]interface{}, key string) DiffDataEntry {
 
-	var deviceDiffDB DeviceDiffDB
+	var diffDataEntry DiffDataEntry
 
-	for deviceDataDBEntryIndex, deviceDataDBEntry := range t {
-		var DeviceDiffDBEntry DeviceDiffDBEntry
-		DeviceDiffDBEntry.DeviceName = deviceDataDBEntry.DeviceName
+	ToChange := make(map[string]interface{})
+	ToAdd := make(map[string]interface{})
+	//ToDelete := make(map[string]interface{})
 
-		for deviceDataEntryIndex, deviceDataEntry := range deviceDataDBEntry.DeviceData {
-			var diffDataEntry DiffDataEntry
-			diffDataEntry.Key = deviceDataEntry.Key
+	diffDataEntry.Key = key
+	diffDataEntry.ToChange = ToChange
+	diffDataEntry.ToAdd = ToAdd
+	//diffDataEntry.ToDelete = ToDelete
 
-			ToChange := make(map[string]interface{})
-			ToAdd := make(map[string]interface{})
-			ToDelete := make(map[string]interface{})
+	commonKeys := FindCommonKeys(t, o)
+	distinctKeysSrcOnly := FindDistinctKeys(t, o)
+	//distinctKeysDstOnly := FindDistinctKeys(t, o)
 
-			diffDataEntry.ToChange = ToChange
-			diffDataEntry.ToAdd = ToAdd
-			diffDataEntry.ToDelete = ToDelete
-
-			tmplDeviceData := deviceDataEntry.Data
-			origDeviceData := o[deviceDataDBEntryIndex].DeviceData[deviceDataEntryIndex].Data
-
-			commonKeys := FindCommonKeys(tmplDeviceData, origDeviceData)
-			distinctKeysSrcOnly := FindDistinctKeys(tmplDeviceData, origDeviceData)
-			distinctKeysDstOnly := FindDistinctKeys(tmplDeviceData, origDeviceData)
-
-			for _, v := range commonKeys {
-				if tmplDeviceData[v] != origDeviceData[v] {
-					ToChange[v] = tmplDeviceData[v]
-				}
-			}
-
-			for _, v := range distinctKeysSrcOnly {
-				ToAdd[v] = tmplDeviceData[v]
-			}
-
-			for _, v := range distinctKeysDstOnly {
-				ToDelete[v] = origDeviceData[v]
-			}
-
-			DeviceDiffDBEntry.DiffData = append(DeviceDiffDBEntry.DiffData, diffDataEntry)
+	for _, v := range commonKeys {
+		if t[v] != o[v] {
+			ToChange[v] = t[v]
 		}
-
-		deviceDiffDB = append(deviceDiffDB, DeviceDiffDBEntry)
-
 	}
 
-	return deviceDiffDB
+	for _, v := range distinctKeysSrcOnly {
+		ToAdd[v] = t[v]
+	}
+
+	/* 	for _, v := range distinctKeysDstOnly {
+		ToDelete[v] = o[v]
+	} */
+
+	/* 	fmt.Println("toChange", diffDataEntry.ToChange)
+	   	fmt.Println("toAdd", diffDataEntry.ToAdd) */
+
+	return diffDataEntry
+
 }
 
 func CheckForChanges(deviceDiffDB DeviceDiffDB) []string {
@@ -405,7 +403,8 @@ func CheckForChanges(deviceDiffDB DeviceDiffDB) []string {
 		var marker bool
 
 		for _, diffDataEntry := range deviceDiffDBEntry.DiffData {
-			if len(diffDataEntry.ToAdd) == 0 && len(diffDataEntry.ToChange) == 0 && len(diffDataEntry.ToDelete) == 0 {
+			//&& len(diffDataEntry.ToDelete)
+			if len(diffDataEntry.ToAdd) == 0 && len(diffDataEntry.ToChange) == 0 {
 				continue
 			} else {
 				marker = marker || true
@@ -419,21 +418,105 @@ func CheckForChanges(deviceDiffDB DeviceDiffDB) []string {
 	return result
 }
 
-func VNICheckServiceType(m map[string]bool) string {
-	var result string
-	if m["L2VNI"] && m["L3VNI"] && m["AGW"] && m["ARP-Suppress"] {
-		result = "type-1"
-		return result
-	} else {
-		result = "type-undefined"
-		return result
-	}
-}
-
 func ServiceComponentBitMapConstruct(serviceComponentBitMaps m.ServiceComponentBitMaps) map[string]bool {
 	result := make(map[string]bool)
 	for _, serviceComponentBitMap := range serviceComponentBitMaps {
 		result[serviceComponentBitMap.Name] = serviceComponentBitMap.Value
 	}
 	return result
+}
+
+type SOTTemplatingReference []SOTTemplatingReferenceEntry
+type SOTTemplatingReferenceEntry struct {
+	KeyID   string
+	KeyData []KeyDataEntry
+}
+
+type KeyDataEntry struct {
+	DeviceType   string
+	VariablesMap map[string]interface{}
+}
+
+func GetSOTTemplatingReference(sOTDB m.SOTDB, localServiceDefinitions m.LocalServiceDefinitions, serviceVariablesDB ServiceVariablesDBProcessed, generalTemplateConstructor GeneralTemplateConstructor, serviceName string) SOTTemplatingReference {
+
+	var sOTTemplatingReference SOTTemplatingReference
+
+	localServiceMap := m.GetLocalServiceMapFromDefinitions(localServiceDefinitions)
+
+	for _, dBEntry := range sOTDB.DB {
+		var sOTTemplatingReferenceEntry SOTTemplatingReferenceEntry
+		sOTTemplatingReferenceEntry.KeyID = dBEntry.KeyID
+
+		for _, typeEntry := range dBEntry.KeyData.Types {
+			var keyDataEntry KeyDataEntry
+			keyDataEntry.DeviceType = typeEntry.DeviceType
+
+			m := make(map[string]interface{})
+			for componentName, componentValue := range localServiceMap[typeEntry.LocalServiceType] {
+				if componentValue {
+					generalTemplateConstructor[serviceName][componentName](m, dBEntry.KeyID, serviceVariablesDB)
+				}
+			}
+			keyDataEntry.VariablesMap = m
+			sOTTemplatingReferenceEntry.KeyData = append(sOTTemplatingReferenceEntry.KeyData, keyDataEntry)
+		}
+
+		sOTTemplatingReference = append(sOTTemplatingReference, sOTTemplatingReferenceEntry)
+	}
+
+	return sOTTemplatingReference
+}
+
+func ComplienceReport(processedData m.ProcessedData, sOTTemplatingReference SOTTemplatingReference) DeviceDiffDB {
+
+	var deviceDiffDB DeviceDiffDB
+
+	for _, serviceFootprintDBEntry := range processedData.ServiceTypeDB {
+
+		var deviceDiffDBEntry DeviceDiffDBEntry
+
+		deviceDiffDBEntry.DeviceName = serviceFootprintDBEntry.DeviceName
+
+		for _, typeEntry := range serviceFootprintDBEntry.ServiceTypes {
+			if typeEntry.Type != "not-exist" {
+				originalData := GetOriginalData(processedData, serviceFootprintDBEntry.DeviceName, typeEntry.Key)
+				templatedData := GetTemplatedData(sOTTemplatingReference, serviceFootprintDBEntry.DeviceType, typeEntry.Key)
+				diffDataEntry := ConstrustDiffDataEntry(templatedData, originalData, typeEntry.Key)
+				if (len(diffDataEntry.ToAdd) > 0) || (len(diffDataEntry.ToChange) > 0) {
+					deviceDiffDBEntry.DiffData = append(deviceDiffDBEntry.DiffData, diffDataEntry)
+				}
+			}
+		}
+		if len(deviceDiffDBEntry.DiffData) > 0 {
+			deviceDiffDB = append(deviceDiffDB, deviceDiffDBEntry)
+		}
+	}
+	return deviceDiffDB
+}
+
+func GetOriginalData(processedData m.ProcessedData, deviceName string, key string) map[string]interface{} {
+	for _, deviceFootprintDBEntry := range processedData.DeviceFootprintDB {
+		if deviceFootprintDBEntry.DeviceName == deviceName {
+			for _, deviceDataEntry := range deviceFootprintDBEntry.DeviceData {
+				if deviceDataEntry.Key == key {
+					return deviceDataEntry.Data
+				}
+			}
+		}
+	}
+	return map[string]interface{}{}
+}
+
+func GetTemplatedData(sOTTemplatingReference SOTTemplatingReference, deviceType string, key string) map[string]interface{} {
+	for _, sOTTemplatingReferenceEntry := range sOTTemplatingReference {
+		if sOTTemplatingReferenceEntry.KeyID == key {
+			for _, keyDataEntry := range sOTTemplatingReferenceEntry.KeyData {
+				if keyDataEntry.DeviceType == deviceType {
+					return keyDataEntry.VariablesMap
+				}
+			}
+		}
+	}
+
+	return map[string]interface{}{}
 }

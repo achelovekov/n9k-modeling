@@ -898,50 +898,6 @@ func GetDeviceTypeFromInventory(inventory cu.Inventory, deviceName string) strin
 	return "none"
 }
 
-type GlobalServiceTypeDefinition []GlobalServiceTypeDefinitionEntry
-type GlobalServiceTypeDefinitionEntry struct {
-	Name string
-	Data []GlobalServiceTypeDefinitionData
-}
-
-type GlobalServiceTypeDefinitionData struct {
-	DeviceType  string
-	ServiceType string
-}
-
-func GenerateGlobalServiceTypes() GlobalServiceTypeDefinition {
-	var globalServiceTypeDefinition GlobalServiceTypeDefinition
-
-	var globalServiceTypeDefinition_1 GlobalServiceTypeDefinitionEntry
-
-	globalServiceTypeDefinition_1.Name = "gtype-1"
-
-	globalServiceTypeDefinition_1.Data = append(globalServiceTypeDefinition_1.Data, GlobalServiceTypeDefinitionData{DeviceType: "BL", ServiceType: "not-exist"})
-	globalServiceTypeDefinition_1.Data = append(globalServiceTypeDefinition_1.Data, GlobalServiceTypeDefinitionData{DeviceType: "AG", ServiceType: "type-3"})
-	globalServiceTypeDefinition_1.Data = append(globalServiceTypeDefinition_1.Data, GlobalServiceTypeDefinitionData{DeviceType: "AC", ServiceType: "type-2"})
-	globalServiceTypeDefinition = append(globalServiceTypeDefinition, globalServiceTypeDefinition_1)
-
-	return globalServiceTypeDefinition
-}
-
-func GetServiceTypeFromGlobalServiceTypes(globalServiceTypeDefinitionData []GlobalServiceTypeDefinitionData, deviceType string, globalServiceType string) string {
-	for _, globalServiceTypeDefinitionDataEntry := range globalServiceTypeDefinitionData {
-		if globalServiceTypeDefinitionDataEntry.DeviceType == deviceType {
-			return globalServiceTypeDefinitionDataEntry.ServiceType
-		}
-	}
-	return "none"
-}
-
-func GetGlobalServiceTypeData(globalServiceTypeDefinition GlobalServiceTypeDefinition, globalServiceTypeName string) []GlobalServiceTypeDefinitionData {
-	for _, globalServiceTypeDefinitionEntry := range globalServiceTypeDefinition {
-		if globalServiceTypeDefinitionEntry.Name == globalServiceTypeName {
-			return globalServiceTypeDefinitionEntry.Data
-		}
-	}
-	return nil
-}
-
 func CheckServiceTypeDB(serviceTypeDB ServiceTypeDB, sOTDB SOTDB) {
 	for _, serviceTypeDBEntry := range serviceTypeDB {
 		fmt.Println("go for: ", serviceTypeDBEntry.DeviceName)

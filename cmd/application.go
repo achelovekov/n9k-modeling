@@ -460,7 +460,7 @@ func (md *MetaData) GetCompianceData(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "LoadVarsForGetCompianceData.gohtml", serviceList)
 }
 
-func (md *MetaData) GetTemplatedFootprint(w http.ResponseWriter, r *http.Request) {
+/* func (md *MetaData) GetTemplatedFootprint(w http.ResponseWriter, r *http.Request) {
 	var (
 		serviceVariablesDB t.ServiceVariablesDB
 		processedData      m.ProcessedData
@@ -509,7 +509,7 @@ func (md *MetaData) GetTemplatedFootprint(w http.ResponseWriter, r *http.Request
 
 	http.Redirect(w, r, "http://127.0.0.1:8080/index", 301)
 
-}
+} */
 
 func (md *MetaData) GetHostnameForCompianceReport(w http.ResponseWriter, r *http.Request) {
 	var deviceDiffDB t.DeviceDiffDB
@@ -630,6 +630,19 @@ func (md *MetaData) GetGlobalServiceTypeReport(w http.ResponseWriter, r *http.Re
 	bson.Unmarshal(bsonProcessedDataBytes, &sOTDB)
 
 	m.CheckServiceTypeDB(processedData.ServiceTypeDB, sOTDB)
+
+	serviceDefinitionFile := "../serviceDefinitions/" + r.FormValue("serviceName") + "/" + r.FormValue("serviceName") + ".service"
+	serviceDefinition := m.LoadServiceDefinition(serviceDefinitionFile)
+
+	serviceVariablesDBProcessed := t.LoadServiceVariablesDBProcessed(sOTDB)
+
+	generalTemplateConstructor := t.LoadGeneralTemplateConstructor()
+	sOTTemplatingReference := t.GetSOTTemplatingReference(sOTDB, serviceDefinition.LocalServiceDefinitions, serviceVariablesDBProcessed, generalTemplateConstructor, r.FormValue("serviceName"))
+
+	deviceDiffDB := t.ComplienceReport(processedData, sOTTemplatingReference)
+
+	tpl.ExecuteTemplate(w, "GetCompianceReport.gohtml", deviceDiffDB)
+
 }
 
 var tpl *template.Template
@@ -678,7 +691,7 @@ func main() {
 	http.HandleFunc("/getActualServiceTypeForAll", metaData.GetActualServiceTypeForAll)
 
 	http.HandleFunc("/getCompianceData", metaData.GetCompianceData)
-	http.HandleFunc("/getTemplatedFootprint", metaData.GetTemplatedFootprint)
+	/* 	http.HandleFunc("/getTemplatedFootprint", metaData.GetTemplatedFootprint) */
 
 	http.HandleFunc("/getHostnameForCompianceReport", metaData.GetHostnameForCompianceReport)
 	http.HandleFunc("/getComplianceReport", metaData.GetComplianceReport)

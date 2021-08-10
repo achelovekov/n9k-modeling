@@ -6,14 +6,15 @@
     <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
+    {{range $i, $v := .}}
+    <h4>{{$v.DeviceName}}</h4>
     <table>
         <tr>
             <th>Key</th>
             <th>ToChange</th>
             <th>ToAdd</th>
-            <th>ToDelete</th>
         </tr>
-        {{range $i, $v := index . "DiffData"}}
+        {{range $i, $v := $v.DiffData}}
         <tr>
             <th>{{$v.Key}}</th>
             <td>
@@ -26,13 +27,9 @@
                 <code>{{$k}}: {{$v}}</code><br>
                 {{end}}
             </td>
-            <td>
-                {{range $k, $v := $v.ToDelete}}
-                <code>{{$k}}: {{$v}}</code><br>
-                {{end}}
-            </td>
         </tr>
         {{end}}
     </table>
+    {{end}}
 </body>
 </html>

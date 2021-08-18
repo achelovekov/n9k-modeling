@@ -172,37 +172,6 @@
 </section>
 <section class="menuItem">
     <div>       
-        <p class="itemInfoLabel">Construct templated footprint</p>
-        <p class="itemInfoDescr">Construct templated footprint 
-        </p>
-    </div>
-    <div>
-        <form action="getCompianceData">
-            <input type="submit" id="getCompianceData" value="Enter vars" />
-        </form>
-    </div>
-</section>
-<section class="menuItem">
-    <div>       
-        <p class="itemInfoLabel">Show complience report for service</p>
-        <p class="itemInfoDescr">Show complience report for service 
-        </p>
-    </div>
-    <div>
-        <form action="getHostnameForCompianceReport">
-            <select id="serviceName" name="serviceName">
-                <option value="">--Please choose an option--</option>
-                {{range $i, $v := .ServiceList}}
-                    {{$value := index $v "ServiceName"}}
-                    <option value="{{$value}}">{{$value}}</option>
-                {{end}}
-            </select><br>
-            <input type="submit" value="Execute" />
-        </form>
-    </div>
-</section>
-<section class="menuItem">
-    <div>       
         <p class="itemInfoLabel">Get Complience Info</p>
         <p class="itemInfoDescr">Get Complience Info 
         </p>
@@ -217,18 +186,6 @@
                 {{end}}
             </select><br>
             <input type="submit" value="Execute" />
-        </form>
-    </div>
-</section>
-<section class="menuItem">
-    <div>       
-        <p class="itemInfoLabel">Templating Dev</p>
-        <p class="itemInfoDescr">Templating Dev
-        </p>
-    </div>
-    <div>
-        <form action="getTemplatingDev" method="POST">
-            <input type="submit" id="getTemplatingDev" value="Execute" />
         </form>
     </div>
 </section>

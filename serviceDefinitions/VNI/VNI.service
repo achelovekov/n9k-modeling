@@ -787,6 +787,43 @@
           "ComponentExist": true 
         }
       ]
+    },    
+    {
+      "LocalServiceName": "type-4",
+      "LocalServiceComponents": [
+        {
+          "ComponentName": "L2VNI",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "L3VNI-AC",
+          "ComponentExist": false 
+        },
+        {
+          "ComponentName": "L3VNI-AG",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "AGW",
+          "ComponentExist": false 
+        },
+        {
+          "ComponentName": "ARP-Suppress",
+          "ComponentExist": false 
+        },
+        {
+          "ComponentName": "IR",
+          "ComponentExist": true 
+        },
+        {
+          "ComponentName": "PIM",
+          "ComponentExist": false 
+        },
+        {
+          "ComponentName": "MS-IR",
+          "ComponentExist": false
+        }
+      ]
     }
   ]
 }

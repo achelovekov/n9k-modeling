@@ -1,0 +1,90 @@
+{
+  "Name": "VNI",
+  "DB": [
+    {
+      "KeyID": "2032515",
+      "KeyData": {
+          "Types": [
+              {
+                "DeviceType": "AC",
+                "LocalServiceType": "type-1"   
+              },
+              {
+                "DeviceType": "AG",
+                "LocalServiceType": "type-2"   
+              },
+              {
+                "DeviceType": "BL",
+                "LocalServiceType": "type-3"   
+              }
+           ],
+           "GlobalVariables": [
+                {
+                    "Name": "Subnet",
+                    "Value": "100.24.50.0"
+                },
+                {
+                    "Name": "Mask",
+                    "Value": "24"
+                },
+                {
+                    "Name": "IPAddress",
+                    "Value": "100.24.50.253"
+                },
+                {
+                    "Name": "VNID",
+                    "Value": "2012450"
+                },
+                {
+                    "Name": "Segment",
+                    "Value": "i"
+                },
+                {
+                    "Name": "ZoneID",
+                    "Value": "01"
+                },
+                {
+                    "Name": "ZoneIDForMcast",
+                    "Value": "1"
+                },
+                {
+                    "Name": "ZoneName",
+                    "Value": "iAZ"
+                },
+                {
+                    "Name": "Scope",
+                    "Value": "2"
+                },
+                {
+                    "Name": "evpnAS",
+                    "Value": "64997"
+                },
+                {
+                    "Name": "rtMap.direct",
+                    "Value": "RM-REDIST-SUBNET-iAZ"
+                },
+                {
+                    "Name": "bgpInst.asn",
+                    "Value": "64911"
+                },
+                {
+                    "Name": "L3VNI.l2BD.id",
+                    "Value": "3902"
+                },
+                {
+                    "Name": "L3VNI.l3Inst.encap",
+                    "Value": "2010000"
+                },
+                {
+                    "Name": "maxEcmp",
+                    "Value": "4"
+                },
+                {
+                    "Name": "bgpAsn",
+                    "Value": "64923"
+                }
+            ]
+      }
+    }
+  ]
+}

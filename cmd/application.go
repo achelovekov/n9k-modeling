@@ -639,6 +639,8 @@ func (md *MetaData) GetGlobalServiceTypeReport(w http.ResponseWriter, r *http.Re
 	generalTemplateConstructor := t.LoadGeneralTemplateConstructor()
 	sOTTemplatingReference := t.GetSOTTemplatingReference(sOTDB, serviceDefinition.LocalServiceDefinitions, serviceVariablesDBProcessed, generalTemplateConstructor, r.FormValue("serviceName"))
 
+	fmt.Println(sOTTemplatingReference)
+
 	deviceDiffDB := t.ComplienceReport(processedData, sOTTemplatingReference)
 
 	tpl.ExecuteTemplate(w, "GetCompianceReport.gohtml", deviceDiffDB)

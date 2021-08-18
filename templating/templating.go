@@ -471,16 +471,16 @@ func ComplienceReport(processedData m.ProcessedData, sOTTemplatingReference SOTT
 
 	var deviceDiffDB DeviceDiffDB
 
-	for _, serviceFootprintDBEntry := range processedData.ServiceTypeDB {
+	for _, serviceTypeDBEntry := range processedData.ServiceTypeDB {
 
 		var deviceDiffDBEntry DeviceDiffDBEntry
 
-		deviceDiffDBEntry.DeviceName = serviceFootprintDBEntry.DeviceName
+		deviceDiffDBEntry.DeviceName = serviceTypeDBEntry.DeviceName
 
-		for _, typeEntry := range serviceFootprintDBEntry.ServiceTypes {
+		for _, typeEntry := range serviceTypeDBEntry.ServiceTypes {
 			if typeEntry.Type != "not-exist" {
-				originalData := GetOriginalData(processedData, serviceFootprintDBEntry.DeviceName, typeEntry.Key)
-				templatedData := GetTemplatedData(sOTTemplatingReference, serviceFootprintDBEntry.DeviceType, typeEntry.Key)
+				originalData := GetOriginalData(processedData, serviceTypeDBEntry.DeviceName, typeEntry.Key)
+				templatedData := GetTemplatedData(sOTTemplatingReference, serviceTypeDBEntry.DeviceType, typeEntry.Key)
 				diffDataEntry := ConstrustDiffDataEntry(templatedData, originalData, typeEntry.Key)
 				if (len(diffDataEntry.ToAdd) > 0) || (len(diffDataEntry.ToChange) > 0) {
 					deviceDiffDBEntry.DiffData = append(deviceDiffDBEntry.DiffData, diffDataEntry)
